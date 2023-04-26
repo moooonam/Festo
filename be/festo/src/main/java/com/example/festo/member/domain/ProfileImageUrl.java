@@ -19,4 +19,8 @@ public class ProfileImageUrl {
     public static ProfileImageUrl of(String profileUrl) {
         return new ProfileImageUrl(profileUrl);
     }
+
+    public String getValue() {
+        return this.value;
+    }
 }

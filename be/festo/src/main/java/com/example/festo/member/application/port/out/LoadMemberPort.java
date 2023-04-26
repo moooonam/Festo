@@ -6,4 +6,6 @@ import com.example.festo.member.domain.Member;
 public interface LoadMemberPort {
 
     Member loadMember(AuthId authId);
+
+    Member loadMember(Long memberId);
 }

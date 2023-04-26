@@ -22,6 +22,12 @@ public class MemberPersistenceAdapter implements LoadMemberPort, JoinMemberPort 
     }
 
     @Override
+    public Member loadMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                               .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
     public Long join(Member member) {
         return memberRepository.save(member)
                                .getId();
