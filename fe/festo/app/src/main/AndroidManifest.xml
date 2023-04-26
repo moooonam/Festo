@@ -17,8 +17,11 @@
         android:theme="@style/Theme.Festo"
         tools:targetApi="31">
         <activity
-            android:name=".SecondActivity"
-            android:exported="false" />
+            android:name=".customer_ui.home.FestivallistActivity"
+            android:exported="false"
+            android:label="@string/title_activity_festivallist"
+            android:theme="@style/Theme.Festo" />
+
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
