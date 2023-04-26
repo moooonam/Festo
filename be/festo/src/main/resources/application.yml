@@ -1,0 +1,2 @@
+jwt:
+  secret: festo_token_secret
