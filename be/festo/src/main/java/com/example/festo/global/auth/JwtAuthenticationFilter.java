@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Component
@@ -47,6 +48,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (SignatureException e) {
                 log.info("SignatureException: {}", e.getMessage());
                 throw new JwtException("사용자 인증 실패");
+            } catch (NoSuchElementException e) {
+                log.info("NoSuchElementException: {}", e.getMessage());
+                throw new JwtException("사용자 인증 실패: 없는 회원");
             }
         }
         filterChain.doFilter(request, response);

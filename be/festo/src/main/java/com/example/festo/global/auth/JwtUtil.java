@@ -34,16 +34,16 @@ public class JwtUtil {
     public static final String ISSUER = "Otmz";
 
     //accessToken 생성
-    public String createAccessToken(String userId) {
+    public String createAccessToken(Long userId) {
         return createToken(userId, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
     //refreshToken 생성
-    public String createRefreshToken(String userId) {
+    public String createRefreshToken(Long userId) {
         return createToken(userId, REFRESH_TOKEN_EXPIRE_TIME);
     }
 
-    private String createToken(String userId, long expireTime) {
+    private String createToken(Long userId, long expireTime) {
         Date now = new Date();
         Date expires = new Date(now.getTime() + expireTime);
 
@@ -52,7 +52,7 @@ public class JwtUtil {
                         .setHeaderParam("typ", "JWT")
                         .setHeaderParam("regDate", System.currentTimeMillis() / 1000)
                         .setExpiration(expires)
-                        .setSubject(userId)
+                        .setSubject(String.valueOf(userId))
                         .setIssuer(ISSUER)
                         .setIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                         .signWith(SignatureAlgorithm.HS256, secretKey)
