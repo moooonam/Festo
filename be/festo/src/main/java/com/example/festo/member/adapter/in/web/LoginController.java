@@ -1,10 +1,10 @@
 package com.example.festo.member.adapter.in.web;
 
-import com.example.festo.member.application.LoginService;
-import com.example.festo.member.application.LoginResponse;
+import com.example.festo.member.adapter.in.web.model.LoginRequest;
+import com.example.festo.member.adapter.in.web.model.LoginResponse;
+import com.example.festo.member.application.port.in.LoginUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+    private final LoginUseCase loginUseCase;
 
     @PostMapping("/api/v1/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        LoginResponse loginResponse = loginService.login(loginRequest.getAuthId(), loginRequest.getNickname(), loginRequest.getProfileImageUrl());
+        LoginResponse loginResponse = loginUseCase.login(loginRequest.getAuthId(), loginRequest.getNickname(), loginRequest.getProfileImageUrl());
 
         return ResponseEntity.ok(loginResponse);
     }

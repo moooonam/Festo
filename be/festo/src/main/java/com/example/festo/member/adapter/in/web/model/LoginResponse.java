@@ -1,4 +1,4 @@
-package com.example.festo.member.application;
+package com.example.festo.member.adapter.in.web.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -17,16 +17,16 @@ public class Member {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false, unique = true)
-    private Long authId;
+    @Embedded
+    private AuthId authId;
 
-    @Column(nullable = false)
-    private String profileImagePath;
+    @Embedded
+    private ProfileImageUrl profileImageUrl;
 
     @Builder
-    public Member(Long authId, String nickname, String profileImagePath) {
+    public Member(AuthId authId, String nickname, ProfileImageUrl profileImageUrl) {
         this.authId = authId;
         this.nickname = nickname;
-        this.profileImagePath = profileImagePath;
+        this.profileImageUrl = profileImageUrl;
     }
 }

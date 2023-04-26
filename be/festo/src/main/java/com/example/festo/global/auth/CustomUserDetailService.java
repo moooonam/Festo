@@ -1,7 +1,7 @@
 package com.example.festo.global.auth;
 
 import com.example.festo.member.domain.Member;
-import com.example.festo.member.domain.MemberRepository;
+import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
