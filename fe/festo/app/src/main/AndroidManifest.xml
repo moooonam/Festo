@@ -21,7 +21,9 @@
             android:exported="false" />
         <activity
             android:name=".customer_ui.search.SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MyApp"
+            />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
