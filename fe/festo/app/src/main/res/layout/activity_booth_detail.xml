@@ -1,73 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".BoothDetailActivity">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="15dp">
+
+            <ImageView
+                android:id="@+id/boothLogoImage"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:id="@+id/boothName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="부스이름"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/boothLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="주소가 들어갈 자리"
+                android:textColor="#F24E1E" />
+
+            <TextView
+                android:id="@+id/boothExplanation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="설명문구 쓰는 자리입니다." />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:layout_marginTop="10dp"
+                android:background="#A9A9A9" />
+
+            <ListView
+                android:id="@+id/menu_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="15dp"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/boothLogoImage"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:src="@mipmap/ic_launcher" />
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/button_payment"
+        android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/boothName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="부스이름"
-            android:textColor="#000000"
-            android:textSize="20sp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="19dp"
+            android:layout_marginLeft="20dp"
+            android:text="금액 합계 : " />
+        />
+
+        <TextView
+            android:id="@+id/totalTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="@color/white"
+            android:textSize="19dp"
             android:textStyle="bold" />
-
+        />
         <TextView
-            android:id="@+id/boothLocation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="주소가 들어갈 자리"
-            android:textColor="#F24E1E"
-            android:layout_marginTop="5dp"/>
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="19dp"
+            android:text="원" />
+        />
 
         <TextView
-            android:id="@+id/boothExplanation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="설명문구 쓰는 자리입니다."
-            android:layout_marginTop="5dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="#A9A9A9"
-            android:layout_marginTop="10dp"/>
-
-        <ListView
-            android:id="@+id/menu_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-        <TextView
+            android:id="@+id/payBtn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:text="금액 합계" />
-            />
+            android:gravity="center_vertical|end"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="19dp"
+            android:layout_marginRight="20dp"
+            android:text="결제하기" />
+    </LinearLayout>
 
-
-</LinearLayout>
+</FrameLayout>

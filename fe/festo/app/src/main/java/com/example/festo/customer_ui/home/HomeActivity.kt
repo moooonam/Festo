@@ -2,6 +2,7 @@ package com.example.festo.customer_ui.home
 
 
 import android.content.ClipData.Item
+import android.content.Intent
 import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Log
@@ -65,6 +66,15 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+
+        // 지워야함
+        val intent = Intent(this, FestivalActivity::class.java)
+        val bt1 = findViewById<Button>(R.id.btn1)
+        bt1.setOnClickListener {
+            println("눌림")
+            startActivity(intent)
         }
 
 
