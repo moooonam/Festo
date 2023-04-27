@@ -28,11 +28,11 @@
     </androidx.appcompat.widget.Toolbar>
 
     <Button
-        android:id="@+id/test_btn"
-        android:layout_width="100dp"
+        android:id="@+id/go_registerbooth_btn"
+        android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:text="여기는 부스야"
+        android:text="부스등록"
         />
 
 </FrameLayout>
