@@ -6,7 +6,6 @@
 
     <application
         android:name=".MyApplication"
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,13 +14,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Festo"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".customer_ui.home.PaymentActivity"
+            android:exported="false" />
         <activity
             android:name=".customer_ui.home.FestivallistActivity"
             android:exported="false"
             android:label="@string/title_activity_festivallist"
             android:theme="@style/Theme.Festo" />
-
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
@@ -50,8 +52,13 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
+        <activity
+            android:name=".customer_ui.home.FestivalActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".customer_ui.home.BoothDetailActivity"
+            android:exported="false"></activity>
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme"
@@ -62,7 +69,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -72,8 +80,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="@string/kakao_native_key"
-                    />
+                    android:scheme="@string/kakao_native_key" />
             </intent-filter>
         </activity>
     </application>

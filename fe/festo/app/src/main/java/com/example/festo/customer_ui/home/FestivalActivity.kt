@@ -47,8 +47,12 @@ class FestivalActivity : AppCompatActivity() {
                 view,
                 position,
                 id -> val selectItem = parent.getItemAtPosition(position) as Booth
+            val booth = selectItem.name
 //            Toast.makeText(this, selectItem.name, Toast.LENGTH_SHORT).show()
             val intent = Intent(this, BoothDetailActivity::class.java)
+
+            // 부스 이름을 담아서 부스 디테일 액티비티로 이동
+            intent.putExtra("boothInfo", booth);
             startActivity(intent)
         }
 

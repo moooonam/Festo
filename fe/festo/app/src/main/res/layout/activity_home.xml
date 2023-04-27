@@ -13,6 +13,13 @@
         android:layout_above="@id/my_bottom_nav"
         android:orientation="vertical" />
 
+    <!-- 지워야함 -->
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Button" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/my_bottom_nav"
         android:layout_width="match_parent"
