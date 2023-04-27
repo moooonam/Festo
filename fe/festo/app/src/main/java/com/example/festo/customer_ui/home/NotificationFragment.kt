@@ -28,11 +28,11 @@ class NotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var list : ArrayList<NotificationData> = requireActivity().intent!!.extras!!.get("DataList") as ArrayList<NotificationData>
+        var list : ArrayList<NotificationData> = requireActivity().intent!!.extras!!.get("NotifictionDataList") as ArrayList<NotificationData>
 
         listAdapter = NotificationAdapter(list)
-        mBinding?.listView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.listView?.adapter = listAdapter
+        mBinding?.notificationListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mBinding?.notificationListView?.adapter = listAdapter
 
     }
     override fun onDestroyView() {
