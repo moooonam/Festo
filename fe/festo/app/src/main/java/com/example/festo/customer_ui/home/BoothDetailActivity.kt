@@ -49,13 +49,14 @@ class BoothDetailActivity : AppCompatActivity() {
         val payBtn = findViewById<TextView>(R.id.payBtn)
         payBtn.setOnClickListener {
             for (menu in Menulist) {
-                if (menu.check) {
+                if (menu.check && menu.cnt != 0) {
                     val myOrderItem = MyOrderList(menu.image, menu.name, menu.price, menu.cnt)
                     myOrderList.add(myOrderItem)
                 }
             }
 
             val intent = Intent(this, PaymentActivity::class.java)
+            intent.putExtra("myOrderList", myOrderList)
             startActivity(intent)
         }
     }

@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/boothLogoImage"
+                    android:id="@+id/menuImage"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:layout_marginStart="10dp"
@@ -43,7 +43,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/boothLogoImage"
+                    android:layout_toRightOf="@id/menuImage"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -60,7 +60,7 @@
                             android:layout_marginBottom="4dp">
 
                             <TextView
-                                android:id="@+id/boothName"
+                                android:id="@+id/menuName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginRight="10dp"
@@ -68,7 +68,7 @@
                                 android:textSize="13sp" />
 
                             <TextView
-                                android:id="@+id/boothCategory"
+                                android:id="@+id/menuPrice"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="end"
@@ -78,7 +78,7 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/boothExplanation"
+                            android:id="@+id/menuCntPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
@@ -88,10 +88,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/menuCnt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/ordermenu_cnt"
                         android:text="수량" />
                 </LinearLayout>
 
