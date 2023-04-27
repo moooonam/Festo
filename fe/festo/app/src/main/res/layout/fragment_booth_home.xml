@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.festo.customer_ui.home.HomeFragment">
+    tools:context="com.example.festo.booth_ui.home.BoothHomeFragment">
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:src="@drawable/ic_notification"
             android:layout_gravity="end"
             android:layout_marginRight="20dp"
-            android:id="@+id/notification_btn"
+            android:id="@+id/booth_notification_btn"
             />
     </androidx.appcompat.widget.Toolbar>
 
@@ -32,7 +32,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:text="축제목록"
+        android:text="여기는 부스야"
         />
 
 </FrameLayout>

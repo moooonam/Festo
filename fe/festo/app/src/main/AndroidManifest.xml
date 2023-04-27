@@ -27,7 +27,11 @@
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp" />
+            android:theme="@style/Theme.MyApp"
+            />
+        <activity android:name=".booth_ui.BoothMainActivity"
+            android:exported="false"
+            />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
@@ -39,7 +43,13 @@
             android:exported="false" />
         <activity
             android:name=".customer_ui.home.HomeActivity"
-            android:exported="false"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"></activity>
@@ -51,13 +61,13 @@
             android:exported="false"></activity>
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@style/SplashTheme">
-            <intent-filter>
+            android:theme="@style/SplashTheme"
+            android:exported="false">
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

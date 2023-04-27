@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/boothHomeFragment"
+        android:title="홈"
+        android:icon="@drawable/ic_home"
+        />
+    <item
+        android:id="@+id/boothOderlistFragment"
+        android:title="주문내역"
+        android:icon="@drawable/ic_orderlist"
+        />
+    <item
+        android:id="@+id/boothSalesAnalysisFragment"
+        android:title="매출분석"
+        android:icon="@drawable/ic_chart"
+        />
+    <item
+        android:id="@+id/boothmypageFragment"
+        android:title="마이페이지"
+        android:icon="@drawable/ic_mypage"
+        />
+</menu>
+
+
+
+
