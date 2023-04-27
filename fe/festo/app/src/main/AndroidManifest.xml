@@ -27,6 +27,9 @@
             android:exported="false"
             android:theme="@style/Theme.MyApp"
             />
+        <activity android:name=".booth_ui.BoothMainActivity"
+            android:exported="false"
+            />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
