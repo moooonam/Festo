@@ -1,6 +1,7 @@
 package com.example.festo.host_ui
 
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.booth_ui.home.BoothHomeFragment
@@ -10,6 +11,7 @@ import com.example.festo.host_ui.boothlist.BoothListFragment
 import com.example.festo.host_ui.home.HostHomeFragment
 import com.example.festo.host_ui.salesanalysis.HostSalesAnalysisFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import net.daum.mf.map.api.MapView
 
 class HostMainActivity: AppCompatActivity() {
 

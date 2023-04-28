@@ -3,8 +3,13 @@ package com.example.festo.customer_ui.home
 
 import android.content.ClipData.Item
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
@@ -15,7 +20,8 @@ import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchFragment
 import com.example.festo.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 class HomeActivity : AppCompatActivity() {
@@ -25,7 +31,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        getHashKey()
         mBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_home)
         supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, HomeFragment())
@@ -67,6 +73,24 @@ class HomeActivity : AppCompatActivity() {
         }
 
 
+    }
+    fun getHashKey(){
+        var packageInfo : PackageInfo = PackageInfo()
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        } catch (e: PackageManager.NameNotFoundException){
+            e.printStackTrace()
+        }
+
+        for (signature: Signature in packageInfo.signatures){
+            try{
+                var md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            } catch(e: NoSuchAlgorithmException){
+                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
+            }
+        }
     }
 
 
