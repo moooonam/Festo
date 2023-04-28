@@ -9,7 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.databinding.FragmentNotificationBinding
-
+class NotificationData(
+    var state: String? = null,
+    var booth: String? = null,
+    var date : String? = null,
+)
 class NotificationFragment : Fragment() {
 
     private lateinit var listAdapter: NotificationAdapter
@@ -28,9 +32,16 @@ class NotificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var list : ArrayList<NotificationData> = requireActivity().intent!!.extras!!.get("NotifictionDataList") as ArrayList<NotificationData>
+        var NotifictionDataList: ArrayList<NotificationData> = arrayListOf(
+            NotificationData("첫번째데이터1", "두번째데이터1", "2023년4월26일"),
+            NotificationData("첫번째데이터2", "두번째데이터2","2023년4월26일"),
+            NotificationData("첫번째데이터3", "두번째데이터3","2023년4월26일"),
+            NotificationData("첫번째데이터4", "두번째데이터4","2023년4월26일"),
+            NotificationData("첫번째데이터5", "두번째데이터5","2023년4월26일"),
+        )
+//        var list : ArrayList<NotificationData> = requireActivity().intent!!.extras!!.get("NotifictionDataList") as ArrayList<NotificationData>
 
-        listAdapter = NotificationAdapter(list)
+        listAdapter = NotificationAdapter(NotifictionDataList)
         mBinding?.notificationListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.notificationListView?.adapter = listAdapter
 
