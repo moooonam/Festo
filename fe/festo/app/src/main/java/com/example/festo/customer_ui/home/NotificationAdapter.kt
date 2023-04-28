@@ -19,9 +19,9 @@ class NotificationAdapter (private var list: MutableList<NotificationData>): Rec
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: NotificationData, position: Int) {
-            state.text = data.getState()
-            booth.text = data.getBooth()
-            date.text = data.getDate()
+            state.text = data.state
+            booth.text = data.booth
+            date.text = data.date
         }
     }
 

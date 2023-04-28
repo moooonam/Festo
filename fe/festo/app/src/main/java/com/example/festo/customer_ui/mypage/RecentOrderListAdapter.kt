@@ -1,6 +1,5 @@
 package com.example.festo.customer_ui.mypage
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
-import com.example.festo.customer_ui.home.NotificationAdapter
-import com.example.festo.customer_ui.home.NotificationData
-import com.example.festo.customer_ui.home.RecentOrderListData
 
 class RecentOrderListAdapter (private var list: MutableList<RecentOrderListData>): RecyclerView.Adapter<RecentOrderListAdapter.ListItemViewHolder> () {
 
@@ -24,10 +20,10 @@ class RecentOrderListAdapter (private var list: MutableList<RecentOrderListData>
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: RecentOrderListData, position: Int) {
-            date.text = data.getDate()
-            booth.text = data.getBooth()
-            price.text = data.getPrice().toString()
-            boothImg.setImageResource(data.getBoothImg()!!)
+            date.text = data.date
+            booth.text = data.booth
+            price.text = data.price.toString()
+            boothImg.setImageResource(data.boothImg!!)
         }
     }
 
