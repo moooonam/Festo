@@ -3,6 +3,7 @@ package com.example.festo.order.domain;
 import com.example.festo.common.jpa.MoneyConverter;
 import com.example.festo.common.model.Money;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Order {
     @Column(name = "status")
     private OrderStatus orderStatus;
 
+    @CreatedDate
     private LocalDateTime orderDate;
 
     @ElementCollection(fetch = FetchType.LAZY)
@@ -30,12 +32,14 @@ public class Order {
     @OrderColumn(name = "line_idx")
     private List<OrderLine> orderLines;
 
+    protected Order() {
+    }
+
     public Order(OrderNo number, Orderer orderer, List<OrderLine> orderLines) {
         this.number = number;
         this.orderer = orderer;
         this.orderLines = orderLines;
         this.orderStatus = OrderStatus.BEFORE_PAYMENT;
-        this.orderDate = LocalDateTime.now();
         calculateTotalAmounts(this.orderLines);
     }
 
