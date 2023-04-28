@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.databinding.FragmentMypageBinding
+import com.example.festo.host_ui.HostMainActivity
+
 class RecentOrderListData(
     var date: String? = null,
     var booth: String? = null,
@@ -30,6 +32,11 @@ class MypageFragment : Fragment() {
         mBinding = binding
         mBinding!!.ivProfile2.setOnClickListener{
             val intent = Intent(getActivity(), BoothMainActivity::class.java)
+            startActivity(intent)
+        }
+
+        mBinding!!.ivProfile3.setOnClickListener{
+            val intent = Intent(getActivity(), HostMainActivity::class.java)
             startActivity(intent)
         }
         return  mBinding?.root

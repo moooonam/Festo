@@ -11,16 +11,17 @@ import androidx.fragment.app.Fragment
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.databinding.FragmentBoothMypageBinding
+import com.example.festo.databinding.FragmentHostMypageBinding
 import com.example.festo.host_ui.HostMainActivity
 
-class BoothMypageFragment : Fragment() {
-    private var mBinding : FragmentBoothMypageBinding? = null
+class HostMypageFragmnet : Fragment() {
+    private var mBinding : FragmentHostMypageBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var binding = FragmentBoothMypageBinding.inflate(inflater, container, false)
+        var binding = FragmentHostMypageBinding.inflate(inflater, container, false)
 
         mBinding = binding
 
@@ -28,8 +29,8 @@ class BoothMypageFragment : Fragment() {
             val intent = Intent(getActivity(), HomeActivity::class.java)
             startActivity(intent)
         }
-        mBinding!!.ivProfile3.setOnClickListener{
-            val intent = Intent(getActivity(), HostMainActivity::class.java)
+        mBinding!!.ivProfile2.setOnClickListener{
+            val intent = Intent(getActivity(), BoothMainActivity::class.java)
             startActivity(intent)
         }
         return  mBinding?.root
