@@ -4,6 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.festo.host_ui.boothlist.BoothListFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,5 +15,8 @@
         android:text="부스리스트페이지"
         android:textSize="50dp"
         />
+
+
+    </LinearLayout>
 
 </FrameLayout>
