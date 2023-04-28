@@ -1,0 +1,56 @@
+<html lang="ko">
+<head>
+    <meta charSet="utf-8"/>
+    <title>결제하기</title>
+    <script src="https://js.tosspayments.com/v1/payment-widget"></script>
+</head>
+<body>
+<script>
+        const clientKey = 'test_ck_k6bJXmgo28em0BeWYEA8LAnGKWx4';
+        const customerKey = 'YbX2HuSlsC9uVJW6NMRMj';
+        const paymentWidget = PaymentWidget(clientKey, customerKey); // 회원 결제
+        // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS); // 비회원 결제
+    </script>
+<div id="payment-method"></div>
+<script>
+        paymentWidget.renderPaymentMethods('#payment-method', 1000);
+        paymentWidget.requestPayment({
+            orderId: 'AD8aZDpbzXs4EQa-UkIX6',
+            orderName: '토스 티셔츠 외 2건',
+            successUrl: 'http://localhost:8080/success',
+            failUrl: 'http://localhost:8080/fail',
+            customerEmail: 'customer123@gmail.com',
+            customerName: '김토스'
+        })
+    </script>
+</body>
+
+<!--<html>-->
+<!--<head>-->
+<!--    <meta charset="utf-8" />-->
+<!--    <script src="https://js.tosspayments.com/v1/payment"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<section>-->
+<!--    &lt;!&ndash; ... &ndash;&gt;-->
+<!--    <span>총 주문금액</span>-->
+<!--    <span>15,000 원</span>-->
+<!--    <button id="payment-button">15,000원 결제하기</button>-->
+<!--</section>-->
+<!--<script>-->
+<!--      var clientKey = 'test_ck_k6bJXmgo28em0BeWYEA8LAnGKWx4'-->
+<!--      var tossPayments = TossPayments(clientKey)-->
+<!--      var button = document.getElementById('payment-button') // 결제하기 버튼-->
+<!--      button.addEventListener('click', function () {-->
+<!--        tossPayments.requestPayment('카드', {-->
+<!--          amount: 15000,-->
+<!--          orderId: 'xh916vzUTg29j13jHN3kZ',-->
+<!--          orderName: '토스 티셔츠 외 2건',-->
+<!--          customerName: '박토스',-->
+<!--          successUrl: 'http://localhost:8080/success',-->
+<!--          failUrl: 'http://localhost:8080/fail',-->
+<!--        })-->
+<!--      })-->
+<!--    </script>-->
+<!--</body>-->
+<!--</html>-->

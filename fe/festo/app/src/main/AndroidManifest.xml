@@ -20,6 +20,18 @@
             android:name=".customer_ui.home.PaymentActivity"
             android:exported="false" />
         <activity
+            android:name=".customer_ui.home.TosspayActivity"
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:scheme="supertoss" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".customer_ui.home.FestivallistActivity"
             android:exported="false"
             android:label="@string/title_activity_festivallist"
@@ -27,11 +39,10 @@
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp"
-            />
-        <activity android:name=".booth_ui.BoothMainActivity"
-            android:exported="false"
-            />
+            android:theme="@style/Theme.MyApp" />
+        <activity
+            android:name=".booth_ui.BoothMainActivity"
+            android:exported="false" />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
@@ -52,22 +63,25 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".customer_ui.home.FestivalActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="false">
-           <!-- <intent-filter>
+            android:exported="false"
+            android:theme="@style/SplashTheme">
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

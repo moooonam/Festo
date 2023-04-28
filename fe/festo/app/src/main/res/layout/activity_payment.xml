@@ -93,6 +93,7 @@
             android:textSize="19dp"
             android:layout_marginRight="20dp"
             android:text="TossPay" />
+
     </LinearLayout>
 
 </FrameLayout>
