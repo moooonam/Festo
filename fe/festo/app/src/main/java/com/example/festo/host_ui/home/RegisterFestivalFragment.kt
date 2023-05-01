@@ -18,7 +18,7 @@ import com.example.festo.R
 import com.example.festo.databinding.FragmentRegisterFestivalBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
-import net.daum.mf.map.api.MapView
+
 
 class RegisterFestivalFragment : Fragment() {
     private var mBinding : FragmentRegisterFestivalBinding? = null
