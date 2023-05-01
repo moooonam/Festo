@@ -5,6 +5,7 @@
     <!-- 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -60,15 +61,16 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".customer_ui.home.FestivalActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
-            android:exported="false"></activity>
-        <activity android:name=".host_ui.HostMainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
+        <activity
+            android:name=".host_ui.HostMainActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme"
