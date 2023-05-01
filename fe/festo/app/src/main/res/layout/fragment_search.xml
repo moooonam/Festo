@@ -30,7 +30,7 @@
                 app:iconifiedByDefault="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:queryHint="축제를 검색하세요."
+                app:queryHint="찾고싶은 축제가 있나요??"
                 app:searchIcon="@drawable/ic_search"
                 tools:ignore="MissingConstraints" />
         </androidx.constraintlayout.widget.ConstraintLayout>

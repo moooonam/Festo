@@ -25,7 +25,6 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         var binding = FragmentHomeBinding.inflate(inflater, container, false)
         mBinding = binding
         mBinding!!.testBtn.setOnClickListener {
@@ -42,7 +41,6 @@ class HomeFragment : Fragment() {
             transaction?.replace(R.id.layout_nav_bottom, NotificationFragment())
             transaction?.commit()
         }
-
 
         return mBinding?.root
 

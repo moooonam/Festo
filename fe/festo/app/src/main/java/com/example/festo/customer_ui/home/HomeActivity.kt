@@ -71,8 +71,6 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
-
-
     }
     fun getHashKey(){
         var packageInfo : PackageInfo = PackageInfo()
