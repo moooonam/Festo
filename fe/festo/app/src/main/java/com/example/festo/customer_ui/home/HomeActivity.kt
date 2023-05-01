@@ -1,44 +1,41 @@
 package com.example.festo.customer_ui.home
 
 
+import android.content.ClipData.Item
+import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.content.pm.Signature
+import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
-import android.widget.ListView
+import android.util.Base64
+import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.mypage.MypageFragment
+import com.example.festo.customer_ui.mypage.RecentOrderListData
 import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchFragment
 import com.example.festo.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 
 
 class HomeActivity : AppCompatActivity() {
 
-    // 페스티벌 더미 리스트
-    var FestiList = mutableListOf<FestiList>(
-        FestiList(R.drawable.festival1, "진주 남강유등축제"),
-        FestiList(R.drawable.festival2, "광양 전통숯불구이축제"),
-        FestiList(R.drawable.festival1, "진주 남강유등축제"),
-        FestiList(R.drawable.festival2, "광양 전통숯불구이축제"),
-    )
 
     private lateinit var mBinding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getHashKey()
         mBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_home)
-
-        val Adapter = FestListAdapter(this, FestiList)
-        val list_view = findViewById<ListView>(R.id.festivalListView)
-        list_view.adapter = Adapter
-        // 고른 축제 페이지 연결
-
         supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, HomeFragment())
             .commit()
-        // 네비게이션들을 담는 호스트
-        val TAG: String = "HomeActivity : "
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
@@ -73,6 +70,24 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+    }
+    fun getHashKey(){
+        var packageInfo : PackageInfo = PackageInfo()
+        try {
+            packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+        } catch (e: PackageManager.NameNotFoundException){
+            e.printStackTrace()
+        }
+
+        for (signature: Signature in packageInfo.signatures){
+            try{
+                var md: MessageDigest = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
+            } catch(e: NoSuchAlgorithmException){
+                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
+            }
         }
     }
 
