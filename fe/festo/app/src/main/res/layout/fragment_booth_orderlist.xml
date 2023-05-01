@@ -3,48 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.festo.booth_ui.orderlist.BoothOrderListFragment">
-<!--   <LinearLayout-->
-<!--       android:layout_width="wrap_content"-->
-<!--       android:layout_height="wrap_content"-->
-<!--       android:orientation="horizontal"-->
-<!--       android:layout_marginStart="20dp"-->
-<!--       android:layout_marginTop="30dp"-->
-<!--       >-->
 
-<!--   <Button-->
-<!--       android:layout_width="wrap_content"-->
-<!--       android:layout_height="wrap_content"-->
-<!--       android:background="@drawable/button_paylink"-->
-<!--       android:text="신규&amp;준비중"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="주문목록"
+        android:textSize="50dp"
+        />
 
-<!--      <Button-->
-<!--          android:layout_marginStart="30sp"-->
-<!--          android:layout_width="wrap_content"-->
-<!--          android:layout_height="wrap_content"-->
-<!--          android:background="@drawable/button_paylink"-->
-<!--          android:text="완료"/>-->
-<!--   </LinearLayout>-->
-   <com.google.android.material.button.MaterialButtonToggleGroup
-       android:id="@+id/toggleButton"
-       app:singleSelection="true"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content">
-      <Button
-          style="?attr/materialButtonOutlinedStyle"
-          android:id="@+id/button1"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Button 1"
-          />
-      <Button
-          style="?attr/materialButtonOutlinedStyle"
-          android:id="@+id/button2"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="Button 2"
-          />
-
-   </com.google.android.material.button.MaterialButtonToggleGroup>
 </FrameLayout>
