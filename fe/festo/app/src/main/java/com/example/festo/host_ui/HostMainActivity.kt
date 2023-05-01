@@ -11,7 +11,7 @@ import com.example.festo.host_ui.boothlist.BoothListFragment
 import com.example.festo.host_ui.home.HostHomeFragment
 import com.example.festo.host_ui.salesanalysis.HostSalesAnalysisFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import net.daum.mf.map.api.MapView
+
 
 class HostMainActivity: AppCompatActivity() {
 

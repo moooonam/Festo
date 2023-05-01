@@ -73,6 +73,4 @@ dependencies {
 
 //    compile files('libs/libDaumMapAndroid.jar')
 
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
 }
