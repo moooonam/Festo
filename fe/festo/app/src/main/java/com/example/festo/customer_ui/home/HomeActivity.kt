@@ -1,20 +1,16 @@
 package com.example.festo.customer_ui.home
 
 
-import android.content.ClipData.Item
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.mypage.MypageFragment
-import com.example.festo.customer_ui.mypage.RecentOrderListData
 import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchFragment
@@ -24,6 +20,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
+@Suppress("DEPRECATION")
 class HomeActivity : AppCompatActivity() {
 
 
@@ -72,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
             true
         }
     }
+    @SuppressLint("PackageManagerGetSignatures")
     fun getHashKey(){
         var packageInfo : PackageInfo = PackageInfo()
         try {
@@ -86,7 +84,7 @@ class HomeActivity : AppCompatActivity() {
                 md.update(signature.toByteArray())
                 Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
             } catch(e: NoSuchAlgorithmException){
-                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
+                Log.e("KEY_HASH", "Unable to get MessageDigest. signature = $signature", e)
             }
         }
     }
