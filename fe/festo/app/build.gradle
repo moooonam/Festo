@@ -53,9 +53,12 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
 
     // tosspay
+//    implementation 'com.tosspayments.sdk:widget:2.3.0'
+//    implementation 'com.github.tosspayments:payment-sdk-android:1.0.0'
     implementation 'com.github.tosspayments:payment-sdk-android:0.1.2'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    implementation 'androidx.core:core:1.7.0'
+//    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+//    implementation 'androidx.core:core:1.7.0'
+//    implementation 'com.android.support:appcompat-v7:33.0.0'
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -17,18 +17,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".customer_ui.home.PaymentResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".customer_ui.home.PaymentActivity"
             android:exported="false" />
         <activity
             android:name=".customer_ui.home.TosspayActivity"
-            android:exported="false"
+            android:exported="true"
             tools:ignore="AppLinkUrlError">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
-                    android:scheme="supertoss" />
+                    android:host="action"
+                    android:scheme="supertoss://" />
             </intent-filter>
         </activity>
         <activity
