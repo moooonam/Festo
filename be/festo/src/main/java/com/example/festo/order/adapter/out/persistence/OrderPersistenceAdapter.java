@@ -2,7 +2,6 @@ package com.example.festo.order.adapter.out.persistence;
 
 import com.example.festo.order.application.port.out.PlaceOrderPort;
 import com.example.festo.order.domain.Order;
-import com.example.festo.order.domain.OrderNo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort {
     }
 
     @Override
-    public OrderNo nextOrderNo() {
-        return orderRepository.nextOrderNo();
+    public int nextOrderNo(Long boothId) {
+        return orderRepository.nextOrderNo(boothId);
     }
 }

@@ -3,16 +3,24 @@ package com.example.festo.order.domain;
 import com.example.festo.common.jpa.MoneyConverter;
 import com.example.festo.common.model.Money;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Getter
 public class Order {
 
-    @EmbeddedId
-    private OrderNo number;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderId;
+
+    @Embedded
+    private OrderNo orderNo;
+
+    private Long boothId;
 
     @Embedded
     private Orderer orderer;
@@ -35,11 +43,12 @@ public class Order {
     protected Order() {
     }
 
-    public Order(OrderNo number, Orderer orderer, List<OrderLine> orderLines) {
-        this.number = number;
+    public Order(OrderNo orderNo, Orderer orderer, List<OrderLine> orderLines) {
+        this.orderNo = orderNo;
         this.orderer = orderer;
         this.orderLines = orderLines;
-        this.orderStatus = OrderStatus.BEFORE_PAYMENT;
+        this.orderStatus = OrderStatus.WAITING_ACCEPTANCE;
+
         calculateTotalAmounts(this.orderLines);
     }
 

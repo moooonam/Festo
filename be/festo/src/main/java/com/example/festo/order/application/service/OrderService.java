@@ -37,7 +37,7 @@ public class OrderService implements PlaceOrderUseCase {
         }
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
-        OrderNo orderNo = placeOrderPort.nextOrderNo();
+        OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
         Order order = new Order(orderNo, orderer, orderLines);
 
         placeOrderPort.placeOrder(order);
