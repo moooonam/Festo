@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    @Query("select count(o) + 1 from Order o where o.boothId = :boothId")
+    @Query("select count(o) + 1 from Order o where o.boothInfo.boothId = :boothId")
     int nextOrderNo(@Param("boothId") Long boothId);
 }
