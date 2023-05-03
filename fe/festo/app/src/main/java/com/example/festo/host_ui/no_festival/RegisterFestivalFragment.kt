@@ -1,4 +1,4 @@
-package com.example.festo.host_ui.home
+package com.example.festo.host_ui.no_festival
 
 
 
@@ -15,7 +15,9 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
 import com.example.festo.R
+import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.databinding.FragmentRegisterFestivalBinding
+import com.example.festo.host_ui.HostMainActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 
@@ -76,6 +78,19 @@ class RegisterFestivalFragment : Fragment() {
 
                 }
             })
+        }
+
+        // 축제 등록 버튼 누르면 메인 페이지로 이동
+        binding.registerFestival.setOnClickListener{
+            val intent = Intent(requireContext(), HostMainActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 일반 사용자 마이페이지로 이동
+        binding.goCustomer.setOnClickListener {
+            val intent = Intent(requireContext(), HomeActivity::class.java)
+            intent.putExtra("fragment", "MypageFragment")
+            startActivity(intent)
         }
 
         return  mBinding?.root

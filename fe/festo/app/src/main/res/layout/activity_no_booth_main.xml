@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".host_ui.no_festival.NoFeativalMainActivity">
+    tools:context=".booth_ui.no_booth.NoBoothMainActivity">
 
     <LinearLayout
-        android:id="@+id/no_festival_layout_nav_bottom"
+        android:id="@+id/no_booth_layout_nav_bottom"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" />

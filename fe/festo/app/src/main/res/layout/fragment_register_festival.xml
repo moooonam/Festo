@@ -3,12 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="20dp"
-    tools:context="com.example.festo.host_ui.home.RegisterFestivalFragment">
+    android:paddingTop="7dp"
+    tools:context="com.example.festo.host_ui.no_festival.RegisterFestivalFragment">
+
+    <LinearLayout
+        android:id="@+id/goCustomer"
+        android:paddingLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일반 사용자로 돌아가기"
+            android:textColor="@color/festO" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -114,13 +136,14 @@
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:orientation="horizontal">
+
             <ImageView
-                android:layout_marginTop="20dp"
+                android:id="@+id/iv_map"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_map"
-                android:id="@+id/iv_map"
-                />
+                android:layout_marginTop="20dp"
+                android:src="@drawable/ic_map" />
+
             <EditText
                 android:layout_width="300dp"
                 android:layout_height="match_parent"
@@ -143,20 +166,21 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:layout_gravity="center"
                 android:id="@+id/iv_festivalImage"
                 android:layout_width="250dp"
                 android:layout_height="170dp"
+                android:layout_gravity="center"
 
                 android:src="@drawable/logo1" />
 
         </LinearLayout>
+
         <Button
+            android:id="@+id/registerFestival"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="부스등록"
             android:layout_gravity="center"
-            />
+            android:text="축제 등록" />
     </LinearLayout>
 
 </FrameLayout>

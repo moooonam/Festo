@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.festo.R
-import com.example.festo.booth_ui.home.RegisterBoothFragment
 import com.example.festo.databinding.FragmentHostHomeBinding
+import com.example.festo.host_ui.no_festival.RegisterFestivalFragment
 
 class HostHomeFragment : Fragment() {
     private var mBinding: FragmentHostHomeBinding? = null
