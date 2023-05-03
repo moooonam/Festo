@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.mypage.OrderlistAdapter
-import com.example.festo.customer_ui.mypage.RecentOrderListAdapter
-import com.example.festo.customer_ui.mypage.RecentOrderListData
 import com.example.festo.databinding.FragmentOrderlistBinding
+
 class OrderListData(
     var boothImg: Int? = null,
     var festival: String? = null,
