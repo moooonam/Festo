@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
@@ -33,14 +34,13 @@ class PaymentResultActivity : AppCompatActivity() {
         val resultText = findViewById<TextView>(R.id.result)
         resultText.text = isSuccess.toString()
 
-        // 주문내역으로 이동
-//        val goOrderListBtn = findViewById<Button>(R.id.goOrderList)
+//         주문내역으로 이동
+        val goOrderListBtn = findViewById<Button>(R.id.goOrderList)
 
-//        goOrderListBtn.setOnClickListener{
-//            supportFragmentManager
-//                .beginTransaction()
-//                .replace(R.id.orderlistFragment, OrderlistFragment())
-//                .commit()
-//        }
+        goOrderListBtn.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "orderListFragment")
+            startActivity(intent)
+        }
     }
 }

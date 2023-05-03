@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".host_ui.no_festival.NoFeativalMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".customer_ui.home.TosspayActivity"
             android:exported="false" />
         <activity
