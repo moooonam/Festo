@@ -32,13 +32,15 @@ public class OrderController {
                              .build();
     }
 
-    @PatchMapping("/api/v1/orders/{orderNo}")
-    public ResponseEntity<Void> updateState(@PathVariable("orderNo") String orderNo, OrderStatusChangeRequest orderStatusChangeRequest) {
+    @PatchMapping("/api/v1/orders/{orderId}/status")
+    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, OrderStatusChangeRequest orderStatusChangeRequest) {
         User user = (User) SecurityContextHolder.getContext()
                                                 .getAuthentication()
                                                 .getPrincipal();
 
-        orderStatusChangeUseCase.changeStatus(orderNo, orderStatusChangeUseCase);
+        orderStatusChangeRequest.setRequesterId(Long.parseLong(user.getUsername()));
+
+        orderStatusChangeUseCase.changeStatus(orderId, orderStatusChangeRequest);
 
         return ResponseEntity.ok()
                              .build();

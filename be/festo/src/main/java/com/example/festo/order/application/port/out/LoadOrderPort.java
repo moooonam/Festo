@@ -2,9 +2,7 @@ package com.example.festo.order.application.port.out;
 
 import com.example.festo.order.domain.Order;
 
-public interface PlaceOrderPort {
+public interface LoadOrderPort {
 
-    void placeOrder(Order order);
-
-    int nextOrderNo(Long boothId);
+    Order loadOrder(Long orderId);
 }

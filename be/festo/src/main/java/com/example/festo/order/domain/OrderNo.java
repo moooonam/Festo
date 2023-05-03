@@ -10,16 +10,16 @@ import java.util.Objects;
 public class OrderNo implements Serializable {
 
     @Column(name = "order_number")
-    private String number;
+    private int number;
 
     protected OrderNo() {
     }
 
-    public OrderNo(String number) {
+    public OrderNo(int number) {
         this.number = number;
     }
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
@@ -36,7 +36,7 @@ public class OrderNo implements Serializable {
         return Objects.hash(number);
     }
 
-    public static OrderNo of(String number) {
+    public static OrderNo of(int number) {
         return new OrderNo(number);
     }
 }

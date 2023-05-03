@@ -12,13 +12,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orderer {
+public class BoothInfo {
 
     @AttributeOverrides(
-            @AttributeOverride(name = "id", column = @Column(name = "orderer_id"))
+            @AttributeOverride(name = "id", column = @Column(name = "booth_id"))
     )
-    private Long memberId;
+    private Long boothId;
 
-    @Column(name = "orderer_name")
-    private String name;
+    @AttributeOverrides(
+            @AttributeOverride(name = "id", column = @Column(name = "owner_id"))
+    )
+    private Long ownerId;
+
+    public boolean isOwner(Long id) {
+        return this.ownerId.equals(id);
+    }
 }

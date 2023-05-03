@@ -1,5 +1,7 @@
 package com.example.festo.order.application.port.in;
 
+import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
+
 public interface OrderStatusChangeUseCase {
-    void changeStatus(String orderNo, OrderStatusChangeUseCase orderStatusChangeUseCase);
+    void changeStatus(Long orderId, OrderStatusChangeRequest orderStatusChangeUseCase);
 }

@@ -15,4 +15,8 @@ public class OrderRequest {
 
     private Long ordererMemberId;
 
+    private Long boothId;
+
+    private PaymentInfo paymentInfo;
+
 }
