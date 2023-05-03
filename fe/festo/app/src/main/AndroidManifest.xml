@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -18,6 +17,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".host_ui.no_festival.NoFeativalMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer_ui.home.TosspayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer_ui.home.PaymentResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".customer_ui.home.PaymentActivity"
             android:exported="false" />
         <activity
@@ -28,11 +36,10 @@
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp"
-            />
-        <activity android:name=".booth_ui.BoothMainActivity"
-            android:exported="false"
-            />
+            android:theme="@style/Theme.MyApp" />
+        <activity
+            android:name=".booth_ui.BoothMainActivity"
+            android:exported="false" />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
@@ -53,24 +60,28 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".customer_ui.home.FestivalActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
-            android:exported="false"></activity>
-        <activity android:name=".host_ui.HostMainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
+        <activity
+            android:name=".host_ui.HostMainActivity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="false">
-            <!-- <intent-filter>
+            android:exported="false"
+            android:theme="@style/SplashTheme">
+
+            <!--
+             <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
                  <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>-->
+             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"

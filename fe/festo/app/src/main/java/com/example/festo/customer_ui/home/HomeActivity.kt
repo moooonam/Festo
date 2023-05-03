@@ -24,6 +24,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
+
 class HomeActivity : AppCompatActivity() {
 
 
@@ -70,6 +71,16 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+
+        // 결제완료 후 주문내역으로 이동 한 경우
+        val fragmentName = intent.getStringExtra("fragment")
+        if (fragmentName == "orderListFragment") {
+            val OrderlistFragment = OrderlistFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, OrderlistFragment).commit()
+            // 네비게이션도 주문내역이 선택되어지도록 변경
+            bottomNavigationView.setSelectedItemId(R.id.orderlistFragment)
         }
 
 

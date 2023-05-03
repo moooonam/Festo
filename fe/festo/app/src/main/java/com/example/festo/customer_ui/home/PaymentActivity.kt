@@ -1,13 +1,18 @@
 package com.example.festo.customer_ui.home
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
+import com.tosspayments.paymentsdk.PaymentWidget
+import com.tosspayments.paymentsdk.TossPayments
 
 @Suppress("DEPRECATION")
 class PaymentActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
@@ -26,5 +31,13 @@ class PaymentActivity : AppCompatActivity() {
         }
         val total = findViewById<TextView>(com.example.festo.R.id.totalPrice)
         total.text = "${totalPrice.toString()}원"
+
+        val payBtn = findViewById<TextView>(R.id.payBtn)
+        payBtn.setOnClickListener {
+            val intent = Intent(this, TosspayActivity::class.java)
+            startActivity(intent)
+        }
+
     }
+
 }
