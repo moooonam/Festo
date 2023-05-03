@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.festo.booth_ui.orderlist.BoothOrderListFragment">
+    tools:context="com.example.festo.booth_ui.orderlist.BoothOrderListCompleteFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,13 +29,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <android.widget.Button
                 android:id="@+id/orerlist_btn_1"
                 android:layout_width="110dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/button_payment"
+                android:background="@drawable/button_payment2"
                 android:text="신규,준비중"
                 android:textSize="12sp" />
 
@@ -44,7 +44,7 @@
                 android:layout_width="110dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/button_payment2"
+                android:background="@drawable/button_payment"
                 android:text="완료"
                 android:textColor="@color/black"
                 android:textSize="12sp" />
@@ -55,7 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginHorizontal="20dp"
-
             android:background="#80000000" />
 
         <LinearLayout
@@ -74,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="상태" />
+                android:text="주문일자" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -82,11 +81,6 @@
                 android:layout_marginStart="30dp"
                 android:text="주문목록" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="100dp"
-                android:text="상태변경" />
 
         </LinearLayout>
 
@@ -96,13 +90,13 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="2dp"
             android:background="#80000000" />
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/boothOrderlistFragment_listview"
+            android:id="@+id/boothOrderlistCompleteFragment_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
 
         </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 </FrameLayout>
