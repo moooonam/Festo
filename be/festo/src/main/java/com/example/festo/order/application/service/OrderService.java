@@ -9,10 +9,7 @@ import com.example.festo.order.application.port.in.PlaceOrderUseCase;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
 import com.example.festo.order.application.port.out.UpdateOrderPort;
-import com.example.festo.order.domain.Order;
-import com.example.festo.order.domain.OrderLine;
-import com.example.festo.order.domain.OrderNo;
-import com.example.festo.order.domain.Orderer;
+import com.example.festo.order.domain.*;
 import com.example.festo.product.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,7 +44,8 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
-        Order order = new Order(orderNo, orderer, orderLines);
+        BoothInfo boothInfo = null; // TODO
+        Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
         placeOrderPort.placeOrder(order);
     }
