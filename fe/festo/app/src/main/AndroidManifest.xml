@@ -74,10 +74,7 @@
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
             android:exported="false"></activity>
-        <activity
-            android:name=".host_ui.HostMainActivity"
-            android:exported="false"></activity>
-            android:exported="false" />
+
         <activity
             android:name=".host_ui.HostMainActivity"
             android:exported="false" />
@@ -87,7 +84,7 @@
             android:theme="@style/SplashTheme">
             <!-- <intent-filter>
 
-            <!--
+            <!-
              <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
