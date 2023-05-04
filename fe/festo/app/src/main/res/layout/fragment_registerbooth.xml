@@ -3,12 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="20dp"
-    tools:context="com.example.festo.booth_ui.home.RegisterBoothFragment">
+    android:paddingTop="7dp"
+    tools:context="com.example.festo.booth_ui.no_booth.RegisterBoothFragment">
+
+    <LinearLayout
+        android:id="@+id/goCustomer"
+        android:paddingLeft="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/ic_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일반 사용자로 돌아가기"
+            android:textColor="@color/festO" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:orientation="vertical">
 
         <TextView
@@ -119,6 +141,13 @@
                 android:src="@drawable/logo1" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/registerBooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="부스 등록" />
 
     </LinearLayout>
 

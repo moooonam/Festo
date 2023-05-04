@@ -86,6 +86,14 @@ class HomeActivity : AppCompatActivity() {
             bottomNavigationView.setSelectedItemId(R.id.orderlistFragment)
         }
 
+        // 다른 프로필에서 일반 사용자로 돌아온 경우
+        if (fragmentName == "MypageFragment") {
+            val MypageFragment = MypageFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, MypageFragment).commit()
+            // 네비게이션도 마이페이지가 선택되어지도록 변경
+            bottomNavigationView.setSelectedItemId(R.id.mypageFragment)
+        }
+
 
     }
     fun getHashKey(){

@@ -1,4 +1,4 @@
-package com.example.festo.booth_ui.home
+package com.example.festo.booth_ui.no_booth
 
 
 
@@ -11,8 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.databinding.FragmentRegisterboothBinding
+import com.example.festo.host_ui.HostMainActivity
 
 class RegisterBoothFragment : Fragment() {
     private var mBinding : FragmentRegisterboothBinding? = null
@@ -52,6 +54,19 @@ class RegisterBoothFragment : Fragment() {
 
             var picker = TimePickerDialog( requireContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar,listener, hour, minute, true ) // true하면 24시간 제
             picker.show()
+        }
+
+        // 부스 등록 버튼 누르면 메인 페이지로 이동
+        binding.registerBooth.setOnClickListener{
+            val intent = Intent(requireContext(), BoothMainActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 일반 사용자 마이페이지로 이동
+        binding.goCustomer.setOnClickListener {
+            val intent = Intent(requireContext(), HomeActivity::class.java)
+            intent.putExtra("fragment", "MypageFragment")
+            startActivity(intent)
         }
         return  mBinding?.root
     }
