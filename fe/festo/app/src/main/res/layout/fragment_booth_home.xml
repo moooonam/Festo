@@ -335,6 +335,10 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="#A9A9A9" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -342,6 +346,16 @@
                         android:text="MENU"
                         android:textSize="20dp"
                         android:textStyle="bold" />
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="220dp"
+                            android:textSize="10sp"
+                            android:text="메뉴추가"
+                            android:id="@+id/btn_addmenu"
+                             />
+                    </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/menulistFragment_listView"
