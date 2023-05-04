@@ -21,6 +21,8 @@ class TosspayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tosspay)
 
+        val totalPrice = intent.getIntExtra("totalPrice", 0)
+
         paymentWidget = PaymentWidget(
             activity = this,
             clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq",
@@ -31,7 +33,7 @@ class TosspayActivity : AppCompatActivity() {
         paymentWidget.setMethodWidget(methodWidget)
 
         paymentWidget.renderPaymentMethodWidget(
-            amount = 1000,
+            amount = totalPrice,
             orderId = "toss106923984729847289"
         )
 
