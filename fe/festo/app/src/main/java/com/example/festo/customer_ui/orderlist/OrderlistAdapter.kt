@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.orderlist.OrderListData
 
-class OrderlistAdapter (private var list: MutableList<OrderListData>): RecyclerView.Adapter<OrderlistAdapter.ListItemViewHolder> () {
+class OrderlistAdapter(private var list: MutableList<OrderListData>) :
+    RecyclerView.Adapter<OrderlistAdapter.ListItemViewHolder>() {
 
     // inner class로 ViewHolder 정의
-    inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
+    inner class ListItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         var festival: TextView = itemView!!.findViewById(R.id.tv_festivaltitle)
         var date: TextView = itemView!!.findViewById(R.id.tv_orderdate)
         var booth: TextView = itemView!!.findViewById(R.id.tv_boothtitle)
@@ -36,7 +37,8 @@ class OrderlistAdapter (private var list: MutableList<OrderListData>): RecyclerV
 
     // ViewHolder에게 item을 보여줄 View로 쓰일 item_data_list.xml를 넘기면서 ViewHolder 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_orderlist, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.list_item_orderlist, parent, false)
         return ListItemViewHolder(view)
     }
 
