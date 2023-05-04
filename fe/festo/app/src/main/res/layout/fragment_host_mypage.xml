@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.festo.host_ui.mypage.HostMypageFragmnet">
+    tools:context="com.example.festo.host_ui.mypage.HostMypageFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:paddingHorizontal="10dp"
-                        android:src="@drawable/mypage_profile" />
+                        android:src="@drawable/user_mypage_unactive" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:paddingHorizontal="10dp"
-                        android:src="@drawable/mypage_profile" />
+                        android:src="@drawable/booth_mypage_unactive" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:paddingHorizontal="10dp"
-                        android:src="@drawable/mypage_profile" />
+                        android:src="@drawable/festival_mypage_active" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

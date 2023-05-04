@@ -78,7 +78,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:paddingHorizontal="10dp"
-                        android:src="@drawable/mypage_profile" />
+                        android:src="@drawable/booth_mypage_unactive" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:paddingHorizontal="10dp"
-                        android:src="@drawable/mypage_profile" />
+                        android:src="@drawable/festival_mypage_unactive" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
