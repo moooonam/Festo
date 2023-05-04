@@ -19,10 +19,7 @@ class HostHomeFragment : Fragment() {
     ): View? {
         var binding = FragmentHostHomeBinding.inflate(inflater, container, false)
         mBinding = binding
-        mBinding!!.goRegisterfestivalBtn.setOnClickListener {
-            val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.host_layout_nav_bottom, RegisterFestivalFragment())
-            transaction?.commit()}
+
         return mBinding?.root
     }
 
