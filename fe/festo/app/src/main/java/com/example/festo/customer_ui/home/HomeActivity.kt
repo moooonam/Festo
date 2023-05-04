@@ -17,6 +17,7 @@ import com.example.festo.customer_ui.mypage.MypageFragment
 import com.example.festo.customer_ui.mypage.RecentOrderListData
 import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.recent.RecentFragment
+import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.customer_ui.search.SearchFragment
 import com.example.festo.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -46,9 +47,11 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 R.id.searchFragment -> {
-                    supportFragmentManager.beginTransaction()
+                    /*supportFragmentManager.beginTransaction()
                         .replace(R.id.layout_nav_bottom, SearchFragment()).commit()
-                    return@setOnItemSelectedListener true
+                    return@setOnItemSelectedListener true*/
+                    val intent = Intent(this,SearchActivity::class.java)
+                    startActivity(intent)
                 }
 
                 R.id.recentFragment -> {
@@ -71,8 +74,6 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
-
-
     }
     fun getHashKey(){
         var packageInfo : PackageInfo = PackageInfo()

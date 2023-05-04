@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -28,11 +27,18 @@
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp"
-            />
-        <activity android:name=".booth_ui.BoothMainActivity"
-            android:exported="false"
-            />
+            android:theme="@style/Theme.MyApp">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+
+        <activity
+            android:name=".booth_ui.BoothMainActivity"
+            android:exported="false" />
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
@@ -60,12 +66,13 @@
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
             android:exported="false"></activity>
-        <activity android:name=".host_ui.HostMainActivity"
+        <activity
+            android:name=".host_ui.HostMainActivity"
             android:exported="false"></activity>
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/SplashTheme"
-            android:exported="false">
+            android:exported="false"
+            android:theme="@style/SplashTheme">
             <!-- <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
 
