@@ -36,7 +36,14 @@
         <activity
             android:name=".customer_ui.search.SearchActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyApp" />
+            android:theme="@style/Theme.MyApp">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".booth_ui.BoothMainActivity"
             android:exported="false" />
@@ -66,6 +73,10 @@
             android:exported="false" />
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
+            android:exported="false"></activity>
+        <activity
+            android:name=".host_ui.HostMainActivity"
+            android:exported="false"></activity>
             android:exported="false" />
         <activity
             android:name=".host_ui.HostMainActivity"
@@ -74,6 +85,7 @@
             android:name=".SplashActivity"
             android:exported="false"
             android:theme="@style/SplashTheme">
+            <!-- <intent-filter>
 
             <!--
              <intent-filter>
