@@ -6,344 +6,354 @@
     android:layout_height="match_parent"
     tools:context="com.example.festo.booth_ui.home.BoothHomeFragment">
 
-    <androidx.appcompat.widget.Toolbar
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="fest'O"
-            android:textColor="#F24E1E"
-            android:textSize="22sp" />
-
-        <ImageView
-            android:id="@+id/booth_notification_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_notification" />
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:orientation="vertical">
-
-        <!--        제일 상단-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="부스이름"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/booth_category"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="카테고리"
-                android:textColor="#fff"
-                android:textSize="15sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="영업시작"
-                android:textColor="#fff"
-                android:textSize="15sp" />
-
-        </LinearLayout>
-
-        <!--인기메뉴 Top3-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/festO"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="최근 가장 인기가 많았던 메뉴에요!"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-
-                <!--            메뉴 하나-->
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="메뉴이름1"
-                            android:textColor="@color/white"
-                            android:textSize="11dp" />
-
-                        <ImageView
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:src="@mipmap/ic_launcher" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="20"
-                        android:text="1"
-                        android:textColor="#AF3410"
-                        android:textSize="90dp"
-                        android:textStyle="bold" />
-
-                </FrameLayout>
-
-<!--                세 메뉴 양쪽정렬 하기 위해 넣어놓은 빈 뷰-->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-
-                    />
-
-                <!--            메뉴 하나-->
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="메뉴이름1"
-                            android:textColor="@color/white"
-                            android:textSize="11dp" />
-
-                        <ImageView
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:src="@mipmap/ic_launcher" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="20"
-                        android:text="2"
-                        android:textColor="#AF3410"
-                        android:textSize="90dp"
-                        android:textStyle="bold" />
-
-                </FrameLayout>
-
-                <!--                세 메뉴 양쪽정렬 하기 위해 넣어놓은 빈 뷰-->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
-
-                <!--            메뉴 하나-->
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="25dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="메뉴이름1"
-                            android:textColor="@color/white"
-                            android:textSize="11dp" />
-
-                        <ImageView
-                            android:id="@+id/boothLogoImage"
-                            android:layout_width="90dp"
-                            android:layout_height="90dp"
-                            android:src="@mipmap/ic_launcher" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="20dp"
-                        android:shadowColor="@color/white"
-                        android:shadowRadius="20"
-                        android:text="3"
-                        android:textColor="#AF3410"
-                        android:textSize="90dp"
-                        android:textStyle="bold" />
-
-                </FrameLayout>
-            </LinearLayout>
-
-        </LinearLayout>
-
-<!--        부스정보-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="나의 부스"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="정보수정"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    android:layout_gravity="start"
+                    android:text="fest'O"
+                    android:textColor="#F24E1E"
+                    android:textSize="22sp" />
 
                 <ImageView
-                    android:layout_width="90dp"
-                    android:layout_height="90dp"
-                    android:src="@mipmap/ic_launcher" />
-
-                <LinearLayout
+                    android:id="@+id/booth_notification_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="end"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/ic_notification" />
+            </androidx.appcompat.widget.Toolbar>
 
-                    <LinearLayout
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+                <!--        제일 상단-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp">
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
-                        android:paddingTop="20dp"
-                        android:paddingBottom="10dp"
-                        android:paddingRight="10dp">
-                        <TextView
+                        android:text="부스이름"
+                        android:textSize="25dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/booth_category"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="카테고리"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="영업시작"
+                        android:textColor="#fff"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <!--인기메뉴 Top3-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/festO"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="최근 가장 인기가 많았던 메뉴에요!"
+                        android:textColor="@color/white"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!--            메뉴 하나-->
+                        <FrameLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="부스이름" />
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="25dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="메뉴이름1"
+                                    android:textColor="@color/white"
+                                    android:textSize="11dp" />
+
+                                <ImageView
+                                    android:layout_width="90dp"
+                                    android:layout_height="90dp"
+                                    android:src="@mipmap/ic_launcher" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="20dp"
+                                android:shadowColor="@color/white"
+                                android:shadowRadius="20"
+                                android:text="1"
+                                android:textColor="#AF3410"
+                                android:textSize="90dp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <!--                세 메뉴 양쪽정렬 하기 위해 넣어놓은 빈 뷰-->
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1"
+
                             />
+
+                        <!--            메뉴 하나-->
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="25dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="메뉴이름1"
+                                    android:textColor="@color/white"
+                                    android:textSize="11dp" />
+
+                                <ImageView
+                                    android:layout_width="90dp"
+                                    android:layout_height="90dp"
+                                    android:src="@mipmap/ic_launcher" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="20dp"
+                                android:shadowColor="@color/white"
+                                android:shadowRadius="20"
+                                android:text="2"
+                                android:textColor="#AF3410"
+                                android:textSize="90dp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+
+                        <!--                세 메뉴 양쪽정렬 하기 위해 넣어놓은 빈 뷰-->
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <!--            메뉴 하나-->
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="25dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="메뉴이름1"
+                                    android:textColor="@color/white"
+                                    android:textSize="11dp" />
+
+                                <ImageView
+                                    android:id="@+id/boothLogoImage"
+                                    android:layout_width="90dp"
+                                    android:layout_height="90dp"
+                                    android:src="@mipmap/ic_launcher" />
+
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="20dp"
+                                android:shadowColor="@color/white"
+                                android:shadowRadius="20"
+                                android:text="3"
+                                android:textColor="#AF3410"
+                                android:textSize="90dp"
+                                android:textStyle="bold" />
+
+                        </FrameLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!--        부스정보-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textStyle="bold"
-                            android:text="16:00 ~ 20:00" />
+                            android:layout_gravity="center"
+                            android:text="나의 부스"
+                            android:textSize="20dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="정보수정"
+                            android:textStyle="bold" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
+                            android:src="@mipmap/ic_launcher" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:paddingTop="20dp"
+                                android:paddingRight="10dp"
+                                android:paddingBottom="10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="부스이름"
+                                    android:textStyle="bold" />
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="16:00 ~ 20:00"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="20dp"
+                                android:text="부스의 위치가 들어갈 곳" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2px"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="#A9A9A9" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="20dp"
-                        android:text="부스의 위치가 들어갈 곳" />
+                        android:text="MENU"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/menulistFragment_listView"
+                        android:layout_width="match_parent"
+                        android:layout_height="540dp"
+                        android:layout_marginTop="20dp"></androidx.recyclerview.widget.RecyclerView>
+
                 </LinearLayout>
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2px"
-                android:background="#A9A9A9"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MENU"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/boothlistFragment_listView"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginTop="20dp">-->
-<!--            </androidx.recyclerview.widget.RecyclerView>-->
-
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 
 </FrameLayout>

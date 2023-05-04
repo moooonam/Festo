@@ -3,13 +3,11 @@ package com.example.festo.host_ui.boothlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
-import com.example.festo.customer_ui.orderlist.OrderListData
 
-class BoothlistAdapter (private var list: MutableList<BoothListData>): RecyclerView.Adapter<BoothlistAdapter.ListItemViewHolder> () {
+class BoothlistAdapter(private var list: ArrayList<BoothListData>): RecyclerView.Adapter<BoothlistAdapter.ListItemViewHolder> () {
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
