@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.customer_ui.home.HomeActivity
-import com.example.festo.databinding.FragmentBoothMypageBinding
 import com.example.festo.databinding.FragmentHostMypageBinding
-import com.example.festo.host_ui.HostMainActivity
 
-class HostMypageFragmnet : Fragment() {
+class HostMypageFragment : Fragment() {
     private var mBinding : FragmentHostMypageBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,

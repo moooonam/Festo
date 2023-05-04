@@ -43,7 +43,16 @@ class BoothOrderListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         var BoothOrderListDataList: ArrayList<BoothOrderListData> = arrayListOf(
             BoothOrderListData(1,"01","대기","15:00","닭꼬치",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2)
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
+            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
         )
         listAdapter = BoothOrderListAdapter(BoothOrderListDataList)
         mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)

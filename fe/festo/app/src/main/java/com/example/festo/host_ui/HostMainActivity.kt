@@ -1,11 +1,9 @@
 package com.example.festo.host_ui
 
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
-import com.example.festo.booth_ui.home.BoothHomeFragment
-import com.example.festo.booth_ui.mypage.HostMypageFragmnet
+import com.example.festo.booth_ui.mypage.HostMypageFragment
 import com.example.festo.databinding.ActivityHostMainBinding
 import com.example.festo.host_ui.boothlist.BoothListFragment
 import com.example.festo.host_ui.home.HostHomeFragment
@@ -42,7 +40,7 @@ class HostMainActivity: AppCompatActivity() {
                 }
                 R.id.hostMypageFragment -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.host_layout_nav_bottom, HostMypageFragmnet()).commit()
+                        .replace(R.id.host_layout_nav_bottom, HostMypageFragment()).commit()
                     return@setOnItemSelectedListener true
                 }
             }
