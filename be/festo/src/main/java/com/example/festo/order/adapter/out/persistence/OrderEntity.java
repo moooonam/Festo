@@ -58,4 +58,8 @@ public class OrderEntity {
         this.totalAmounts = totalAmounts;
         this.orderStatus = orderStatus;
     }
+
+    public void updateStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }

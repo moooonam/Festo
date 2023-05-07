@@ -6,7 +6,7 @@ import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import com.example.festo.member.domain.Member;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
-import com.example.festo.order.application.port.out.UpdateOrderPort;
+import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
 import com.example.festo.order.domain.BoothInfo;
 import com.example.festo.order.domain.Order;
 import com.example.festo.order.domain.Orderer;
@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
-public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, UpdateOrderPort {
+public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, UpdateOrderStatusPort {
 
     private final OrderRepository orderRepository;
 
@@ -59,10 +59,14 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
     }
 
     @Override
-    public Order updateOrder(Order order) {
-        orderRepository.save(mapToOrderEntity(order));
+    public Order updateOrderStatus(Order order) {
+        OrderEntity orderEntity = orderRepository.findById(order.getOrderId())
+                                                 .orElseThrow(NoSuchElementException::new);
 
-        return order; // TODO
+        orderEntity.updateStatus(order.getOrderStatus());
+        orderRepository.save(orderEntity);
+
+        return order;
     }
 
     private Order mapToOrderDomain(OrderEntity orderEntity) {
@@ -73,9 +77,5 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         BoothInfo boothInfo = new BoothInfo(booth.getId(), booth.getOwnerId());
 
         return new Order(orderEntity.getOrderNo(), boothInfo, orderer, orderEntity.getOrderLines());
-    }
-
-    private OrderEntity mapToOrderEntity(Order order) {
-        return null; // TODO
     }
 }

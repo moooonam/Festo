@@ -8,7 +8,7 @@ import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
-import com.example.festo.order.application.port.out.UpdateOrderPort;
+import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
 import com.example.festo.order.domain.*;
 import com.example.festo.product.domain.Product;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final LoadOrderPort loadOrderPort;
 
-    private final UpdateOrderPort updateOrderPort;
+    private final UpdateOrderStatusPort updateOrderPort;
 
     private final ProductRepository productRepository;
 
@@ -44,7 +44,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
-        BoothInfo boothInfo = null; // TODO
+        BoothInfo boothInfo = null; // TODO 부스 쪽 유스케이스 만들어지면 추가 구현 필요
         Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
         placeOrderPort.placeOrder(order);
@@ -56,6 +56,6 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         Order order = loadOrderPort.loadOrder(orderId);
         order.updateStatus(orderStatusChangeRequest);
 
-        updateOrderPort.updateOrder(order);
+        updateOrderPort.updateOrderStatus(order);
     }
 }
