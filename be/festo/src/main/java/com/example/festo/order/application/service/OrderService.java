@@ -1,9 +1,8 @@
 package com.example.festo.order.application.service;
 
-import com.example.festo.order.adapter.in.web.model.OrderProduct;
-import com.example.festo.order.adapter.in.web.model.OrderRequest;
-import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
+import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.adapter.out.persistence.ProductRepository;
+import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
 import com.example.festo.order.application.port.out.LoadOrderPort;
@@ -21,7 +20,7 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase {
+public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase, LoadOrderUseCase {
 
     private final PlaceOrderPort placeOrderPort;
 
@@ -45,7 +44,13 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
         BoothInfo boothInfo = null; // TODO 부스 쪽 유스케이스 만들어지면 추가 구현 필요
-        Order order = new Order(orderNo, boothInfo, orderer, orderLines);
+
+        Order order = Order.builder()
+                           .orderNo(orderNo)
+                           .boothInfo(boothInfo)
+                           .orderer(orderer)
+                           .orderLines(orderLines)
+                           .build();
 
         placeOrderPort.placeOrder(order);
     }
@@ -57,5 +62,20 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         order.updateStatus(orderStatusChangeRequest);
 
         updateOrderPort.updateOrderStatus(order);
+    }
+
+    @Override
+    public OrderDetail loadOrderDetail(Long orderId) {
+        Order order = loadOrderPort.loadOrder(orderId);
+
+        List<ProductResponse> menus = new ArrayList<>();
+        for (OrderLine orderLine : order.getOrderLines()) {
+            Product product = productRepository.findById(orderLine.getProductId())
+                                               .orElseThrow(NoSuchElementException::new);
+
+            menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
+        }
+
+        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
     }
 }

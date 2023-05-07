@@ -1,7 +1,9 @@
 package com.example.festo.order.adapter.in.web;
 
+import com.example.festo.order.adapter.in.web.model.OrderDetail;
 import com.example.festo.order.adapter.in.web.model.OrderRequest;
 import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
+import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final PlaceOrderUseCase placeOrderUseCase;
+
+    private final LoadOrderUseCase loadOrderUseCase;
 
     private final OrderStatusChangeUseCase orderStatusChangeUseCase;
 
@@ -44,5 +48,12 @@ public class OrderController {
 
         return ResponseEntity.ok()
                              .build();
+    }
+
+    @GetMapping("/api/v1/orders/{orderId}")
+    public ResponseEntity<OrderDetail> getOrderDetail(@PathVariable("orderId") Long orderId) {
+        OrderDetail orderDetail = loadOrderUseCase.loadOrderDetail(orderId);
+
+        return ResponseEntity.ok(orderDetail);
     }
 }

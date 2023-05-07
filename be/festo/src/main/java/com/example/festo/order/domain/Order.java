@@ -3,8 +3,10 @@ package com.example.festo.order.domain;
 import com.example.festo.common.model.Money;
 import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,30 +24,23 @@ public class Order {
 
     private OrderStatus orderStatus;
 
+    private LocalDateTime orderTime;
+
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_number"))
     @OrderColumn(name = "line_idx")
     private List<OrderLine> orderLines;
 
-    public Order(OrderNo orderNo, BoothInfo boothInfo, Orderer orderer, List<OrderLine> orderLines) {
-        this.orderNo = orderNo;
-        this.boothInfo = boothInfo;
-        this.orderer = orderer;
-        this.orderLines = orderLines;
-        this.orderStatus = OrderStatus.WAITING_ACCEPTANCE;
-
-        calculateTotalAmounts(this.orderLines);
-    }
-
-    public Order(Long orderId, OrderNo orderNo, BoothInfo boothInfo, Orderer orderer, List<OrderLine> orderLines) {
+    @Builder
+    public Order(Long orderId, OrderNo orderNo, BoothInfo boothInfo, Orderer orderer, Money totalAmounts, OrderStatus orderStatus, LocalDateTime orderTime, List<OrderLine> orderLines) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.boothInfo = boothInfo;
         this.orderer = orderer;
+        this.totalAmounts = totalAmounts;
+        this.orderStatus = orderStatus;
+        this.orderTime = orderTime;
         this.orderLines = orderLines;
-        this.orderStatus = OrderStatus.WAITING_ACCEPTANCE;
-
-        calculateTotalAmounts(this.orderLines);
     }
 
     private void calculateTotalAmounts(List<OrderLine> orderLines) {

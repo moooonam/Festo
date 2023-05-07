@@ -43,7 +43,7 @@ public class OrderEntity {
     private OrderStatus orderStatus;
 
     @CreatedDate
-    private LocalDateTime orderDate;
+    private LocalDateTime orderTime;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_number"))

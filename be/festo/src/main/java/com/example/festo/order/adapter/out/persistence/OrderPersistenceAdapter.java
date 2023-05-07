@@ -76,6 +76,12 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         Orderer orderer = new Orderer(member.getId(), member.getNickname());
         BoothInfo boothInfo = new BoothInfo(booth.getId(), booth.getOwnerId());
 
-        return new Order(orderEntity.getOrderNo(), boothInfo, orderer, orderEntity.getOrderLines());
+        return Order.builder()
+                    .orderNo(orderEntity.getOrderNo())
+                    .boothInfo(boothInfo)
+                    .orderer(orderer)
+                    .orderTime(orderEntity.getOrderTime())
+                    .orderLines(orderEntity.getOrderLines())
+                    .build();
     }
 }
