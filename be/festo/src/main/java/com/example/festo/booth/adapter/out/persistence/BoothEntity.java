@@ -17,7 +17,7 @@ import java.time.LocalTime;
 public class BoothEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long boothId;
 
     private LocalTime openTime;
     private LocalTime closeTime;

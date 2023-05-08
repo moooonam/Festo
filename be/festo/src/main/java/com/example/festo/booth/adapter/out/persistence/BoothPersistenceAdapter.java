@@ -40,7 +40,7 @@ public class BoothPersistenceAdapter implements SaveBoothPort {
 
         BoothEntity loadBoothEntity = boothRepository.save(boothEntity);
 
-        return loadBoothEntity.getId();
+        return loadBoothEntity.getBoothId();
     }
 
     @Override
@@ -48,6 +48,6 @@ public class BoothPersistenceAdapter implements SaveBoothPort {
         BoothEntity boothEntity = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
         boothEntity.setImageUrl(imgUrl);
         boothRepository.save(boothEntity);
-        return boothEntity.getId();
+        return boothEntity.getBoothId();
     }
 }
