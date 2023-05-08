@@ -8,6 +8,7 @@ import com.example.festo.order.domain.OrderLine;
 import com.example.festo.order.domain.OrderNo;
 import com.example.festo.order.domain.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,9 +18,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderEntity {
 
     @Id
