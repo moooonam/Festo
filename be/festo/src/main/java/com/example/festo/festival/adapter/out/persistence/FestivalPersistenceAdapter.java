@@ -1,6 +1,7 @@
 package com.example.festo.festival.adapter.out.persistence;
 
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
+import com.example.festo.festival.application.port.out.LoadFestivalIdPort;
 import com.example.festo.festival.application.port.out.LoadFestivalListPort;
 import com.example.festo.festival.application.port.out.SaveFestivalCommand;
 import com.example.festo.festival.application.port.out.SaveFestivalPort;
@@ -8,6 +9,7 @@ import com.example.festo.festival.domain.FestivalStatus;
 import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import com.example.festo.member.domain.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,7 +19,8 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
-public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort {
+@Slf4j
+public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort, LoadFestivalIdPort {
     private final MemberRepository memberRepository;
     private final FestivalRepository festivalRepository;
     @Override
@@ -102,5 +105,11 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
         }
 
         return commandList;
+    }
+
+    @Override
+    public Long loadFestivalIdByInviteCode(String inviteCode) {
+        FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElseThrow(NoSuchElementException::new);
+        return festivalEntity.getFestivalId();
     }
 }
