@@ -7,4 +7,6 @@ import java.util.List;
 public interface FestivalRepository extends JpaRepository<FestivalEntity,Long> {
     boolean existsByInviteCode(String inviteCode);
     List<MainFestivalProjection> findAllProjectedBy();
+
+    List<SearchFestivalProjection> findByNameContaining(String keyword);
 }

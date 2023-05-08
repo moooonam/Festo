@@ -69,15 +69,33 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
 
     @Override
-    public List<FestivalResponse.mainPage> findAllFestivals() {
+    public List<FestivalResponse.MainPage> findAllFestivals() {
         List<MainFestivalProjection> mainFestivalProjectionList =festivalRepository.findAllProjectedBy();
 
-        List<FestivalResponse.mainPage> commandList = new ArrayList<>();
+        List<FestivalResponse.MainPage> commandList = new ArrayList<>();
         for(MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList){
-            FestivalResponse.mainPage command = FestivalResponse.mainPage.builder()
+            FestivalResponse.MainPage command = FestivalResponse.MainPage.builder()
                     .festivalId(mainFestivalProjection.getFestivalId())
                     .imageUrl(mainFestivalProjection.getImageUrl())
                     .name(mainFestivalProjection.getName())
+                    .build();
+
+            commandList.add(command);
+        }
+
+        return commandList;
+    }
+
+    @Override
+    public List<FestivalResponse.Search> findAllFestivalsBySearch(String keyword) {
+        List<SearchFestivalProjection> searchFestivalProjectionList =festivalRepository.findByNameContaining(keyword);
+
+        List<FestivalResponse.Search> commandList = new ArrayList<>();
+        for(SearchFestivalProjection searchFestivalProjection : searchFestivalProjectionList){
+            FestivalResponse.Search command = FestivalResponse.Search.builder()
+                    .festivalId(searchFestivalProjection.getFestivalId())
+                    .imageUrl(searchFestivalProjection.getImageUrl())
+                    .name(searchFestivalProjection.getName())
                     .build();
 
             commandList.add(command);

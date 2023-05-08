@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -48,9 +45,17 @@ public class FestivalController {
     }
 
     @GetMapping("festivals")
-    public ResponseEntity<List<FestivalResponse.mainPage>> getFestivals(){
+    public ResponseEntity<List<FestivalResponse.MainPage>> getFestivals(){
         log.info("메인 페이지 페스티벌 조회 컨트롤러 시작");
-        List<FestivalResponse.mainPage> festivalList = getFestivalsUseCase.getFestivalByMain();
-        return new ResponseEntity<List<FestivalResponse.mainPage>>(festivalList, HttpStatus.OK);
+        List<FestivalResponse.MainPage> festivalList = getFestivalsUseCase.getFestivalByMain();
+        return new ResponseEntity<List<FestivalResponse.MainPage>>(festivalList, HttpStatus.OK);
     }
+
+    @GetMapping("festivals/search")
+    public ResponseEntity<List<FestivalResponse.Search>> getFestivalsBySearch(@RequestParam("keyword")String keyword){
+        log.info("페스티벌 검색 조회 컨트롤러 시작");
+        List<FestivalResponse.Search> festivalList = getFestivalsUseCase.getFestivalBySearch(keyword);
+        return new ResponseEntity<List<FestivalResponse.Search>>(festivalList, HttpStatus.OK);
+    }
+
 }

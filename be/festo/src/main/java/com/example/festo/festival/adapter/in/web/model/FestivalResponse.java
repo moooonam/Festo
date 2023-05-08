@@ -7,14 +7,14 @@ import lombok.Getter;
 public class FestivalResponse {
     @Getter
     @Builder
-    public static class mainPage{
+    public static class MainPage{
         private Long festivalId;
         private String imageUrl;
         private String name;
     }
     @Getter
     @Builder
-    public static class search{
+    public static class Search{
         private Long festivalId;
         private String imageUrl;
         private String name;

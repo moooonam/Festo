@@ -42,7 +42,12 @@ public class FestivalService implements RegisterFestivalUseCase, GetFestivalsUse
     }
 
     @Override
-    public List<FestivalResponse.mainPage> getFestivalByMain() {
+    public List<FestivalResponse.MainPage> getFestivalByMain() {
         return loadFestivalListPort.findAllFestivals();
+    }
+
+    @Override
+    public List<FestivalResponse.Search> getFestivalBySearch(String keyword) {
+        return loadFestivalListPort.findAllFestivalsBySearch(keyword);
     }
 }

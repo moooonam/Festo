@@ -5,5 +5,6 @@ import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
 import java.util.List;
 
 public interface LoadFestivalListPort {
-    List<FestivalResponse.mainPage> findAllFestivals();
+    List<FestivalResponse.MainPage> findAllFestivals();
+    List<FestivalResponse.Search> findAllFestivalsBySearch(String keyword);
 }

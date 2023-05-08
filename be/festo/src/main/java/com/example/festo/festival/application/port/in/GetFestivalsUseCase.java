@@ -5,5 +5,6 @@ import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
 import java.util.List;
 
 public interface GetFestivalsUseCase {
-    List<FestivalResponse.mainPage> getFestivalByMain();
+    List<FestivalResponse.MainPage> getFestivalByMain();
+    List<FestivalResponse.Search> getFestivalBySearch(String keyword);
 }
