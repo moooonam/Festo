@@ -19,16 +19,22 @@ import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.customer_ui.search.SearchFragment
+import com.example.festo.data.API.ApiService
+import com.example.festo.data.req.TestReq
+import com.example.festo.data.res.TestRes
+import com.example.festo.data.res.User
 import com.example.festo.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
 
-
 class HomeActivity : AppCompatActivity() {
 
-
+    private var retrofit = RetrofitClient.client
     private lateinit var mBinding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,11 +57,13 @@ class HomeActivity : AppCompatActivity() {
                     /*supportFragmentManager.beginTransaction()
                         .replace(R.id.layout_nav_bottom, SearchFragment()).commit()
                     return@setOnItemSelectedListener true*/
-                    val intent = Intent(this,SearchActivity::class.java)
+                    val intent = Intent(this, SearchActivity::class.java)
                     startActivity(intent)
                 }
 
                 R.id.recentFragment -> {
+                    startRetrofit()
+//                    testPost()
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.layout_nav_bottom, RecentFragment()).commit()
                     return@setOnItemSelectedListener true
@@ -81,7 +89,8 @@ class HomeActivity : AppCompatActivity() {
         val fragmentName = intent.getStringExtra("fragment")
         if (fragmentName == "orderListFragment") {
             val OrderlistFragment = OrderlistFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, OrderlistFragment).commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, OrderlistFragment).commit()
             // 네비게이션도 주문내역이 선택되어지도록 변경
             bottomNavigationView.setSelectedItemId(R.id.orderlistFragment)
         }
@@ -89,33 +98,62 @@ class HomeActivity : AppCompatActivity() {
         // 다른 프로필에서 일반 사용자로 돌아온 경우
         if (fragmentName == "MypageFragment") {
             val MypageFragment = MypageFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.layout_nav_bottom, MypageFragment).commit()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, MypageFragment).commit()
             // 네비게이션도 마이페이지가 선택되어지도록 변경
             bottomNavigationView.setSelectedItemId(R.id.mypageFragment)
         }
 
 
     }
-    fun getHashKey(){
-        var packageInfo : PackageInfo = PackageInfo()
+
+    fun getHashKey() {
+        var packageInfo: PackageInfo = PackageInfo()
         try {
             packageInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
-        } catch (e: PackageManager.NameNotFoundException){
+        } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
 
-        for (signature: Signature in packageInfo.signatures){
-            try{
+        for (signature: Signature in packageInfo.signatures) {
+            try {
                 var md: MessageDigest = MessageDigest.getInstance("SHA")
                 md.update(signature.toByteArray())
                 Log.e("KEY_HASH", Base64.encodeToString(md.digest(), Base64.DEFAULT))
-            } catch(e: NoSuchAlgorithmException){
+            } catch (e: NoSuchAlgorithmException) {
                 Log.e("KEY_HASH", "Unable to get MessageDigest. signature = " + signature, e)
             }
         }
     }
 
+    private fun startRetrofit() {
+        val postApi = retrofit?.create(ApiService::class.java)
+        postApi!!.getUsers().enqueue(object : Callback<List<User>> {
+            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+                if (response.isSuccessful) {
+//                    Log.d("테스트중", "onResponse: ${response.body()}")
+                    Log.d(" 테스트", "${response.body()?.get(1)}")
+                }
+            }
 
+            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+                t.printStackTrace()
+            }
+        })
+    }
+
+//    private fun testPost() {
+//        val postApi = retrofit?.create(ApiService::class.java)
+//        postApi!!.postTest(TestReq()).enqueue(object : Callback<TestRes> {
+//            override fun onResponse(call: Call<TestRes>, response: Response<TestRes>) {
+//                Log.d("테스트트", "${response.body()}")
+//            }
+//
+//            override fun onFailure(call: Call<TestRes>, t: Throwable) {
+//                t.printStackTrace()
+//            }
+//        })
+//    }
 }
 
 
