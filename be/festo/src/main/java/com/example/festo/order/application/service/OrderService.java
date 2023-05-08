@@ -1,22 +1,21 @@
 package com.example.festo.order.application.service;
 
 import com.example.festo.order.adapter.in.web.model.*;
-import com.example.festo.order.adapter.out.persistence.ProductRepository;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
+import com.example.festo.order.application.port.out.LoadBoothInfoPort;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
 import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
 import com.example.festo.order.domain.*;
-import com.example.festo.product.domain.Product;
+import com.example.festo.product.application.port.out.LoadProductPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +27,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final UpdateOrderStatusPort updateOrderPort;
 
-    private final ProductRepository productRepository;
+    private final LoadProductPort loadProductPort;
+
+    private final LoadBoothInfoPort loadBoothInfoPort;
 
     private final OrdererService ordererService;
 
@@ -36,14 +37,13 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
         for (OrderProduct orderProduct : orderRequest.getOrderProducts()) {
-            Product product = productRepository.findById(orderProduct.getProductId())
-                                               .orElseThrow(NoSuchElementException::new);
+            Product product = loadProductPort.loadProduct(orderProduct.getProductId());
             orderLines.add(new OrderLine(orderProduct.getProductId(), product.getPrice(), orderProduct.getQuantity()));
         }
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
-        BoothInfo boothInfo = null; // TODO 부스 쪽 유스케이스 만들어지면 추가 구현 필요
+        BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(orderRequest.getBoothId());
 
         Order order = Order.builder()
                            .orderNo(orderNo)
@@ -70,12 +70,12 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         List<ProductResponse> menus = new ArrayList<>();
         for (OrderLine orderLine : order.getOrderLines()) {
-            Product product = productRepository.findById(orderLine.getProductId())
-                                               .orElseThrow(NoSuchElementException::new);
-
+            Product product = loadProductPort.loadProduct(orderLine.getProductId());
             menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
         }
 
-        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+        return new OrderDetail(order.getOrderNo()
+                                    .getNumber(), order.getOrderTime(), order.getTotalAmounts()
+                                                                             .getValue(), menus);
     }
 }
