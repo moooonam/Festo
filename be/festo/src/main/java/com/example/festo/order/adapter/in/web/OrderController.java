@@ -22,7 +22,7 @@ public class OrderController {
 
     private final OrderStatusChangeUseCase orderStatusChangeUseCase;
 
-    @PostMapping("/api/v1/orders")
+    @PostMapping("/orders")
     public ResponseEntity<Void> order(@RequestBody OrderRequest orderRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                 .getAuthentication()
@@ -36,7 +36,7 @@ public class OrderController {
                              .build();
     }
 
-    @PatchMapping("/api/v1/orders/{orderId}/status")
+    @PatchMapping("/orders/{orderId}/status")
     public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, OrderStatusChangeRequest orderStatusChangeRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                        .getAuthentication()
@@ -50,7 +50,7 @@ public class OrderController {
                              .build();
     }
 
-    @GetMapping("/api/v1/orders/{orderId}")
+    @GetMapping("/orders/{orderId}")
     public ResponseEntity<OrderDetail> getOrderDetail(@PathVariable("orderId") Long orderId) {
         OrderDetail orderDetail = loadOrderUseCase.loadOrderDetail(orderId);
 
