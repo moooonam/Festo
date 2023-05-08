@@ -4,18 +4,19 @@ import com.example.festo.booth.adapter.out.persistence.BoothEntity;
 import com.example.festo.booth.adapter.out.persistence.BoothRepository;
 import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import com.example.festo.member.domain.Member;
-import com.example.festo.order.adapter.in.web.model.OrderSummary;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
 import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
 import com.example.festo.order.domain.BoothInfo;
 import com.example.festo.order.domain.Order;
+import com.example.festo.order.domain.OrderStatus;
 import com.example.festo.order.domain.Orderer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -66,6 +67,27 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
 
         return orderRepository.findOrdersByOrdererId(ordererId)
                               .stream()
+                              .map(this::mapToOrderDomain)
+                              .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Order> loadOrdersByBoothId(Long boothId, Long requesterId, boolean completed) {
+        BoothEntity booth = boothRepository.findById(boothId)
+                                           .orElseThrow(NoSuchElementException::new);
+
+        if (!Objects.equals(booth.getOwner().getId(), requesterId)) {
+            throw new RuntimeException("권한 없음");
+        }
+
+        return orderRepository.findOrdersByBoothId(boothId)
+                              .stream()
+                              .filter(orderEntity -> {
+                                  if (completed) {
+                                      return orderEntity.getOrderStatus().equals(OrderStatus.COMPLETE);
+                                  }
+                                  return !orderEntity.getOrderStatus().equals(OrderStatus.COMPLETE);
+                              })
                               .map(this::mapToOrderDomain)
                               .collect(Collectors.toList());
     }

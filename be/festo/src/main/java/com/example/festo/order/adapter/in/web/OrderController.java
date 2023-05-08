@@ -1,9 +1,6 @@
 package com.example.festo.order.adapter.in.web;
 
-import com.example.festo.order.adapter.in.web.model.OrderDetail;
-import com.example.festo.order.adapter.in.web.model.OrderRequest;
-import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
-import com.example.festo.order.adapter.in.web.model.OrderSummary;
+import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
@@ -54,19 +51,30 @@ public class OrderController {
     }
 
     @GetMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDetail> getOrderDetail(@PathVariable("orderId") Long orderId) {
-        OrderDetail orderDetail = loadOrderUseCase.loadOrderDetail(orderId);
+    public ResponseEntity<OrderDetailResponse> getOrderDetail(@PathVariable("orderId") Long orderId) {
+        OrderDetailResponse orderDetailResponse = loadOrderUseCase.loadOrderDetail(orderId);
 
-        return ResponseEntity.ok(orderDetail);
+        return ResponseEntity.ok(orderDetailResponse);
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderSummary>> getOrders() {
+    public ResponseEntity<List<OrderSummaryResponse>> getOrders() {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
                                                               .getPrincipal();
 
-        List<OrderSummary> orders = loadOrderUseCase.loadOrderSummariesByOrdererId(Long.parseLong(user.getUsername()));
+        List<OrderSummaryResponse> orders = loadOrderUseCase.loadOrderSummariesByOrdererId(Long.parseLong(user.getUsername()));
+
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/booths/{boothId}/orders")
+    public ResponseEntity<List<OrderSummaryForBoothOwnerResponse>> getOrdersByBooth(@PathVariable Long boothId, @RequestParam(name = "completed") boolean completed) {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                                                              .getAuthentication()
+                                                              .getPrincipal();
+
+        List<OrderSummaryForBoothOwnerResponse> orders = loadOrderUseCase.loadOrderSummariesByBoothId(boothId, Long.parseLong(user.getUsername()), completed);
 
         return ResponseEntity.ok(orders);
     }
