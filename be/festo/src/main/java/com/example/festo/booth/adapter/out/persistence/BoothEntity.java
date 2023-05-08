@@ -6,8 +6,8 @@ import com.example.festo.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
@@ -17,8 +17,8 @@ import java.time.LocalTime;
 public class BoothEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long boothId;
+    private String name;
     private LocalTime openTime;
     private LocalTime closeTime;
     private String locationDescription;
