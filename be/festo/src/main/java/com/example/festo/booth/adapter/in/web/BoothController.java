@@ -24,9 +24,7 @@ public class BoothController {
     public ResponseEntity<Long> createBooth(@PathVariable("festival_id") Long festivalId, @RequestPart("request") BoothRequest request, @RequestPart("boothImg") MultipartFile boothImg){
         log.info("부스 등록 컨트롤러 시작");
         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //User는 왜 안될까?
 
-        log.info(user.getUsername() + " user 아이디 입니다.");
         RegisterBoothCommand command = RegisterBoothCommand.builder()
                 .boothName(request.getBoothName())
                 .location(request.getLocation())

@@ -26,6 +26,6 @@ public class FestivalInfoPersistenceAdapter implements LoadFestivalInfoPort {
     }
 
     private FestivalInfo mapToFestivalInfoDomain(FestivalEntity festivalEntity) {
-        return new FestivalInfo(festivalEntity.getId(), festivalEntity.getFestivalName(), festivalEntity.getImageUrl());
+        return new FestivalInfo(festivalEntity.getFestivalId(), festivalEntity.getName(), festivalEntity.getImageUrl());
     }
 }

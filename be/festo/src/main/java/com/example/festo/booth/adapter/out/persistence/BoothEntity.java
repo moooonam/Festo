@@ -18,8 +18,8 @@ import java.time.LocalTime;
 public class BoothEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long boothId;
+    private String name;
     private LocalTime openTime;
     private LocalTime closeTime;
     private String locationDescription;
@@ -39,8 +39,9 @@ public class BoothEntity {
     private FestivalEntity festival;
 
     @Builder
-    public BoothEntity(Long id, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, String category, BoothStatus boothStatus, Member owner, FestivalEntity festival) {
-        this.id = id;
+    public BoothEntity(Long boothId, String name, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, String category, BoothStatus boothStatus, Member owner, FestivalEntity festival) {
+        this.boothId = boothId;
+        this.name = name;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.locationDescription = locationDescription;
