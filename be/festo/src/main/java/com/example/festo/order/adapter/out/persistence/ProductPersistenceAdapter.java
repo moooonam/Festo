@@ -2,7 +2,7 @@ package com.example.festo.order.adapter.out.persistence;
 
 import com.example.festo.order.domain.Product;
 import com.example.festo.product.adapter.out.persistence.ProductRepository;
-import com.example.festo.product.application.port.out.LoadProductPort;
+import com.example.festo.order.application.port.out.LoadProductPort;
 import com.example.festo.product.domain.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

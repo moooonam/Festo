@@ -1,4 +1,4 @@
-package com.example.festo.product.application.port.out;
+package com.example.festo.order.application.port.out;
 
 import com.example.festo.order.domain.Product;
 

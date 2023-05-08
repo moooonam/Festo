@@ -4,12 +4,8 @@ import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
-import com.example.festo.order.application.port.out.LoadBoothInfoPort;
-import com.example.festo.order.application.port.out.LoadOrderPort;
-import com.example.festo.order.application.port.out.PlaceOrderPort;
-import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
+import com.example.festo.order.application.port.out.*;
 import com.example.festo.order.domain.*;
-import com.example.festo.product.application.port.out.LoadProductPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +27,10 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final LoadBoothInfoPort loadBoothInfoPort;
 
+    private final LoadFestivalInfoPort loadFestivalInfoPort;
+
     private final OrdererService ordererService;
+
 
     @Override
     public void placeOrder(OrderRequest orderRequest) {
@@ -74,8 +73,21 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
             menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
         }
 
-        return new OrderDetail(order.getOrderNo()
-                                    .getNumber(), order.getOrderTime(), order.getTotalAmounts()
-                                                                             .getValue(), menus);
+        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+    }
+
+    @Override
+    public List<OrderSummary> loadOrderSummariesByOrdererId(Long ordererId) {
+        List<Order> orders = loadOrderPort.loadOrdersByOrdererId(ordererId);
+
+        List<OrderSummary> orderSummaries = new ArrayList<>();
+        for (Order order : orders) {
+            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
+            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
+
+            orderSummaries.add(new OrderSummary(order, festivalInfo, firstProduct));
+        }
+
+        return orderSummaries;
     }
 }

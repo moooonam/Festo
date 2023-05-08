@@ -23,6 +23,6 @@ public class BoothInfoPersistenceAdapter implements LoadBoothInfoPort {
     }
 
     private BoothInfo mapToBoothInfoDomain(BoothEntity boothEntity) {
-        return new BoothInfo(boothEntity.getId(), boothEntity.getOwner().getId());
+        return new BoothInfo(boothEntity.getId(), boothEntity.getOwner().getId(), null);
     }
 }
