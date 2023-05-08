@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +25,7 @@ public class OrderController {
 
     @PostMapping("/api/v1/orders")
     public ResponseEntity<Void> order(@RequestBody OrderRequest orderRequest) {
-        User user = (User) SecurityContextHolder.getContext()
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                 .getAuthentication()
                                                 .getPrincipal();
 
@@ -38,9 +39,9 @@ public class OrderController {
 
     @PatchMapping("/api/v1/orders/{orderId}/status")
     public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, OrderStatusChangeRequest orderStatusChangeRequest) {
-        User user = (User) SecurityContextHolder.getContext()
-                                                .getAuthentication()
-                                                .getPrincipal();
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                                                       .getAuthentication()
+                                                       .getPrincipal();
 
         orderStatusChangeRequest.setRequesterId(Long.parseLong(user.getUsername()));
 
