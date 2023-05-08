@@ -1,5 +1,7 @@
 package com.example.festo.festival.adapter.out.persistence;
 
+import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
+import com.example.festo.festival.application.port.out.LoadFestivalListPort;
 import com.example.festo.festival.application.port.out.SaveFestivalCommand;
 import com.example.festo.festival.application.port.out.SaveFestivalPort;
 import com.example.festo.festival.domain.FestivalStatus;
@@ -8,12 +10,14 @@ import com.example.festo.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
-public class FestivalPersistenceAdapter implements SaveFestivalPort {
+public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort {
     private final MemberRepository memberRepository;
     private final FestivalRepository festivalRepository;
     @Override
@@ -36,7 +40,7 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort {
 
         FestivalEntity loadFestivalEntity = festivalRepository.save(festivalEntity);
 
-        return loadFestivalEntity.getId();
+        return loadFestivalEntity.getFestivalId();
     }
 
     @Override
@@ -44,7 +48,7 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort {
         FestivalEntity festivalEntity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
         festivalEntity.setImageUrl(imgUrl);
         festivalRepository.save(festivalEntity);
-        return festivalEntity.getId();
+        return festivalEntity.getFestivalId();
     }
 
     private String randomCode(){
@@ -64,4 +68,21 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort {
     }
 
 
+    @Override
+    public List<FestivalResponse.mainPage> findAllFestivals() {
+        List<MainFestivalProjection> mainFestivalProjectionList =festivalRepository.findAllProjectedBy();
+
+        List<FestivalResponse.mainPage> commandList = new ArrayList<>();
+        for(MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList){
+            FestivalResponse.mainPage command = FestivalResponse.mainPage.builder()
+                    .festivalId(mainFestivalProjection.getFestivalId())
+                    .imageUrl(mainFestivalProjection.getImageUrl())
+                    .name(mainFestivalProjection.getName())
+                    .build();
+
+            commandList.add(command);
+        }
+
+        return commandList;
+    }
 }

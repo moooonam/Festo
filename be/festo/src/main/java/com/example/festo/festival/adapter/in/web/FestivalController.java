@@ -1,6 +1,8 @@
 package com.example.festo.festival.adapter.in.web;
 
 import com.example.festo.festival.adapter.in.web.model.FestivalRequest;
+import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
+import com.example.festo.festival.application.port.in.GetFestivalsUseCase;
 import com.example.festo.festival.application.port.in.RegisterFestivalCommand;
 import com.example.festo.festival.application.port.in.RegisterFestivalUseCase;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FestivalController {
 
     private final RegisterFestivalUseCase registerFestivalUseCase;
+    private final GetFestivalsUseCase getFestivalsUseCase;
 
     @PostMapping("festivals")
     public ResponseEntity<Long> createFestival(@RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg ){
@@ -39,5 +45,12 @@ public class FestivalController {
         Long festivalId=registerFestivalUseCase.registerFestival(command);
 
         return new ResponseEntity<Long>(festivalId, HttpStatus.OK);
+    }
+
+    @GetMapping("festivals")
+    public ResponseEntity<List<FestivalResponse.mainPage>> getFestivals(){
+        log.info("메인 페이지 페스티벌 조회 컨트롤러 시작");
+        List<FestivalResponse.mainPage> festivalList = getFestivalsUseCase.getFestivalByMain();
+        return new ResponseEntity<List<FestivalResponse.mainPage>>(festivalList, HttpStatus.OK);
     }
 }

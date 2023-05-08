@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class FestivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long festivalId;
 
     private String name;
     private String description;
