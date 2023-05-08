@@ -161,6 +161,14 @@
                                     android:layout_height="90dp"
                                     android:src="@mipmap/ic_launcher" />
 
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="20dp"
+                                    android:text="인기메뉴와 어울리는 메뉴 추천"
+                                    android:textSize="15dp"
+                                    android:textStyle="bold" />
+
                             </LinearLayout>
 
                             <TextView
@@ -236,14 +244,13 @@
                     android:textSize="15dp"
                     android:text="매출 분석 그래프"/>
 
-                <!--        새로운 메뉴 추천-->
-                <TextView
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:textStyle="bold"
-                    android:textSize="15dp"
-                    android:text="인기메뉴와 어울리는 메뉴 추천"/>
+                    android:layout_height="match_parent"/>
+
+                <!--        새로운 메뉴 추천-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/newMenu_listView"
