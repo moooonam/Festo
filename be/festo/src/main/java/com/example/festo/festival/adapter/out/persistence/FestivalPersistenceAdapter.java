@@ -20,23 +20,25 @@ import java.util.Random;
 public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort {
     private final MemberRepository memberRepository;
     private final FestivalRepository festivalRepository;
+
     @Override
     public Long saveFestival(SaveFestivalCommand saveFestivalCommand, Long managerId) {
-        Member manager = memberRepository.findById(managerId).orElseThrow(NoSuchElementException::new);
+        Member manager = memberRepository.findById(managerId)
+                                         .orElseThrow(NoSuchElementException::new);
 
-        String inviteCode=randomCode();
+        String inviteCode = randomCode();
 
         FestivalEntity festivalEntity = FestivalEntity.builder()
-                .name(saveFestivalCommand.getFestivalName())
-                .description(saveFestivalCommand.getDescription())
-                .address(saveFestivalCommand.getLocation())
-                .startDate(saveFestivalCommand.getStartDate())
-                .endDate(saveFestivalCommand.getEndDate())
-                .imageUrl(saveFestivalCommand.getImageUrl())
-                .inviteCode(inviteCode)
-                .manager(manager)
-                .festivalStatus(FestivalStatus.CLOSE)
-                .build();
+                                                      .name(saveFestivalCommand.getFestivalName())
+                                                      .description(saveFestivalCommand.getDescription())
+                                                      .address(saveFestivalCommand.getLocation())
+                                                      .startDate(saveFestivalCommand.getStartDate())
+                                                      .endDate(saveFestivalCommand.getEndDate())
+                                                      .imageUrl(saveFestivalCommand.getImageUrl())
+                                                      .inviteCode(inviteCode)
+                                                      .manager(manager)
+                                                      .festivalStatus(FestivalStatus.CLOSE)
+                                                      .build();
 
         FestivalEntity loadFestivalEntity = festivalRepository.save(festivalEntity);
 
@@ -45,23 +47,24 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public Long updateSetImg(Long festivalId, String imgUrl) {
-        FestivalEntity festivalEntity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        FestivalEntity festivalEntity = festivalRepository.findById(festivalId)
+                                                          .orElseThrow(NoSuchElementException::new);
         festivalEntity.setImageUrl(imgUrl);
         festivalRepository.save(festivalEntity);
         return festivalEntity.getFestivalId();
     }
 
-    private String randomCode(){
-        boolean flag =false;
-        String uniqueCode="";
-        while(!flag){
+    private String randomCode() {
+        boolean flag = false;
+        String uniqueCode = "";
+        while (!flag) {
             Random random = new Random();
             int randomNum = random.nextInt(900000) + 100000; // 100000 ~ 999999 범위의 랜덤한 정수
 
             uniqueCode = Integer.toString(randomNum);
 
-            if(!festivalRepository.existsByInviteCode(uniqueCode)){
-                flag= true;
+            if (!festivalRepository.existsByInviteCode(uniqueCode)) {
+                flag = true;
             }
         }
         return uniqueCode;
@@ -70,15 +73,15 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public List<FestivalResponse.MainPage> findAllFestivals() {
-        List<MainFestivalProjection> mainFestivalProjectionList =festivalRepository.findAllProjectedBy();
+        List<MainFestivalProjection> mainFestivalProjectionList = festivalRepository.findAllProjectedBy();
 
         List<FestivalResponse.MainPage> commandList = new ArrayList<>();
-        for(MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList){
+        for (MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList) {
             FestivalResponse.MainPage command = FestivalResponse.MainPage.builder()
-                    .festivalId(mainFestivalProjection.getFestivalId())
-                    .imageUrl(mainFestivalProjection.getImageUrl())
-                    .name(mainFestivalProjection.getName())
-                    .build();
+                                                                         .festivalId(mainFestivalProjection.getFestivalId())
+                                                                         .imageUrl(mainFestivalProjection.getImageUrl())
+                                                                         .name(mainFestivalProjection.getName())
+                                                                         .build();
 
             commandList.add(command);
         }
@@ -88,15 +91,15 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public List<FestivalResponse.Search> findAllFestivalsBySearch(String keyword) {
-        List<SearchFestivalProjection> searchFestivalProjectionList =festivalRepository.findByNameContaining(keyword);
+        List<SearchFestivalProjection> searchFestivalProjectionList = festivalRepository.findByNameContaining(keyword);
 
         List<FestivalResponse.Search> commandList = new ArrayList<>();
-        for(SearchFestivalProjection searchFestivalProjection : searchFestivalProjectionList){
+        for (SearchFestivalProjection searchFestivalProjection : searchFestivalProjectionList) {
             FestivalResponse.Search command = FestivalResponse.Search.builder()
-                    .festivalId(searchFestivalProjection.getFestivalId())
-                    .imageUrl(searchFestivalProjection.getImageUrl())
-                    .name(searchFestivalProjection.getName())
-                    .build();
+                                                                     .festivalId(searchFestivalProjection.getFestivalId())
+                                                                     .imageUrl(searchFestivalProjection.getImageUrl())
+                                                                     .name(searchFestivalProjection.getName())
+                                                                     .build();
 
             commandList.add(command);
         }

@@ -3,7 +3,6 @@ package com.example.festo.booth.adapter.in.web.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter

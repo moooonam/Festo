@@ -10,7 +10,7 @@ import java.util.Objects;
 public class OrderNo implements Serializable {
 
     @Column(name = "order_number")
-    private int number;
+    private Integer number;
 
     protected OrderNo() {
     }

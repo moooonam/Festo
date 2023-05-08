@@ -1,53 +1,55 @@
 package com.example.festo.order.application.service;
 
-import com.example.festo.order.adapter.in.web.model.OrderProduct;
-import com.example.festo.order.adapter.in.web.model.OrderRequest;
-import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
-import com.example.festo.order.adapter.out.persistence.ProductRepository;
+import com.example.festo.order.adapter.in.web.model.*;
+import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
-import com.example.festo.order.application.port.out.LoadOrderPort;
-import com.example.festo.order.application.port.out.PlaceOrderPort;
-import com.example.festo.order.application.port.out.UpdateOrderPort;
-import com.example.festo.order.domain.Order;
-import com.example.festo.order.domain.OrderLine;
-import com.example.festo.order.domain.OrderNo;
-import com.example.festo.order.domain.Orderer;
-import com.example.festo.product.domain.Product;
+import com.example.festo.order.application.port.out.*;
+import com.example.festo.order.domain.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase {
+public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase, LoadOrderUseCase {
 
     private final PlaceOrderPort placeOrderPort;
 
     private final LoadOrderPort loadOrderPort;
 
-    private final UpdateOrderPort updateOrderPort;
+    private final UpdateOrderStatusPort updateOrderPort;
 
-    private final ProductRepository productRepository;
+    private final LoadProductPort loadProductPort;
+
+    private final LoadBoothInfoPort loadBoothInfoPort;
+
+    private final LoadFestivalInfoPort loadFestivalInfoPort;
 
     private final OrdererService ordererService;
+
 
     @Override
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
         for (OrderProduct orderProduct : orderRequest.getOrderProducts()) {
-            Product product = productRepository.findById(orderProduct.getProductId())
-                                               .orElseThrow(NoSuchElementException::new);
+            Product product = loadProductPort.loadProduct(orderProduct.getProductId());
             orderLines.add(new OrderLine(orderProduct.getProductId(), product.getPrice(), orderProduct.getQuantity()));
         }
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
-        Order order = new Order(orderNo, orderer, orderLines);
+        BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(orderRequest.getBoothId());
+
+        Order order = Order.builder()
+                           .orderNo(orderNo)
+                           .boothInfo(boothInfo)
+                           .orderer(orderer)
+                           .orderLines(orderLines)
+                           .build();
 
         placeOrderPort.placeOrder(order);
     }
@@ -58,6 +60,34 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         Order order = loadOrderPort.loadOrder(orderId);
         order.updateStatus(orderStatusChangeRequest);
 
-        updateOrderPort.updateOrder(order);
+        updateOrderPort.updateOrderStatus(order);
+    }
+
+    @Override
+    public OrderDetail loadOrderDetail(Long orderId) {
+        Order order = loadOrderPort.loadOrder(orderId);
+
+        List<ProductResponse> menus = new ArrayList<>();
+        for (OrderLine orderLine : order.getOrderLines()) {
+            Product product = loadProductPort.loadProduct(orderLine.getProductId());
+            menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
+        }
+
+        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+    }
+
+    @Override
+    public List<OrderSummary> loadOrderSummariesByOrdererId(Long ordererId) {
+        List<Order> orders = loadOrderPort.loadOrdersByOrdererId(ordererId);
+
+        List<OrderSummary> orderSummaries = new ArrayList<>();
+        for (Order order : orders) {
+            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
+            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
+
+            orderSummaries.add(new OrderSummary(order, festivalInfo, firstProduct));
+        }
+
+        return orderSummaries;
     }
 }
