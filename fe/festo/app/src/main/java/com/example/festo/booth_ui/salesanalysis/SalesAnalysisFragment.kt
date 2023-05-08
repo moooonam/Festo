@@ -43,7 +43,7 @@ class SalesAnalysisFragment : Fragment() {
         fun basicSetting() {
             chart.apply {
                 description.isEnabled = false
-                setMaxVisibleValueCount(3)
+                setMaxVisibleValueCount(5) // 최대로 보여지는 데이터의 수
                 setPinchZoom(false)
                 setDrawBarShadow(false)
                 setDrawGridBackground(false)
@@ -51,7 +51,7 @@ class SalesAnalysisFragment : Fragment() {
                 legend.isEnabled = false
                 setTouchEnabled(false)
                 isDoubleTapToZoomEnabled = false
-                animateY(3000)
+                animateY(5000) // 애니메이션 효과 적용 시간
             }
         }
 
@@ -73,6 +73,7 @@ class SalesAnalysisFragment : Fragment() {
                 setDrawAxisLine(false)
                 isEnabled = false
                 setDrawLabels(false)
+                axisMaximum = 600f
             }
         }
 
@@ -92,18 +93,20 @@ class SalesAnalysisFragment : Fragment() {
             val colorList = ArrayList<Int>()
             val set : BarDataSet
 
-            values.add(BarEntry(1.0f, 20.0f))
-            values.add(BarEntry(2.0f, 30.0f))
-            values.add(BarEntry(3.0f, 40.0f))
+            values.add(BarEntry(1.0f, 320.0f))
+            values.add(BarEntry(2.0f, 430.0f))
+            values.add(BarEntry(3.0f, 440.0f))
+            values.add(BarEntry(4.0f, 300.0f))
+            values.add(BarEntry(5.0f, 520.0f))
 
             type.add(" ")
-            type.add("What")
-            type.add("Who")
-            type.add("How")
+            type.add("26일")
+            type.add("27일")
+            type.add("28일")
+            type.add("29일")
+            type.add("30일")
 
-            colorList.add(Color.parseColor("#BDBDBD"))
-            colorList.add(Color.parseColor("#5D5D5D"))
-            colorList.add(Color.parseColor("#191919"))
+            colorList.add(Color.parseColor("#F24E1E"))
 
             if (chart.data != null && chart.data.dataSetCount > 1) {
                 val chartData = chart.data
@@ -121,7 +124,7 @@ class SalesAnalysisFragment : Fragment() {
 
                 val data = BarData(dataSets)
                 chart.data = data
-                chart.setVisibleXRange(1.0f,3.0f)
+                chart.setVisibleXRange(1.0f,5.0f)
                 chart.setFitBars(true)
 
                 val xAxis = chart.xAxis
