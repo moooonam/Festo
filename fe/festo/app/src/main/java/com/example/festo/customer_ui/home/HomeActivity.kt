@@ -104,6 +104,13 @@ class HomeActivity : AppCompatActivity() {
             bottomNavigationView.setSelectedItemId(R.id.mypageFragment)
         }
 
+        // 액티비티에서 알림창을 누르는 경우
+        if (fragmentName == "NotificationFragment") {
+            val NotificationFragment = NotificationFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, NotificationFragment).commit()
+        }
+
 
     }
 

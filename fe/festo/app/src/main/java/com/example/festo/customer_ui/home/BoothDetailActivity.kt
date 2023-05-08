@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.home
 import MenuAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +29,14 @@ class BoothDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_booth_detail)
+
+        // 알림으로 이동
+        val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
+        notificationBtn.setOnClickListener {
+            var intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "NotificationFragment")
+            startActivity(intent)
+        }
 
         // 전달받은 부스 정보
         val intent = intent //전달할 데이터를 받을 Intent

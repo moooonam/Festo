@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,14 @@ class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
+
+        // 알림으로 이동
+        val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
+        notificationBtn.setOnClickListener {
+            var intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "NotificationFragment")
+            startActivity(intent)
+        }
 
         // 선택된 메뉴 객체 전달받음
         val myOrderList = intent.getSerializableExtra("myOrderList") as ArrayList<*>
