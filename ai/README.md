@@ -1,8 +1,11 @@
 # AI 리드미
 
-### 3주차
+- 가이드
 
-- 4/24
-  - Jira 생성 및 일주일 계획 수립
-  - fast-api Tutorial
-  - RNN 학습
+```git bash
+python -m venv venv
+source venv/Scripts/activate
+pip install -r requirements.txt
+
+uvicorn main:app
+```
