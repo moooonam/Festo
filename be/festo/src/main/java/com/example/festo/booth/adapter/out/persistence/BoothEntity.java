@@ -18,7 +18,7 @@ public class BoothEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boothId;
-
+    private String name;
     private LocalTime openTime;
     private LocalTime closeTime;
     private String locationDescription;

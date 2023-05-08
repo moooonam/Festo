@@ -27,6 +27,7 @@ public class BoothPersistenceAdapter implements SaveBoothPort {
         FestivalEntity festival = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
 
         BoothEntity boothEntity = BoothEntity.builder()
+                .name(saveBoothCommand.getBoothName())
                 .openTime(saveBoothCommand.getOpenTime())
                 .closeTime(saveBoothCommand.getCloseTime())
                 .locationDescription(saveBoothCommand.getLocation())
