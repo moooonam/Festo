@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import com.example.festo.customer_ui.home.HomeActivity
@@ -90,19 +91,34 @@ class RegisterFestivalFragment : Fragment() {
         // 축제 등록 버튼 누르면
         binding.registerFestival.setOnClickListener {
             // 데이터 넣기
-            val request = RegiFestivalRequest(
-                binding.etFestivalName.text.toString(),
-                binding.etFestivalLocation.text.toString(),
-                binding.etFestivalDescription.text.toString(),
-                startDate,
-                endDate
-            )
-            val data = RegisterFestivalReq(request, "이미지들어갈자리")
-            Log.d("과연", "${data}")
+            Log.d("버튼은", "반응함")
+            if (binding.etFestivalName.text.toString().isEmpty()) {
+                Log.d("if", "들어옴")
+                Toast.makeText(requireActivity(), "축제 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (binding.etFestivalDescription.text.toString().isEmpty()) {
+                Toast.makeText(requireActivity(), "축제 설명을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (startDate.isNullOrEmpty() or endDate.isNullOrEmpty()) {
+                Toast.makeText(requireActivity(), "축제 기간을 설정해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (binding.etFestivalLocation.text.toString().isEmpty()) {
+                Toast.makeText(requireActivity(), "축제 장소를 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
 
-            // 메인페이지 이동
-            val intent = Intent(requireContext(), HostMainActivity::class.java)
-            startActivity(intent)
+            else {
+
+                val request = RegiFestivalRequest(
+                    binding.etFestivalName.text.toString(),
+                    binding.etFestivalLocation.text.toString(),
+                    binding.etFestivalDescription.text.toString(),
+                    startDate,
+                    endDate
+                )
+                val data = RegisterFestivalReq(request, "이미지들어갈자리")
+                Log.d("과연", "${data}")
+
+                // 메인페이지 이동
+                val intent = Intent(requireContext(), HostMainActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         // 일반 사용자 마이페이지로 이동

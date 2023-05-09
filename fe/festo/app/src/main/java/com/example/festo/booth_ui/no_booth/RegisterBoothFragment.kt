@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.customer_ui.home.HomeActivity
@@ -78,20 +79,34 @@ class RegisterBoothFragment : Fragment() {
 
         // 부스 등록 버튼 누르면
         binding.registerBooth.setOnClickListener {
-            val request = RegiBoothRequest(
-                binding.etBoothName.text.toString(),
-                binding.etBoothLocation.text.toString(),
-                binding.etBoothDescription.text.toString(),
-                binding.tvStartTime.text.toString(),
-                binding.tvEndTime.text.toString()
 
-            )
-            val data = RegisterBoothReq(request, "이미지들어갈자리")
-            Log.d("제발", "${data}")
+            if (binding.etBoothName.text.toString().isEmpty()) {
+                Toast.makeText(requireActivity(), "부스 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if (binding.tvStartTime.text.toString() == "00 : 00 " && binding.tvEndTime.text.toString() == " 00 : 00") {
+                Toast.makeText(requireActivity(), "운영시간을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }   else if (binding.etBoothLocation.text.toString().isEmpty()) {
+                Toast.makeText(requireActivity(), "부스 위치를 입력해 주세요", Toast.LENGTH_SHORT).show()
+            } else if ( binding.etBoothDescription.text.toString().isEmpty()) {
+                Toast.makeText(requireActivity(), "부스 설명을 입력해 주세요", Toast.LENGTH_SHORT).show()
+            }
 
-            //메인페이지 이동
-            val intent = Intent(requireContext(), BoothMainActivity::class.java)
-            startActivity(intent)
+            else {
+
+                val request = RegiBoothRequest(
+                    binding.etBoothName.text.toString(),
+                    binding.etBoothLocation.text.toString(),
+                    binding.etBoothDescription.text.toString(),
+                    binding.tvStartTime.text.toString(),
+                    binding.tvEndTime.text.toString()
+
+                )
+                val data = RegisterBoothReq(request, "이미지들어갈자리")
+                Log.d("제발", "${data}")
+
+                //메인페이지 이동
+                val intent = Intent(requireContext(), BoothMainActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         // 일반 사용자 마이페이지로 이동
