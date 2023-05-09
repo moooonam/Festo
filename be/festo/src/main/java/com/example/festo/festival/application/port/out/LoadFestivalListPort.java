@@ -7,4 +7,5 @@ import java.util.List;
 public interface LoadFestivalListPort {
     List<FestivalResponse.MainPage> findAllFestivals();
     List<FestivalResponse.Search> findAllFestivalsBySearch(String keyword);
+    List<FestivalResponse.Manager> findAllFestivalsByManagerId(Long managerId);
 }
