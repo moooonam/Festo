@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "814956839859",
+    "project_id": "fcm-kotlin-83d7f",
+    "storage_bucket": "fcm-kotlin-83d7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814956839859:android:c38896c64c358622a101c6",
+        "android_client_info": {
+          "package_name": "com.example.festo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814956839859-onchblfee7n2qdk35le5mnte5tknjtls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.festo",
+            "certificate_hash": "34b40a0b1a0bd8484a657082debdfebbf0c2f2e1"
+          }
+        },
+        {
+          "client_id": "814956839859-2k3ilo7fs5gkt2ede377dvjgnfd5an47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCND6Y-hc4HXSGa5VKqBBdRGHNb5MD-4AU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814956839859-2k3ilo7fs5gkt2ede377dvjgnfd5an47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
