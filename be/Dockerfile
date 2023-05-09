@@ -1,15 +1,15 @@
-FROM openjdk:17 AS builder
+FROM openjdk:17-jdk-slim-buster
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
-RUN microdnf install findutils
-RUN chmod +x ./gradlew
-RUN ./gradlew bootJAR
+WORKDIR /app
 
-FROM openjdk:17
-COPY --from=builder build/libs/*.jar app.jar
+COPY . /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    ./gradlew build && \
+    rm -rf /root/.gradle
+
 EXPOSE 8080
-ENTRYPOINT ["java","-jar", "/app.jar"]
+
+CMD ["java", "-jar", "build/libs/*.jar"]
