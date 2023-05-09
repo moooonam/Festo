@@ -3,6 +3,7 @@ package com.example.festo.festival.adapter.in.web;
 import com.example.festo.festival.adapter.in.web.model.FestivalRequest;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
 import com.example.festo.festival.application.port.in.*;
+import com.example.festo.festival.domain.Festival;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class FestivalController {
     private final GetFestivalsUseCase getFestivalsUseCase;
     private final GetFestivalIdUseCase getFestivalIdUseCase;
     private final GetInviteCodeUseCase getInviteCodeUseCase;
+    private final GetFestivalDetailUseCase getFestivalDetailUseCase;
 
     @PostMapping("festivals")
     public ResponseEntity<Long> createFestival(@RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg ){
@@ -83,5 +85,26 @@ public class FestivalController {
         List<FestivalResponse.Manager> festivalList = getFestivalsUseCase.getFestivalByManager(Long.parseLong(user.getUsername()));
         return new ResponseEntity<List<FestivalResponse.Manager>>(festivalList, HttpStatus.OK);
     }
+
+    @GetMapping("festivals/{festival_id}")
+    public ResponseEntity<?> getFestivalDetail(@PathVariable("festival_id")Long festivalId){
+        log.info("페스티벌 상세정보 조회 컨트롤러 시작");
+
+        Festival domain = getFestivalDetailUseCase.getFestivalDetailByFestivalId(festivalId);
+
+        FestivalResponse.Detail detail = FestivalResponse.Detail.builder()
+                .name(domain.getName())
+                .address(domain.getAddress())
+                .imageUrl(domain.getImageUrl())
+                .festivalId(festivalId)
+                .startDate(domain.getStartDate())
+                .endDate(domain.getEndDate())
+                .description(domain.getDescription())
+                .build();
+
+
+        return new ResponseEntity<>(detail, HttpStatus.OK);
+    }
+
 
 }
