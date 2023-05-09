@@ -11,7 +11,7 @@ public class Festival {
     private Long festivalId;
     private String name;
     private String description;
-    private int inviteCode;
+    private String inviteCode;
     private String address;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -20,7 +20,14 @@ public class Festival {
     private FestivalStatus festivalStatus;
     private List<BoothInfo> booths;
 
-
-
-
+    public Festival(Long festivalId, String name, String description, String inviteCode, String address, LocalDate startDate, LocalDate endDate, String imageUrl) {
+        this.festivalId = festivalId;
+        this.name = name;
+        this.description = description;
+        this.inviteCode = inviteCode;
+        this.address = address;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.imageUrl = imageUrl;
+    }
 }

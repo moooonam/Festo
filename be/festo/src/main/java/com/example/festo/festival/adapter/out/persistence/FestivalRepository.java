@@ -12,5 +12,6 @@ public interface FestivalRepository extends JpaRepository<FestivalEntity,Long> {
     List<SearchFestivalProjection> findByNameContaining(String keyword);
 
     Optional<FestivalEntity> findByInviteCode(String inviteCode);
+    List<MainFestivalProjection> findAllProjectedByManagerId(Long managerId);
 
 }
