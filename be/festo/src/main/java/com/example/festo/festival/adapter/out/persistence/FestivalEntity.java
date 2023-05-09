@@ -3,17 +3,16 @@ package com.example.festo.festival.adapter.out.persistence;
 import com.example.festo.festival.domain.FestivalStatus;
 import com.example.festo.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "festival")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class FestivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,6 +2,7 @@ package com.example.festo.festival.adapter.in.web;
 
 import com.example.festo.festival.adapter.in.web.model.FestivalRequest;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
+import com.example.festo.festival.application.port.in.GetFestivalIdUseCase;
 import com.example.festo.festival.application.port.in.GetFestivalsUseCase;
 import com.example.festo.festival.application.port.in.RegisterFestivalCommand;
 import com.example.festo.festival.application.port.in.RegisterFestivalUseCase;
@@ -23,6 +24,7 @@ public class FestivalController {
 
     private final RegisterFestivalUseCase registerFestivalUseCase;
     private final GetFestivalsUseCase getFestivalsUseCase;
+    private final GetFestivalIdUseCase getFestivalIdUseCase;
 
     @PostMapping("festivals")
     public ResponseEntity<Long> createFestival(@RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg ){
@@ -58,4 +60,10 @@ public class FestivalController {
         return new ResponseEntity<List<FestivalResponse.Search>>(festivalList, HttpStatus.OK);
     }
 
+    @GetMapping("festivals/invitation")
+    public ResponseEntity<Long> getFestivalIdByInviteCode(@RequestParam("inviteCode")String inviteCode){
+        log.info("페스티벌 초대코드 조회 컨트롤러 시작");
+        Long festivalId = getFestivalIdUseCase.getFestivalIdByInviteCode(inviteCode);
+        return new ResponseEntity<Long>(festivalId, HttpStatus.OK);
+    }
 }
