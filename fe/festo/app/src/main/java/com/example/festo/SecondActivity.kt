@@ -1,5 +1,7 @@
 package com.example.festo
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import androidx.appcompat.app.AppCompatActivity
@@ -13,10 +15,17 @@ import com.kakao.sdk.user.UserApiClient
 class SecondActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecondBinding
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySecondBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val testToken = sharedPreferences.getString("access_token", "")
+        val testrefToken = sharedPreferences.getString("refresh_token", "")
+        binding.testToken.text = "토큰 : $testToken"
+        binding.testRefToken.text = "ref 토큰 : $testrefToken"
 
         UserApiClient.instance.me { user, error ->
             if (error != null) {

@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'androidx.navigation.safeargs.kotlin' version '2.5.3' apply false
+    id 'com.google.gms.google-services'
 }
 
 
@@ -80,6 +81,19 @@ dependencies {
 
     // 메테리얼 서치
     implementation 'com.github.mancj:MaterialSearchBar:0.8.5'
+
+    // 알림 기능 라이브러리
+    //noinspection GradleCompatible
+    implementation 'com.android.support:support-compat:28.0.0'
+    // FCM
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:31.5.0')
+
+    // Add the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+
 
 //    compile files('libs/libDaumMapAndroid.jar')
 
