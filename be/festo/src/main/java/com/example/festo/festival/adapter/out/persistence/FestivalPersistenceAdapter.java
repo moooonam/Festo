@@ -1,10 +1,8 @@
 package com.example.festo.festival.adapter.out.persistence;
 
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
-import com.example.festo.festival.application.port.out.LoadFestivalIdPort;
-import com.example.festo.festival.application.port.out.LoadFestivalListPort;
-import com.example.festo.festival.application.port.out.SaveFestivalCommand;
-import com.example.festo.festival.application.port.out.SaveFestivalPort;
+import com.example.festo.festival.application.port.out.*;
+import com.example.festo.festival.domain.Festival;
 import com.example.festo.festival.domain.FestivalStatus;
 import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import com.example.festo.member.domain.Member;
@@ -20,7 +18,7 @@ import java.util.Random;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort, LoadFestivalIdPort {
+public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort, LoadFestivalIdPort, LoadInviteCodePort,LoadFestivalDetailPort {
     private final MemberRepository memberRepository;
     private final FestivalRepository festivalRepository;
 
@@ -111,8 +109,38 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
     }
 
     @Override
+    public List<FestivalResponse.Manager> findAllFestivalsByManagerId(Long managerId) {
+        List<MainFestivalProjection> mainFestivalProjectionList =festivalRepository.findAllProjectedByManagerId(managerId);
+        List<FestivalResponse.Manager> commandList = new ArrayList<>();
+        for(MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList){
+            FestivalResponse.Manager command = FestivalResponse.Manager.builder()
+                    .festivalId(mainFestivalProjection.getFestivalId())
+                    .imageUrl(mainFestivalProjection.getImageUrl())
+                    .name(mainFestivalProjection.getName())
+                    .build();
+
+            commandList.add(command);
+        }
+
+        return commandList;
+    }
+
+    @Override
     public Long loadFestivalIdByInviteCode(String inviteCode) {
-        FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElseThrow(NoSuchElementException::new);
+        FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElse(null);
         return festivalEntity.getFestivalId();
+    }
+
+    @Override
+    public String loadInviteCodeByFestivalId(Long festivalId) {
+        FestivalEntity festivalEntity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        return festivalEntity.getInviteCode();
+    }
+
+    @Override
+    public Festival loadFestivalDetailByFestivalId(Long festivalId) {
+        FestivalEntity entity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        Festival domain = new Festival(entity.getFestivalId(),entity.getName(),entity.getDescription(),entity.getInviteCode(),entity.getAddress(),entity.getStartDate(),entity.getEndDate(),entity.getImageUrl());
+        return domain;
     }
 }

@@ -2,10 +2,8 @@ package com.example.festo.festival.adapter.in.web;
 
 import com.example.festo.festival.adapter.in.web.model.FestivalRequest;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
-import com.example.festo.festival.application.port.in.GetFestivalIdUseCase;
-import com.example.festo.festival.application.port.in.GetFestivalsUseCase;
-import com.example.festo.festival.application.port.in.RegisterFestivalCommand;
-import com.example.festo.festival.application.port.in.RegisterFestivalUseCase;
+import com.example.festo.festival.application.port.in.*;
+import com.example.festo.festival.domain.Festival;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +23,8 @@ public class FestivalController {
     private final RegisterFestivalUseCase registerFestivalUseCase;
     private final GetFestivalsUseCase getFestivalsUseCase;
     private final GetFestivalIdUseCase getFestivalIdUseCase;
+    private final GetInviteCodeUseCase getInviteCodeUseCase;
+    private final GetFestivalDetailUseCase getFestivalDetailUseCase;
 
     @PostMapping("festivals")
     public ResponseEntity<Long> createFestival(@RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg ){
@@ -61,9 +61,50 @@ public class FestivalController {
     }
 
     @GetMapping("festivals/invitation")
-    public ResponseEntity<Long> getFestivalIdByInviteCode(@RequestParam("inviteCode")String inviteCode){
-        log.info("페스티벌 초대코드 조회 컨트롤러 시작");
+    public ResponseEntity<?> getFestivalIdByInviteCode(@RequestParam("inviteCode")String inviteCode){
+        log.info("페스티벌 초대코드 입력 컨트롤러 시작");
         Long festivalId = getFestivalIdUseCase.getFestivalIdByInviteCode(inviteCode);
+        if(festivalId == null){
+            return new ResponseEntity<String>("존재하지 않는 코드입니다.", HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<Long>(festivalId, HttpStatus.OK);
     }
+
+
+    @GetMapping("festivals/{festival_id}/invitecode")
+    public ResponseEntity<?> getFestivalIdByInviteCode(@PathVariable("festival_id")Long festivalId){
+        log.info("페스티벌 초대코드 조회 컨트롤러 시작");
+        String inviteCode=getInviteCodeUseCase.getInviteCodeById(festivalId);
+        return new ResponseEntity<String>(inviteCode, HttpStatus.OK);
+    }
+
+    @GetMapping("festivals/manager")
+    public ResponseEntity<?> getFestivalsBymanagerId(){
+        log.info("페스티벌 초대코드 조회 컨트롤러 시작");
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<FestivalResponse.Manager> festivalList = getFestivalsUseCase.getFestivalByManager(Long.parseLong(user.getUsername()));
+        return new ResponseEntity<List<FestivalResponse.Manager>>(festivalList, HttpStatus.OK);
+    }
+
+    @GetMapping("festivals/{festival_id}")
+    public ResponseEntity<?> getFestivalDetail(@PathVariable("festival_id")Long festivalId){
+        log.info("페스티벌 상세정보 조회 컨트롤러 시작");
+
+        Festival domain = getFestivalDetailUseCase.getFestivalDetailByFestivalId(festivalId);
+
+        FestivalResponse.Detail detail = FestivalResponse.Detail.builder()
+                .name(domain.getName())
+                .address(domain.getAddress())
+                .imageUrl(domain.getImageUrl())
+                .festivalId(festivalId)
+                .startDate(domain.getStartDate())
+                .endDate(domain.getEndDate())
+                .description(domain.getDescription())
+                .build();
+
+
+        return new ResponseEntity<>(detail, HttpStatus.OK);
+    }
+
+
 }

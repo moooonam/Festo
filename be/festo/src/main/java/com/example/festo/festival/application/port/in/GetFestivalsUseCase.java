@@ -7,4 +7,6 @@ import java.util.List;
 public interface GetFestivalsUseCase {
     List<FestivalResponse.MainPage> getFestivalByMain();
     List<FestivalResponse.Search> getFestivalBySearch(String keyword);
+
+    List<FestivalResponse.Manager> getFestivalByManager(Long managerId);
 }

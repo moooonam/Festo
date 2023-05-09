@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class FestivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
