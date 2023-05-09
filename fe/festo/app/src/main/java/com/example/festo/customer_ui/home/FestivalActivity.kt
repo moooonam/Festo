@@ -6,15 +6,8 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.festo.MainActivity
 import com.example.festo.R
-import com.example.festo.customer_ui.mypage.MypageFragment
-import com.example.festo.customer_ui.orderlist.OrderlistFragment
-import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchActivity
-import com.example.festo.databinding.ActivityFestivalBinding
-import com.example.festo.databinding.ActivityHomeBinding
-import com.example.festo.databinding.FragmentHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -52,7 +45,6 @@ class FestivalActivity : AppCompatActivity() {
 
         // 네비게이션
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
-        bottomNavigationView.selectedItemId = -1
 
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
@@ -64,12 +56,6 @@ class FestivalActivity : AppCompatActivity() {
 
                 R.id.searchFragment -> {
                     val intent = Intent(this, SearchActivity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
                     startActivity(intent)
                 }
 

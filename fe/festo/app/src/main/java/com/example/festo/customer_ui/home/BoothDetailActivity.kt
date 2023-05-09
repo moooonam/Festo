@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
@@ -64,9 +65,14 @@ class BoothDetailActivity : AppCompatActivity() {
                 }
             }
 
-            val intent = Intent(this, PaymentActivity::class.java)
-            intent.putExtra("myOrderList", myOrderList)
-            startActivity(intent)
+            if (myOrderList.size != 0) {
+                val intent = Intent(this, PaymentActivity::class.java)
+                intent.putExtra("myOrderList", myOrderList)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "메뉴를 담아주세요!", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         // 네비게이션
@@ -81,12 +87,6 @@ class BoothDetailActivity : AppCompatActivity() {
 
                 R.id.searchFragment -> {
                     val intent = Intent(this, SearchActivity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
                     startActivity(intent)
                 }
 

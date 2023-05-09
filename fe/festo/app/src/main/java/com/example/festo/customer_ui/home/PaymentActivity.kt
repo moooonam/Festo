@@ -78,12 +78,6 @@ class PaymentActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
-                    startActivity(intent)
-                }
-
                 R.id.orderlistFragment -> {
                     val intent = Intent(this, HomeActivity::class.java)
                     intent.putExtra("fragment", "OrderlistFragment")

@@ -1,19 +1,15 @@
 package com.example.festo.customer_ui.search
 
 import android.app.SearchManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.SearchView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
@@ -49,11 +45,6 @@ class SearchActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
-                    startActivity(intent)
-                }
 
                 R.id.orderlistFragment -> {
                     val intent = Intent(this, HomeActivity::class.java)

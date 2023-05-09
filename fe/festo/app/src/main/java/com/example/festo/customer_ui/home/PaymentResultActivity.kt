@@ -31,8 +31,12 @@ class PaymentResultActivity : AppCompatActivity() {
         val isSuccess = intent?.getBooleanExtra(EXTRA_RESULT, false) == true
         val resultDataList = intent?.getStringArrayListExtra(EXTRA_DATA).orEmpty()
 
-        val resultText = findViewById<TextView>(R.id.result)
-        resultText.text = isSuccess.toString()
+//        PaymentKey
+        println(resultDataList[0].substring(11))
+//        OrderId
+        println(resultDataList[1].substring(8))
+//        Amount
+        println(resultDataList[2].substring(7))
 
 //         주문내역으로 이동
         val goOrderListBtn = findViewById<Button>(R.id.goOrderList)
