@@ -1,5 +1,6 @@
-package com.example.festo.product.domain;
+package com.example.festo.product.adapter.out.persistence;
 
+import com.example.festo.booth.adapter.out.persistence.BoothEntity;
 import com.example.festo.common.jpa.MoneyConverter;
 import com.example.festo.common.model.Money;
 import jakarta.persistence.*;
@@ -15,26 +16,29 @@ public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Long menuId;
+    private Long productId;
 
     private String name;
 
     @Convert(converter = MoneyConverter.class)
     private Money price;
 
-    private String description;
-
     private String imageUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "booth_id")
+    private BoothEntity booth;
+
     @Builder
-    public ProductEntity(Long id, Long menuId, String name, Money price, String description, String imageUrl) {
-        this.id = id;
-        this.menuId = menuId;
+    public ProductEntity(Long productId, String name, Money price, String imageUrl, BoothEntity booth) {
+        this.productId = productId;
         this.name = name;
         this.price = price;
-        this.description = description;
         this.imageUrl = imageUrl;
+        this.booth = booth;
+    }
+
+    public void setImageUrl(String imgUrl) {
+        this.imageUrl = imgUrl;
     }
 }

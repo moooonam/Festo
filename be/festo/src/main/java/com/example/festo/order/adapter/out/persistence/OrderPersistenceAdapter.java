@@ -65,7 +65,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
     @Override
     public List<Order> loadOrdersByOrdererId(Long ordererId) {
 
-        return orderRepository.findOrdersByOrdererId(ordererId)
+        return orderRepository.findAllByOrdererId(ordererId)
                               .stream()
                               .map(this::mapToOrderDomain)
                               .collect(Collectors.toList());
@@ -80,7 +80,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
             throw new RuntimeException("권한 없음");
         }
 
-        return orderRepository.findOrdersByBoothId(boothId)
+        return orderRepository.findAllByBooth_BoothId(boothId)
                               .stream()
                               .filter(orderEntity -> {
                                   if (completed) {

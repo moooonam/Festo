@@ -12,7 +12,7 @@ import lombok.Getter;
 @Embeddable
 public class OrderLine {
 
-    private Long productId;
+    private Long menuId;
 
     @Convert(converter = MoneyConverter.class)
     @Column(name = "price")
@@ -27,8 +27,8 @@ public class OrderLine {
     protected OrderLine() {
     }
 
-    public OrderLine(Long productId, Money price, int quantity) {
-        this.productId = productId;
+    public OrderLine(Long menuId, Money price, int quantity) {
+        this.menuId = menuId;
         this.price = price;
         this.quantity = quantity;
         this.amounts = calculateAmounts();

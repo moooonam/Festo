@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProduct {
+public class OrderMenu {
 
-    private Long productId;
+    private Long menuId;
 
     private Integer quantity;
 }

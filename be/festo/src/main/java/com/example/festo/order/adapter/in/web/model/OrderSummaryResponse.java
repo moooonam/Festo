@@ -22,14 +22,14 @@ public class OrderSummaryResponse {
 
     private final int etcCount;
 
-    public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Product firstProduct) {
+    public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Menu firstMenu) {
         this.festivalName = festivalInfo.getFestivalName();
         this.orderNo = order.getOrderNo();
         this.boothId = order.getBoothInfo().getBoothId();
         this.boothName = order.getBoothInfo().getBoothName();
         this.imageUrl = festivalInfo.getImageUrl();
         this.orderStatus = order.getOrderStatus();
-        this.productName = firstProduct.getName();
+        this.productName = firstMenu.getName();
         this.etcCount = order.getOrderLines().size() - 1;
     }
 }
