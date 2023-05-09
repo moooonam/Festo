@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,59 +7,54 @@
     tools:context=".customer_ui.search.SearchActivity"
     >
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="fest'O"
+            android:textColor="#F24E1E"
+            android:textSize="22sp"
+            android:layout_gravity="start"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_notification"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp"
+            android:id="@+id/notification_btn"
+            />
+    </androidx.appcompat.widget.Toolbar>
+
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:mt_hint="축제 검색"
+        android:layout_marginTop="50dp"
+        app:mt_hint="축제를 검색하세요."
         app:mt_maxSuggestionsCount="5"
         app:mt_searchBarColor="#FFF"
         />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_marginTop="50dp"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="110dp" />
 
-    <!--<ListView
-        android:id="@+id/mListView"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/my_bottom_nav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBar"
-        />-->
-
-    <!--<com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recycler_view"
-        app:liftOnScroll="true"
-        app:liftOnScrollTargetViewId="@id/recycler_view"
-        tools:ignore="MissingConstraints">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tool_bar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:menu="@menu/options_menu"
-            app:navigationIcon="@drawable/ic_recent"
-            app:title="축제검색" />
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@drawable/menu_selector_color"
+        app:itemTextColor="@drawable/menu_selector_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 
 
-    </com.google.android.material.appbar.AppBarLayout>-->
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

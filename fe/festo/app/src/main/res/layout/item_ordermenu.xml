@@ -92,6 +92,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textColor="@color/festO"
+                        android:paddingTop="5dp"
                         android:text="수량" />
                 </LinearLayout>
 

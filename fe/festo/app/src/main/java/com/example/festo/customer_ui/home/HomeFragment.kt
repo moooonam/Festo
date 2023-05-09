@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.festo.R
+import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.databinding.FragmentHomeBinding
 
 
@@ -45,6 +46,13 @@ class HomeFragment : Fragment() {
             transaction?.commit()
         }
 
+        // 검색창 클릭시 검색 액티비티로 이동
+        mBinding!!.searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                val intent = Intent(requireActivity(), SearchActivity::class.java)
+                requireActivity().startActivity(intent)
+            }
+        }
         return mBinding?.root
 
     }

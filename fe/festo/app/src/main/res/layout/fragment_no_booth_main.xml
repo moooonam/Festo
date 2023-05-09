@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/festO"
+    tools:context=".booth_ui.no_booth.NoBoothMainFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="150dp"
+            android:text="fest'O"
+            android:textColor="@color/white"
+            android:textSize="90dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/input_festival_code"
+            android:layout_marginBottom="12dp"
+            android:padding="5dp"
+            android:hint="   축제 코드를 입력해주세요" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/goRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:background="@drawable/booth_register"
+            android:text="부스 등록"
+            android:textColor="@color/festO"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/goCustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일반 사용자로 돌아가기"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"/>
+
+        <View
+            android:layout_width="145dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+
+    </LinearLayout>
+</FrameLayout>

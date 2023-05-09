@@ -21,6 +21,12 @@
             android:exported="false"
             />
         <activity
+            android:name=".customer_ui.home.PaymentFailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".booth_ui.no_booth.NoBoothMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".host_ui.no_festival.NoFeativalMainActivity"
             android:exported="false" />
         <activity
@@ -44,6 +50,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -84,7 +91,6 @@
         <activity
             android:name=".customer_ui.home.BoothDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".host_ui.HostMainActivity"
             android:exported="false" />

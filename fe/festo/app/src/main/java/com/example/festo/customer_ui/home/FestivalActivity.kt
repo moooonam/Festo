@@ -1,19 +1,21 @@
 package com.example.festo.customer_ui.home
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.AdapterView
-import android.widget.Button
-import android.widget.ListAdapter
+import android.widget.ImageView
 import android.widget.ListView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
+import com.example.festo.MainActivity
 import com.example.festo.R
+import com.example.festo.customer_ui.mypage.MypageFragment
+import com.example.festo.customer_ui.orderlist.OrderlistFragment
+import com.example.festo.customer_ui.recent.RecentFragment
+import com.example.festo.customer_ui.search.SearchActivity
+import com.example.festo.databinding.ActivityFestivalBinding
+import com.example.festo.databinding.ActivityHomeBinding
+import com.example.festo.databinding.FragmentHomeBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class FestivalActivity : AppCompatActivity() {
@@ -40,28 +42,50 @@ class FestivalActivity : AppCompatActivity() {
         val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
         list_view.adapter = Adapter
 
-
-        // 리스트뷰 클릭 상세피이지 이동
-        list_view.onItemClickListener = AdapterView.OnItemClickListener {
-                parent,
-                view,
-                position,
-                id -> val selectItem = parent.getItemAtPosition(position) as Booth
-            val booth = selectItem.name
-//            Toast.makeText(this, selectItem.name, Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, BoothDetailActivity::class.java)
-
-            // 부스 이름을 담아서 부스 디테일 액티비티로 이동
-            intent.putExtra("boothInfo", booth);
+        val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
+        notificationBtn.setOnClickListener {
+            var intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "NotificationFragment")
             startActivity(intent)
         }
 
-        // 카드뷰 클릭 상세페이지 이동
-//        val intent = Intent(this, BoothDetailActivity::class.java)
-//        val card_view = findViewById<CardView>(R.id.card_view)
-//        card_view.setOnClickListener {
-//            startActivity(intent)
-//        }
 
+        // 네비게이션
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
+        bottomNavigationView.selectedItemId = -1
+
+        bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "HomeFragment")
+                    startActivity(intent)
+                }
+
+                R.id.searchFragment -> {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.recentFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "RecentFragment")
+                    startActivity(intent)
+                }
+
+                R.id.orderlistFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "OrderlistFragment")
+                    startActivity(intent)
+                }
+
+                R.id.mypageFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "MypageFragment")
+                    startActivity(intent)
+                }
+            }
+            true
+        }
     }
 }

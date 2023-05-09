@@ -1,104 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <com.tosspayments.paymentsdk.view.PaymentMethodWidget
-        android:id="@+id/payment_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        tools:ignore="MissingConstraints" />
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="fest'O"
+            android:textColor="#F24E1E"
+            android:textSize="22sp" />
+
+        <ImageView
+            android:id="@+id/notification_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/ic_notification" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.tosspayments.paymentsdk.view.PaymentMethodWidget
+            android:id="@+id/payment_widget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="45dp"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingTop="20dp"
-                android:textStyle="bold"
-                android:text="부스이름 들어갈 곳"
-                android:textSize="20sp" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="20dp"
+                    android:text="부스이름 들어갈 곳"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:text="메뉴 확인 및 결제"
+                    android:textColor="#F24E1E"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2px"
+                    android:layout_marginTop="10dp"
+                    android:background="#A9A9A9" />
+
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/list_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <!--        추천 메뉴-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="이 메뉴는 어떠신가요?" />
+
+                <ListView
+                    android:id="@+id/recommend_list_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="75dp"
+            android:background="@drawable/button_payment"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:textStyle="bold"
-                android:text="메뉴 확인 및 결제"
-                android:textColor="#F24E1E"
-                />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:text="총 주문금액"
+                android:textColor="@color/white"
+                android:textSize="19dp"
+                android:textStyle="bold" />
 
-            <View
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center"
+                android:text="xxxx"
+                android:textColor="@color/white"
+                android:textSize="19dp"
+                android:textStyle="bold" />
+            />
+
+            <TextView
+                android:id="@+id/payBtn"
                 android:layout_width="match_parent"
-                android:layout_height="2px"
-                android:background="#A9A9A9"
-                android:layout_marginTop="10dp"/>
-
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical|end"
+                android:text="결제하기"
+                android:textColor="@color/white"
+                android:textSize="19dp"
+                android:textStyle="bold" />
         </LinearLayout>
+    </FrameLayout>
 
-        <ListView
-            android:id="@+id/list_view"
-            android:layout_width="match_parent"
-            android:layout_height="731dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="이 메뉴는 어떠신가요?" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/my_bottom_nav"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom"
-        android:background="@drawable/button_payment"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@drawable/menu_selector_color"
+        app:itemTextColor="@drawable/menu_selector_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="19dp"
-            android:layout_marginLeft="20dp"
-            android:text="총 주문금액" />
-
-        <TextView
-            android:id="@+id/totalPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="19dp"
-            android:layout_marginLeft="8dp"
-            android:text="xxxx" />
-        />
-
-        <TextView
-            android:id="@+id/payBtn"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|end"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:textSize="19dp"
-            android:layout_marginRight="20dp"
-            android:text="TossPay" />
-    </LinearLayout>
-
-</FrameLayout>
+</RelativeLayout>

@@ -21,6 +21,8 @@ class TosspayActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tosspay)
 
+        val totalPrice = intent.getIntExtra("totalPrice", 0)
+
         paymentWidget = PaymentWidget(
             activity = this,
             clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq",
@@ -31,7 +33,7 @@ class TosspayActivity : AppCompatActivity() {
         paymentWidget.setMethodWidget(methodWidget)
 
         paymentWidget.renderPaymentMethodWidget(
-            amount = 1000,
+            amount = totalPrice,
             orderId = "toss106923984729847289"
         )
 
@@ -63,13 +65,6 @@ class TosspayActivity : AppCompatActivity() {
             })
 
     private fun handlePaymentSuccessResult(success: TossPaymentResult.Success) {
-//        val paymentType: String? = success.additionalParameters["paymentType"]
-//        if ("BRANDPAY".equals(paymentType, true)) {
-//            // 브랜드페이 승인
-//        } else {
-//            // 일반결제 승인 -> 추후 일반결제/브랜드페이 승인으로 Migration 예정되어있음
-//        }
-
         startActivity(
             PaymentResultActivity.getIntent(
                 this@TosspayActivity,
@@ -85,17 +80,19 @@ class TosspayActivity : AppCompatActivity() {
 
 
     private fun handlePaymentFailResult(fail: TossPaymentResult.Fail) {
-        startActivity(
-            PaymentResultActivity.getIntent(
-                this@TosspayActivity,
-                false,
-                arrayListOf(
-                    "ErrorCode|${fail.errorCode}",
-                    "ErrorMessage|${fail.errorMessage}",
-                    "OrderId|${fail.orderId}"
-                )
-            )
-        )
+//        startActivity(
+//            PaymentFailActivity.getIntent(
+//                this@TosspayActivity,
+//                false,
+//                arrayListOf(
+//                    "ErrorCode|${fail.errorCode}",
+//                    "ErrorMessage|${fail.errorMessage}",
+//                    "OrderId|${fail.orderId}"
+//                )
+//            )
+//        )
+        val intent = Intent(this, PaymentFailActivity::class.java)
+        startActivity(intent)
     }
 
 

@@ -41,7 +41,6 @@ android {
 }
 
 
-
 dependencies {
     def nav_version = "2.5.3"
     // Kotlin
@@ -59,6 +58,9 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.4.0-alpha01'
 //    implementation 'com.tosspayments.sdk:paymentsdk:2.6.0'
 //    implementation 'com.github.tosspayments:payment-sdk-android:0.1.1'
+
+    // MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -96,5 +98,10 @@ dependencies {
 
 
 //    compile files('libs/libDaumMapAndroid.jar')
+    // Retrofit 라이브러리 추가
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // Retrofit에서 Gson을 사용하기 위한 라이브러리 추가
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
 }
