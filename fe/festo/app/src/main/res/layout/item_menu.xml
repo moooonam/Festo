@@ -65,17 +65,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
+                            android:layout_marginBottom="13dp"
                             android:text="이름"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
-
-                        <TextView
-                            android:id="@+id/menuExplanation"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="메뉴설명"
-                            android:textSize="12sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -127,16 +128,13 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        /*lv.setOnItemClickListener(object : AdapterView.OnItemClickListener{
-            override fun onItemClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Toast.makeText(this@SearchActivity, listAdapter.getItem(position)!!.toString(), Toast.LENGTH_SHORT).show()
-            }
-        })*/
+        // 알림으로 이동
+        val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
+        notificationBtn.setOnClickListener {
+            var intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "NotificationFragment")
+            startActivity(intent)
+        }
 
 
     }

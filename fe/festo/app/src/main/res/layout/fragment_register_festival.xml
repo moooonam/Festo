@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="10dp"
         android:paddingLeft="8dp">
 
         <View
@@ -30,15 +31,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
             android:text="축제등록"
-            android:textSize="40sp" />
+            android:textStyle="bold"
+            android:textSize="30sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -51,12 +52,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:text="축제 이름"
+                android:textStyle="bold"
                 android:textColor="#F44336"
                 android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/et_festival_name"
-                android:layout_width="210dp"
+                android:layout_width="220dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="65dp"
                 android:hint="축제 이름"
@@ -74,12 +76,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:text="축제 설명"
+                android:textStyle="bold"
                 android:textColor="#F44336"
                 android:textSize="15sp" />
 
             <EditText
                 android:id="@+id/et_festival_description"
-                android:layout_width="210dp"
+                android:layout_width="220dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="65dp"
                 android:hint="축제 설명"
@@ -97,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="축제 운영 기간"
+                android:textStyle="bold"
                 android:textColor="#F44336"
                 android:textSize="15sp" />
 
@@ -106,6 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="13dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_calendar" />
 
             <TextView
@@ -129,6 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="축제장소"
+                android:textStyle="bold"
                 android:textColor="#F44336"
                 android:textSize="15sp" />
 
@@ -144,11 +150,12 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/ic_map" />
 
             <EditText
                 android:id="@+id/et_festival_location"
-                android:layout_width="300dp"
+                android:layout_width="310dp"
                 android:layout_height="match_parent"
                 android:hint="축제 장소"
                 android:textSize="15sp" />
@@ -163,8 +170,9 @@
             <TextView
                 android:layout_width="172dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:text="축제 대표 이미지"
+                android:textStyle="bold"
                 android:textColor="#F44336"
                 android:textSize="15sp" />
 
