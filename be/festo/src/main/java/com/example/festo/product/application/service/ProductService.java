@@ -26,7 +26,7 @@ public class ProductService implements RegisterProductUseCase {
 
         BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(registerProductCommand.getBoothId());
 
-        if (boothInfo.isOwner(registerProductCommand.getRequesterId())) {
+        if (!boothInfo.isOwner(registerProductCommand.getRequesterId())) {
             throw new RuntimeException("권한 없음");
         }
 
