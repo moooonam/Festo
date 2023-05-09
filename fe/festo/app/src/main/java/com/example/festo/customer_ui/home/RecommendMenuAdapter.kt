@@ -10,8 +10,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import com.example.festo.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

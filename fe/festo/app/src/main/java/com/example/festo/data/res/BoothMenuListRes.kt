@@ -4,5 +4,7 @@ class BoothMenuListRes (
     val prodcutId: String,
     val imageUrl: String,
     val name: String,
-    val price: Int
+    val price: Int,
+    var cnt: Int = 0,
+    var check: Boolean = false
 )

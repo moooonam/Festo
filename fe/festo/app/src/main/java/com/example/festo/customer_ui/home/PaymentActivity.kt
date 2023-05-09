@@ -37,8 +37,8 @@ class PaymentActivity : AppCompatActivity() {
 
         // 추천 메뉴
         var RecommendMenuDataList : ArrayList <RecommendMenu> = arrayListOf(
-            RecommendMenu(R.drawable.logo1,"추천메뉴1",4000),
-            RecommendMenu(R.drawable.logo2,"추천메뉴2",2000),
+            RecommendMenu("ddd","추천메뉴1",4000),
+            RecommendMenu("ddd","추천메뉴2",2000),
         )
 
         // 추천메뉴 어댑터 연결

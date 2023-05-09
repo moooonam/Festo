@@ -33,7 +33,7 @@ class MyOrderListAdapter(val context: Context, val myOrderList: ArrayList<MyOrde
 
         val myorderlist = myOrderList[position]
 
-        image.setImageResource(myorderlist.image)
+//        image.setImageResource(myorderlist.image)
         name.text = myorderlist.name
         cnt.text = myorderlist.cnt.toString()
         price.text = "${myorderlist.price}원"
