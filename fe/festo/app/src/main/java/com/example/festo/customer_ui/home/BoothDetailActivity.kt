@@ -3,10 +3,13 @@ package com.example.festo.customer_ui.home
 import MenuAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
+import com.example.festo.customer_ui.search.SearchActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class BoothDetailActivity : AppCompatActivity() {
@@ -29,12 +32,18 @@ class BoothDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_booth_detail)
 
+        // 알림으로 이동
+        val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
+        notificationBtn.setOnClickListener {
+            var intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("fragment", "NotificationFragment")
+            startActivity(intent)
+        }
+
         // 전달받은 부스 정보
         val intent = intent //전달할 데이터를 받을 Intent
         val boothInfo = intent.getStringExtra("boothInfo")
 
-        val boothName = findViewById<TextView>(com.example.festo.R.id.boothName)
-        boothName.setText(boothInfo)
 
         // 메뉴 리스트 연결
         val adapter = MenuAdapter(this, Menulist)
@@ -58,6 +67,42 @@ class BoothDetailActivity : AppCompatActivity() {
             val intent = Intent(this, PaymentActivity::class.java)
             intent.putExtra("myOrderList", myOrderList)
             startActivity(intent)
+        }
+
+        // 네비게이션
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
+        bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "HomeFragment")
+                    startActivity(intent)
+                }
+
+                R.id.searchFragment -> {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.recentFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "RecentFragment")
+                    startActivity(intent)
+                }
+
+                R.id.orderlistFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "OrderlistFragment")
+                    startActivity(intent)
+                }
+
+                R.id.mypageFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "MypageFragment")
+                    startActivity(intent)
+                }
+            }
+            true
         }
     }
 

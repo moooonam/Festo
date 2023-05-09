@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.search
 import android.app.SearchManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.home.FestivalItemListAdapter
+import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.customer_ui.home.HomeFestivalList
 import com.example.festo.databinding.ActivitySearchBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mancj.materialsearchbar.MaterialSearchBar
 
 class SearchActivity : AppCompatActivity() {
@@ -27,6 +30,45 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // 네비게이션
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
+        // 검색 액티비티 들어오면 네비게시션도 검색에 고정
+        bottomNavigationView.setSelectedItemId(R.id.searchFragment)
+        bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.homeFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "HomeFragment")
+                    startActivity(intent)
+                }
+
+                R.id.searchFragment -> {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    startActivity(intent)
+                }
+
+                R.id.recentFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "RecentFragment")
+                    startActivity(intent)
+                }
+
+                R.id.orderlistFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "OrderlistFragment")
+                    startActivity(intent)
+                }
+
+                R.id.mypageFragment -> {
+                    val intent = Intent(this, HomeActivity::class.java)
+                    intent.putExtra("fragment", "MypageFragment")
+                    startActivity(intent)
+                }
+            }
+            true
+        }
+
 
         val lv = findViewById<RecyclerView>(R.id.recycler_view)
         val searchBar = findViewById<MaterialSearchBar>(R.id.searchBar)

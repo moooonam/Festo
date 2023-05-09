@@ -65,13 +65,6 @@ class TosspayActivity : AppCompatActivity() {
             })
 
     private fun handlePaymentSuccessResult(success: TossPaymentResult.Success) {
-//        val paymentType: String? = success.additionalParameters["paymentType"]
-//        if ("BRANDPAY".equals(paymentType, true)) {
-//            // 브랜드페이 승인
-//        } else {
-//            // 일반결제 승인 -> 추후 일반결제/브랜드페이 승인으로 Migration 예정되어있음
-//        }
-
         startActivity(
             PaymentResultActivity.getIntent(
                 this@TosspayActivity,
@@ -87,17 +80,19 @@ class TosspayActivity : AppCompatActivity() {
 
 
     private fun handlePaymentFailResult(fail: TossPaymentResult.Fail) {
-        startActivity(
-            PaymentResultActivity.getIntent(
-                this@TosspayActivity,
-                false,
-                arrayListOf(
-                    "ErrorCode|${fail.errorCode}",
-                    "ErrorMessage|${fail.errorMessage}",
-                    "OrderId|${fail.orderId}"
-                )
-            )
-        )
+//        startActivity(
+//            PaymentFailActivity.getIntent(
+//                this@TosspayActivity,
+//                false,
+//                arrayListOf(
+//                    "ErrorCode|${fail.errorCode}",
+//                    "ErrorMessage|${fail.errorMessage}",
+//                    "OrderId|${fail.orderId}"
+//                )
+//            )
+//        )
+        val intent = Intent(this, PaymentFailActivity::class.java)
+        startActivity(intent)
     }
 
 

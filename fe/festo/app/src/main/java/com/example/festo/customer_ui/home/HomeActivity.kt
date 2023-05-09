@@ -59,6 +59,7 @@ class HomeActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true*/
                     val intent = Intent(this, SearchActivity::class.java)
                     startActivity(intent)
+                    return@setOnItemSelectedListener true
                 }
 
                 R.id.recentFragment -> {
@@ -95,14 +96,32 @@ class HomeActivity : AppCompatActivity() {
             bottomNavigationView.setSelectedItemId(R.id.orderlistFragment)
         }
 
-        // 다른 프로필에서 일반 사용자로 돌아온 경우
-        if (fragmentName == "MypageFragment") {
-            val MypageFragment = MypageFragment()
+        // 액티비티에서 알림창을 누르는 경우
+        if (fragmentName == "NotificationFragment") {
+            val NotificationFragment = NotificationFragment()
             supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_nav_bottom, MypageFragment).commit()
-            // 네비게이션도 마이페이지가 선택되어지도록 변경
+                .replace(R.id.layout_nav_bottom, NotificationFragment).commit()
+        }
+
+        // 액티비티에서 네브바를 누르는 경우 각 프래그먼트로 이동, 다른 프로필에서 일반 사용자로 돌아온 경우 마이페이지로 이동
+        if (fragmentName == "HomeFragment") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, HomeFragment()).commit()
+            bottomNavigationView.setSelectedItemId(R.id.homeFragment)
+        } else if (fragmentName == "RecentFragment") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, RecentFragment()).commit()
+            bottomNavigationView.setSelectedItemId(R.id.recentFragment)
+        } else if (fragmentName == "OrderlistFragment") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, OrderlistFragment()).commit()
+            bottomNavigationView.setSelectedItemId(R.id.orderlistFragment)
+        } else if (fragmentName == "MypageFragment") {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.layout_nav_bottom, MypageFragment()).commit()
             bottomNavigationView.setSelectedItemId(R.id.mypageFragment)
         }
+
 
 
     }

@@ -26,7 +26,7 @@ class BoothAdapter(val context: Context, val BoothList: ArrayList<Booth>) : Base
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.item_booth, null)
-        val logo = view.findViewById<ImageView>(R.id.boothLogoImage)
+//        val logo = view.findViewById<ImageView>(R.id.boothLogoImage)
         val name = view.findViewById<TextView>(R.id.boothName)
         val category = view.findViewById<TextView>(R.id.boothCategory)
         val explanation = view.findViewById<TextView>(R.id.boothExplanation)
@@ -39,7 +39,7 @@ class BoothAdapter(val context: Context, val BoothList: ArrayList<Booth>) : Base
         val booth = BoothList[position]
         //user 변수에 배열(또는 서버에서 받아온 데이터)에 담긴 profile, name, email, content 정보를 담아준다.
 
-        logo.setImageResource(booth.logo)
+//        logo.setImageResource(booth.logo)
         name.text = booth.name
         category.text = booth.category
         explanation.text = booth.explanation

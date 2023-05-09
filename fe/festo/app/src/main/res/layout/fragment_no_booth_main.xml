@@ -29,7 +29,7 @@
             android:background="@drawable/input_festival_code"
             android:layout_marginBottom="12dp"
             android:padding="5dp"
-            android:hint="     축제 코드를 입력해주세요" />
+            android:hint="   축제 코드를 입력해주세요" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/goRegister"
@@ -51,7 +51,7 @@
             android:textColor="@color/white"/>
 
         <View
-            android:layout_width="133dp"
+            android:layout_width="145dp"
             android:layout_height="1dp"
             android:layout_gravity="center"
             android:background="@color/white" />
