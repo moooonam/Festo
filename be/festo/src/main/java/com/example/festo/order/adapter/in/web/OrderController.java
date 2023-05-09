@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{orderId}/status")
-    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, OrderStatusChangeRequest orderStatusChangeRequest) {
+    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, @RequestBody OrderStatusChangeRequest orderStatusChangeRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
                                                               .getPrincipal();
