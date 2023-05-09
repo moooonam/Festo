@@ -44,12 +44,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
         BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(orderRequest.getBoothId());
 
-        Order order = Order.builder()
-                           .orderNo(orderNo)
-                           .boothInfo(boothInfo)
-                           .orderer(orderer)
-                           .orderLines(orderLines)
-                           .build();
+        Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
         placeOrderPort.placeOrder(order);
     }
