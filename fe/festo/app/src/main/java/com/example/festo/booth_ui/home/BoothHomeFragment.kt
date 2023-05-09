@@ -20,6 +20,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.data.req.RegiMenuReq
+import com.example.festo.data.req.RegisterFestivalReq
+import com.example.festo.data.req.RegisterMenuReq
 import com.example.festo.databinding.FragmentBoothHomeBinding
 import com.example.festo.host_ui.boothlist.BoothlistAdapter
 
@@ -62,10 +65,12 @@ class BoothHomeFragment : Fragment() {
             .setPositiveButton("추가하기") { dialogInterface, _ ->
                 val photo = dialogView.findViewById<ImageView>(R.id.menu_img)
                 val meueName = dialogView.findViewById<EditText>(R.id.text1EditText).text.toString()
-                val Price = dialogView.findViewById<EditText>(R.id.text2EditText).text.toString()
+                val Price = Integer.parseInt(dialogView.findViewById<EditText>(R.id.text2EditText).text.toString())
 
                 // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
-
+                val request = RegiMenuReq( meueName,Price)
+                val data = RegisterMenuReq(request, "이미지들어갈부분")
+                Log.d("잘들어감?", "${data}")
 
                 dialogInterface.dismiss()
             }

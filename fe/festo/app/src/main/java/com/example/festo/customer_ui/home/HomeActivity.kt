@@ -1,28 +1,22 @@
 package com.example.festo.customer_ui.home
 
 
-import android.content.ClipData.Item
+import RetrofitClient
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.Signature
-import android.os.Build.VERSION_CODES.P
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.mypage.MypageFragment
-import com.example.festo.customer_ui.mypage.RecentOrderListData
 import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchActivity
-import com.example.festo.customer_ui.search.SearchFragment
 import com.example.festo.data.API.ApiService
-import com.example.festo.data.req.TestReq
-import com.example.festo.data.res.TestRes
-import com.example.festo.data.res.User
+import com.example.festo.data.res.TestUser
 import com.example.festo.databinding.ActivityHomeBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -128,15 +122,15 @@ class HomeActivity : AppCompatActivity() {
 
     private fun startRetrofit() {
         val postApi = retrofit?.create(ApiService::class.java)
-        postApi!!.getUsers().enqueue(object : Callback<List<User>> {
-            override fun onResponse(call: Call<List<User>>, response: Response<List<User>>) {
+        postApi!!.getUsers().enqueue(object : Callback<List<TestUser>> {
+            override fun onResponse(call: Call<List<TestUser>>, response: Response<List<TestUser>>) {
                 if (response.isSuccessful) {
 //                    Log.d("테스트중", "onResponse: ${response.body()}")
                     Log.d(" 테스트", "${response.body()?.get(1)}")
                 }
             }
 
-            override fun onFailure(call: Call<List<User>>, t: Throwable) {
+            override fun onFailure(call: Call<List<TestUser>>, t: Throwable) {
                 t.printStackTrace()
             }
         })
