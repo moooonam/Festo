@@ -2,6 +2,7 @@ package com.example.festo.product.adapter.out.persistence;
 
 import com.example.festo.booth.adapter.out.persistence.BoothEntity;
 import com.example.festo.booth.adapter.out.persistence.BoothRepository;
+import com.example.festo.product.application.port.out.LoadBoothInfoPort;
 import com.example.festo.product.application.port.out.SaveProductPort;
 import com.example.festo.product.domain.BoothInfo;
 import com.example.festo.product.domain.Product;
@@ -12,7 +13,7 @@ import java.util.NoSuchElementException;
 
 @Component
 @RequiredArgsConstructor
-public class ProductPersistenceAdapter implements SaveProductPort {
+public class ProductPersistenceAdapter implements SaveProductPort, LoadBoothInfoPort {
 
     private final ProductRepository productRepository;
 
@@ -39,7 +40,8 @@ public class ProductPersistenceAdapter implements SaveProductPort {
 
     @Override
     public Long updateSetImg(Long productId, String imgUrl) {
-        ProductEntity productEntity= productRepository.findById(productId).orElseThrow(NoSuchElementException::new);
+        ProductEntity productEntity = productRepository.findById(productId)
+                                                       .orElseThrow(NoSuchElementException::new);
         productEntity.setImageUrl(imgUrl);
         productRepository.save(productEntity);
 
@@ -53,5 +55,18 @@ public class ProductPersistenceAdapter implements SaveProductPort {
                       .productImageUrl(productEntity.getImageUrl())
                       .boothInfo(new BoothInfo(productEntity.getBooth()))
                       .build();
+    }
+
+    @Override
+    public BoothInfo loadBoothInfo(Long boothId) {
+        BoothEntity boothEntity = boothRepository.findById(boothId)
+                                                 .orElseThrow(NoSuchElementException::new);
+
+        return mapToBoothInfoDomain(boothEntity);
+    }
+
+    private BoothInfo mapToBoothInfoDomain(BoothEntity boothEntity) {
+        return new BoothInfo(boothEntity.getBoothId(), boothEntity.getOwner()
+                                                                  .getId(), boothEntity.getName());
     }
 }

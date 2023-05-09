@@ -16,5 +16,5 @@ public class OrderDetailResponse {
 
     private final int totalPrice;
 
-    private final List<ProductResponse> menus;
+    private final List<MenuResponse> menus;
 }

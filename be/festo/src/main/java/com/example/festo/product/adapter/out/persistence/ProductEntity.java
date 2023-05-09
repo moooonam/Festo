@@ -23,8 +23,6 @@ public class ProductEntity {
     @Convert(converter = MoneyConverter.class)
     private Money price;
 
-    private String description;
-
     private String imageUrl;
 
     @ManyToOne
@@ -32,11 +30,10 @@ public class ProductEntity {
     private BoothEntity booth;
 
     @Builder
-    public ProductEntity(Long productId, String name, Money price, String description, String imageUrl, BoothEntity booth) {
+    public ProductEntity(Long productId, String name, Money price, String imageUrl, BoothEntity booth) {
         this.productId = productId;
         this.name = name;
         this.price = price;
-        this.description = description;
         this.imageUrl = imageUrl;
         this.booth = booth;
     }

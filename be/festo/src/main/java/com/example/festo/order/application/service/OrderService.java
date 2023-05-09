@@ -23,7 +23,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final UpdateOrderStatusPort updateOrderPort;
 
-    private final LoadProductPort loadProductPort;
+    private final LoadMenuPort loadMenuPort;
 
     private final LoadBoothInfoPort loadBoothInfoPort;
 
@@ -35,9 +35,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     @Override
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
-        for (OrderProduct orderProduct : orderRequest.getOrderProducts()) {
-            Product product = loadProductPort.loadProduct(orderProduct.getProductId());
-            orderLines.add(new OrderLine(orderProduct.getProductId(), product.getPrice(), orderProduct.getQuantity()));
+        for (OrderMenu orderMenu : orderRequest.getOrderMenus()) {
+            Menu menu = loadMenuPort.loadMenu(orderMenu.getMenuId());
+            orderLines.add(new OrderLine(orderMenu.getMenuId(), menu.getPrice(), orderMenu.getQuantity()));
         }
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
@@ -67,10 +67,10 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     public OrderDetailResponse loadOrderDetail(Long orderId) {
         Order order = loadOrderPort.loadOrder(orderId);
 
-        List<ProductResponse> menus = new ArrayList<>();
+        List<MenuResponse> menus = new ArrayList<>();
         for (OrderLine orderLine : order.getOrderLines()) {
-            Product product = loadProductPort.loadProduct(orderLine.getProductId());
-            menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
+            Menu menu = loadMenuPort.loadMenu(orderLine.getMenuId());
+            menus.add(new MenuResponse(menu.getName(), orderLine.getQuantity()));
         }
 
         return new OrderDetailResponse(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
@@ -83,9 +83,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         List<OrderSummaryResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
             FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
-            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines().get(0).getMenuId());
 
-            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstProduct));
+            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu));
         }
 
         return orderSummaries;
@@ -97,8 +97,8 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         List<OrderSummaryForBoothOwnerResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
-            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
-            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstProduct));
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines().get(0).getMenuId());
+            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstMenu));
         }
 
         return orderSummaries;
