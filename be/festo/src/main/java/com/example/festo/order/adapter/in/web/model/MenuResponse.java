@@ -6,9 +6,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ProductResponse {
+public class MenuResponse {
 
-    private final String productName;
+    private final String menuName;
 
     private final int quantity;
 

@@ -31,6 +31,7 @@ public class OrderEntity {
     private OrderNo orderNo;
 
     @ManyToOne
+    @JoinColumn(name = "booth_id")
     private BoothEntity booth;
 
     @ManyToOne

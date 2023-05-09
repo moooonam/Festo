@@ -5,9 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Product {
-
-    private Long id;
+public class Menu {
 
     private Long menuId;
 
@@ -15,17 +13,13 @@ public class Product {
 
     private Money price;
 
-    private String description;
-
     private String imageUrl;
 
     @Builder
-    public Product(Long id, Long menuId, String name, Money price, String description, String imageUrl) {
-        this.id = id;
+    public Menu(Long menuId, String name, Money price, String imageUrl) {
         this.menuId = menuId;
         this.name = name;
         this.price = price;
-        this.description = description;
         this.imageUrl = imageUrl;
     }
 }

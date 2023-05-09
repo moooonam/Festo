@@ -13,7 +13,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Query("select count(o) + 1 from OrderEntity o where o.booth.boothId = :boothId")
     int nextOrderNo(@Param("boothId") Long boothId);
 
-    List<OrderEntity> findOrdersByOrdererId(Long ordererId);
+    List<OrderEntity> findAllByOrdererId(Long ordererId);
 
-    List<OrderEntity> findOrdersByBoothId(Long boothId);
+    List<OrderEntity> findAllByBooth_BoothId(Long boothId);
 }
