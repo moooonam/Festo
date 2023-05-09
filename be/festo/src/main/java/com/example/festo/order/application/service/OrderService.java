@@ -64,7 +64,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     }
 
     @Override
-    public OrderDetail loadOrderDetail(Long orderId) {
+    public OrderDetailResponse loadOrderDetail(Long orderId) {
         Order order = loadOrderPort.loadOrder(orderId);
 
         List<ProductResponse> menus = new ArrayList<>();
@@ -73,19 +73,32 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
             menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
         }
 
-        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+        return new OrderDetailResponse(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
     }
 
     @Override
-    public List<OrderSummary> loadOrderSummariesByOrdererId(Long ordererId) {
+    public List<OrderSummaryResponse> loadOrderSummariesByOrdererId(Long ordererId) {
         List<Order> orders = loadOrderPort.loadOrdersByOrdererId(ordererId);
 
-        List<OrderSummary> orderSummaries = new ArrayList<>();
+        List<OrderSummaryResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
             FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
             Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
 
-            orderSummaries.add(new OrderSummary(order, festivalInfo, firstProduct));
+            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstProduct));
+        }
+
+        return orderSummaries;
+    }
+
+    @Override
+    public List<OrderSummaryForBoothOwnerResponse> loadOrderSummariesByBoothId(Long boothId, Long requesterId, boolean completed) {
+        List<Order> orders = loadOrderPort.loadOrdersByBoothId(boothId, requesterId, completed);
+
+        List<OrderSummaryForBoothOwnerResponse> orderSummaries = new ArrayList<>();
+        for (Order order : orders) {
+            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
+            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstProduct));
         }
 
         return orderSummaries;
