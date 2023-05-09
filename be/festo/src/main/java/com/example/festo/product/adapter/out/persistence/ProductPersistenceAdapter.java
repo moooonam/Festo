@@ -3,17 +3,20 @@ package com.example.festo.product.adapter.out.persistence;
 import com.example.festo.booth.adapter.out.persistence.BoothEntity;
 import com.example.festo.booth.adapter.out.persistence.BoothRepository;
 import com.example.festo.product.application.port.out.LoadBoothInfoPort;
+import com.example.festo.product.application.port.out.LoadProductPort;
 import com.example.festo.product.application.port.out.SaveProductPort;
 import com.example.festo.product.domain.BoothInfo;
 import com.example.festo.product.domain.Product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ProductPersistenceAdapter implements SaveProductPort, LoadBoothInfoPort {
+public class ProductPersistenceAdapter implements SaveProductPort, LoadBoothInfoPort, LoadProductPort {
 
     private final ProductRepository productRepository;
 
@@ -48,14 +51,6 @@ public class ProductPersistenceAdapter implements SaveProductPort, LoadBoothInfo
         return productEntity.getProductId();
     }
 
-    private Product mapToDomain(ProductEntity productEntity) {
-        return Product.builder()
-                      .productId(productEntity.getProductId())
-                      .price(productEntity.getPrice())
-                      .productImageUrl(productEntity.getImageUrl())
-                      .boothInfo(new BoothInfo(productEntity.getBooth()))
-                      .build();
-    }
 
     @Override
     public BoothInfo loadBoothInfo(Long boothId) {
@@ -65,8 +60,28 @@ public class ProductPersistenceAdapter implements SaveProductPort, LoadBoothInfo
         return mapToBoothInfoDomain(boothEntity);
     }
 
+    @Override
+    public List<Product> loadProductsByBoothId(Long boothId) {
+        List<ProductEntity> productEntities = productRepository.findAllByBooth_BoothId(boothId);
+
+        return productEntities.stream()
+                              .map(this::mapToDomain)
+                              .collect(Collectors.toList());
+    }
+
+
     private BoothInfo mapToBoothInfoDomain(BoothEntity boothEntity) {
         return new BoothInfo(boothEntity.getBoothId(), boothEntity.getOwner()
                                                                   .getId(), boothEntity.getName());
+    }
+
+    private Product mapToDomain(ProductEntity productEntity) {
+        return Product.builder()
+                      .productId(productEntity.getProductId())
+                      .price(productEntity.getPrice())
+                      .productImageUrl(productEntity.getImageUrl())
+                      .productName(productEntity.getName())
+                      .boothInfo(new BoothInfo(productEntity.getBooth()))
+                      .build();
     }
 }
