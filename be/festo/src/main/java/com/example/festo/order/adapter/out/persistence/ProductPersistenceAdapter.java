@@ -3,7 +3,7 @@ package com.example.festo.order.adapter.out.persistence;
 import com.example.festo.order.domain.Product;
 import com.example.festo.product.adapter.out.persistence.ProductRepository;
 import com.example.festo.order.application.port.out.LoadProductPort;
-import com.example.festo.product.domain.ProductEntity;
+import com.example.festo.product.adapter.out.persistence.ProductEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +25,7 @@ public class ProductPersistenceAdapter implements LoadProductPort {
 
     private Product mapToProductDomain(ProductEntity productEntity) {
         return Product.builder()
-                      .id(productEntity.getId())
+                      .id(productEntity.getProductId())
                       .menuId(productEntity.getMenuId())
                       .price(productEntity.getPrice())
                       .name(productEntity.getName())
