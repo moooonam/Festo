@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.mypage.MypageFragment
 import com.example.festo.customer_ui.orderlist.OrderlistFragment
-import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.ApiService
 import com.example.festo.data.res.TestUser
@@ -56,14 +55,6 @@ class HomeActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
 
-                R.id.recentFragment -> {
-                    startRetrofit()
-//                    testPost()
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.layout_nav_bottom, RecentFragment()).commit()
-                    return@setOnItemSelectedListener true
-                }
-
                 R.id.orderlistFragment -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.layout_nav_bottom, OrderlistFragment()).commit()
@@ -102,10 +93,6 @@ class HomeActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.layout_nav_bottom, HomeFragment()).commit()
             bottomNavigationView.setSelectedItemId(R.id.homeFragment)
-        } else if (fragmentName == "RecentFragment") {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.layout_nav_bottom, RecentFragment()).commit()
-            bottomNavigationView.setSelectedItemId(R.id.recentFragment)
         } else if (fragmentName == "OrderlistFragment") {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.layout_nav_bottom, OrderlistFragment()).commit()

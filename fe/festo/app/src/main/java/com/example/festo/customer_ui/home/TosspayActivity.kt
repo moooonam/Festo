@@ -64,6 +64,7 @@ class TosspayActivity : AppCompatActivity() {
                 handlePaymentFailResult(fail)
             })
 
+    //PaymentKey, OrderId, Amount 순서
     private fun handlePaymentSuccessResult(success: TossPaymentResult.Success) {
         startActivity(
             PaymentResultActivity.getIntent(
