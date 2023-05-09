@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.customer_ui.mypage.OrderlistAdapter
 import com.example.festo.databinding.FragmentOrderlistBinding
 
@@ -31,6 +32,14 @@ class OrderlistFragment : Fragment() {
         var binding = FragmentOrderlistBinding.inflate(inflater, container, false)
 
         mBinding = binding
+
+        // 알림으로 이동
+        mBinding!!.notificationBtn.setOnClickListener{
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.layout_nav_bottom, NotificationFragment())
+            transaction?.commit()
+        }
+
         return  mBinding?.root
     }
 

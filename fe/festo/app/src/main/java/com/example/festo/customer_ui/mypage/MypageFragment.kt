@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.booth_ui.no_booth.NoBoothMainActivity
+import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.databinding.FragmentMypageBinding
 import com.example.festo.host_ui.HostMainActivity
 import com.example.festo.host_ui.no_festival.NoFeativalMainActivity
@@ -51,6 +52,14 @@ class MypageFragment : Fragment() {
             val intent = Intent(getActivity(), NoFeativalMainActivity::class.java)
             startActivity(intent)
         }
+
+        // 알림으로 이동
+        mBinding!!.notificationBtn.setOnClickListener{
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(R.id.layout_nav_bottom, NotificationFragment())
+            transaction?.commit()
+        }
+
         return  mBinding?.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -44,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
+                android:textStyle="bold"
                 android:text="마이페이지"
                 app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -109,8 +110,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
             android:layout_marginLeft="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
             android:text="최근 주문목록" />
 
         <View
@@ -129,7 +132,7 @@
             android:id="@+id/recentOderList_listView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="240dp"
+            android:layout_marginTop="200dp"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="20dp">
 

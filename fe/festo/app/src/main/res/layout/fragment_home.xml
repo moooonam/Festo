@@ -64,6 +64,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:text="페스토"
                                 android:textColor="@color/festO"
                                 android:textSize="20dp" />
@@ -77,6 +78,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:textStyle="bold"
                                 android:text="축제,"
                                 android:textColor="@color/festO"
                                 android:textSize="20dp" />
