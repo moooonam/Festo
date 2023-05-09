@@ -6,7 +6,9 @@ import com.example.festo.common.model.Money;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
 
+@Getter
 @Embeddable
 public class OrderLine {
 
@@ -34,9 +36,5 @@ public class OrderLine {
 
     private Money calculateAmounts() {
         return this.price.multiply(quantity);
-    }
-
-    public Money getAmounts() {
-        return amounts;
     }
 }
