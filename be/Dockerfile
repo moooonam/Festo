@@ -1,3 +1,7 @@
-FROM amazoncorretto:17
-COPY build/libs/*.jar spring-base.jar
-ENTRYPOINT ["java", "-jar", "/spring-base.jar"]
+FROM openjdk:17-alpine
+
+ARG JAR_FILE=/build/libs/*.jar
+
+COPY ${JAR_FILE} /app.jar
+
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod", "/app.jar"]
