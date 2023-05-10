@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.home
 import MenuAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
@@ -10,22 +11,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.BoothMenuListRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class BoothDetailActivity : AppCompatActivity() {
-    // 예시데이터 정의
-    var Menulist = arrayListOf<Menu>(
-        Menu(com.example.festo.R.drawable.logo1, "이름1", 1000, false, 0),
-        Menu(com.example.festo.R.drawable.logo2, "이름2", 4000, false, 0),
-        Menu(com.example.festo.R.drawable.logo3, "이름3", 3000, false, 0),
-        Menu(com.example.festo.R.drawable.logo1, "이름1", 2000, false, 0),
-        Menu(com.example.festo.R.drawable.logo2, "이름2", 1000, false, 0),
-        Menu(com.example.festo.R.drawable.logo3, "이름3", 5000, false, 0),
-        Menu(com.example.festo.R.drawable.logo1, "이름1", 1000, false, 0),
-        Menu(com.example.festo.R.drawable.logo2, "이름2", 1000, false, 0),
-        Menu(com.example.festo.R.drawable.logo3, "이름3", 1000, false, 0),
-    )
+    private var retrofit = RetrofitClient.client
+    private var menuList = emptyList<BoothMenuListRes>()
 
     // 주문할 메뉴를 담을 리스트
     var myOrderList = arrayListOf<MyOrderList>()
@@ -45,22 +41,51 @@ class BoothDetailActivity : AppCompatActivity() {
         val intent = intent //전달할 데이터를 받을 Intent
         val boothInfo = intent.getStringExtra("boothInfo")
 
+        // 부스 메뉴 리스트 retrofit
+        val postApi = retrofit?.create(UserAPI::class.java)
+        val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E"
+        val token  = "Bearer $tokenValue"
+        postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
+            override fun onResponse(
+                call: Call<List<BoothMenuListRes>>,
+                response: Response<List<BoothMenuListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
+                    menuList = response.body() ?: emptyList()
+                    // 메뉴 리스트 연결
+                    val adapter = MenuAdapter(this@BoothDetailActivity, menuList)
+                    adapter.totalTextView = findViewById(R.id.totalTextView)
+                    val list_view = findViewById<ListView>(R.id.menu_list_view)
+                    list_view.adapter = adapter
+                    adapter.totalTextView = findViewById(R.id.totalTextView)
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<BoothMenuListRes>>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
 
         // 메뉴 리스트 연결
-        val adapter = MenuAdapter(this, Menulist)
-        adapter.totalTextView = findViewById(R.id.totalTextView)
-        val list_view = findViewById<ListView>(com.example.festo.R.id.menu_list_view)
-        list_view.adapter = adapter
+//        val adapter = MenuAdapter(this, arrayListOf())
+//        adapter.totalTextView = findViewById(R.id.totalTextView)
+//        val list_view = findViewById<ListView>(com.example.festo.R.id.menu_list_view)
+//        list_view.adapter = adapter
 
         // 합계 출력 id 연결
-        adapter.totalTextView = findViewById(R.id.totalTextView)
+//        adapter.totalTextView = findViewById(R.id.totalTextView)
 
         // 결제 페이지로 이동
         val payBtn = findViewById<TextView>(R.id.payBtn)
         payBtn.setOnClickListener {
-            for (menu in Menulist) {
+            for (menu in menuList) {
                 if (menu.check && menu.cnt != 0) {
-                    val myOrderItem = MyOrderList(menu.image, menu.name, menu.price, menu.cnt)
+                    val myOrderItem = MyOrderList(menu.productId, menu.imageUrl, menu.name, menu.price, menu.cnt)
                     myOrderList.add(myOrderItem)
                 }
             }
@@ -105,7 +130,5 @@ class BoothDetailActivity : AppCompatActivity() {
             true
         }
     }
-
-
 
 }

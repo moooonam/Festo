@@ -13,15 +13,19 @@ import com.tosspayments.paymentsdk.model.TossPaymentResult
 import com.tosspayments.paymentsdk.view.PaymentMethodWidget
 
 
+@Suppress("DEPRECATION")
 class TosspayActivity : AppCompatActivity() {
     private lateinit var paymentWidget: PaymentWidget
+    private lateinit var myOrderList: ArrayList<*>
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tosspay)
 
+        // 전달받은 데이터
         val totalPrice = intent.getIntExtra("totalPrice", 0)
+        myOrderList = intent.getSerializableExtra("myOrderList") as ArrayList<*>
 
         paymentWidget = PaymentWidget(
             activity = this,
@@ -66,17 +70,14 @@ class TosspayActivity : AppCompatActivity() {
 
     //PaymentKey, OrderId, Amount 순서
     private fun handlePaymentSuccessResult(success: TossPaymentResult.Success) {
-        startActivity(
-            PaymentResultActivity.getIntent(
-                this@TosspayActivity,
-                true,
-                arrayListOf(
-                    "PaymentKey|${success.paymentKey}",
-                    "OrderId|${success.orderId}",
-                    "Amount|${success.amount}",
-                )
-            )
-        )
+        val intent = Intent(this, PaymentResultActivity::class.java).apply {
+            putExtra("myOrderList", myOrderList)
+            putExtra("success", true)
+            putExtra("PaymentKey", success.paymentKey)
+            putExtra("OrderId", success.orderId)
+            putExtra("Amount", success.amount)
+        }
+        startActivity(intent)
     }
 
 

@@ -10,8 +10,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.startActivity
 import com.example.festo.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -31,7 +29,7 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
     // 추천 메뉴를 myorderlist에 추가
     fun addMenuToOrderList(position: Int, count: Int) {
         val recommendMenu = RecommendMenuList[position]
-        val myOrder = MyOrderList(recommendMenu.image, recommendMenu.name, recommendMenu.price, count)
+        val myOrder = MyOrderList(recommendMenu.productId, recommendMenu.image, recommendMenu.name, recommendMenu.price, count)
         myOrderList.add(myOrder)
         notifyDataSetChanged()
     }
