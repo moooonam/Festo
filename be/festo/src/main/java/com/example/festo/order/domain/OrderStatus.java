@@ -8,12 +8,9 @@ import java.util.Arrays;
 public enum OrderStatus {
 
     WAITING_ACCEPTANCE("주문 수락 대기", 0),
-    COMPLETE_ACCEPTANCE("주문 수락 완료", 1),
-    PREPARING_ORDER("상품 준비중", 2),
-    READY_ORDER("상품 준비 완료", 3),
-    WAITING_RECEIVE("수령 대기", 4),
-    RECEIVE_COMPLETE("수령 완료", 5),
-    COMPLETE("거래 완료", 6),
+    PREPARING_ORDER("상품 준비중", 1),
+    WAITING_RECEIVE("수령 대기", 2),
+    COMPLETE("거래 완료", 3),
 
     CANCELED("취소", -1);
 
