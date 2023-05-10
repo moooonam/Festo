@@ -42,6 +42,7 @@ class PaymentResultActivity : AppCompatActivity() {
         val paymentKey = intent.getStringExtra("PaymentKey")
         val orderId = intent.getStringExtra("OrderId")
         val amount = intent.getDoubleExtra("Amount", 0.0)
+        val boothId = intent.getStringExtra("boothId")
 
 
 ////        PaymentKey
@@ -56,7 +57,7 @@ class PaymentResultActivity : AppCompatActivity() {
             OrderInfo(menuId = it.productId.toLong(), quantity = it.cnt)
         }
         val orderReq = OrderReq(
-            boothId = 3,
+            boothId = boothId!!.toLong(),
             orderMenus = orderInfos,
             paymentInfo = PaymentInfo(paymentKey = paymentKey, orderId = orderId, amount = amount.toInt())
         )

@@ -1,17 +1,16 @@
 package com.example.festo.customer_ui.home
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import com.example.festo.R
+import com.example.festo.data.res.BoothListRes
 
-class BoothAdapter(val context: Context, val BoothList: ArrayList<Booth>) : BaseAdapter() {
+class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListRes>) : BaseAdapter() {
     override fun getCount(): Int {
         return BoothList.size
     }
@@ -42,23 +41,24 @@ class BoothAdapter(val context: Context, val BoothList: ArrayList<Booth>) : Base
 //        logo.setImageResource(booth.logo)
         name.text = booth.name
         category.text = booth.category
-        explanation.text = booth.explanation
-        waitCount.text = booth.waitCount
-        waitTime.text = booth.waitTime
-        accumulation.text = booth.accumulation
+        explanation.text = booth.description
+        waitCount.text = booth.waiting.toString()
+//        waitTime.text = booth.waitTime
+        accumulation.text = booth.todayOrderQuantity.toString()
         //위에서 가져온 profile, name, email, content 각각의 변수를 만들어둔 카드뷰에 연결시켜준다.
 
 
         // 리스트뷰 하나의 아이템 뒷 부분을 눌러도 detail 페이지로 이동
         view.setOnClickListener {
             val intent = Intent(context, BoothDetailActivity::class.java)
-//            intent.putExtra("booth_id", booth.id)
+            intent.putExtra("boothId", booth.boothId)
             context.startActivity(intent)
         }
 
         // 카드뷰 클릭시 detail 페이지로 이동
         cardView.setOnClickListener {
             val intent = Intent(context, BoothDetailActivity::class.java)
+            intent.putExtra("boothId", booth.boothId)
             context.startActivity(intent)
         }
 

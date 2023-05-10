@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.UserAPI
-import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
@@ -23,18 +23,19 @@ import java.util.Locale
 
 class FestivalActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
+    private var boothList = emptyList<BoothListRes>()
     // 예시 데이터 정의
-    var BoothList = arrayListOf<Booth>(
-        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-    )
+//    var BoothList = arrayListOf<Booth>(
+//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
+//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
+//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
+//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
+//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
+//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
+//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
+//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
+//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
+//    )
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +43,9 @@ class FestivalActivity : AppCompatActivity() {
         setContentView(com.example.festo.R.layout.activity_festival)
 
         // 하나의 축제에 대한 부스 리스트 어댑터 연결
-        val Adapter = BoothAdapter(this, BoothList)
-        val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
-        list_view.adapter = Adapter
+//        val Adapter = BoothAdapter(this, BoothList)
+//        val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
+//        list_view.adapter = Adapter
 
         val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
         notificationBtn.setOnClickListener {
@@ -88,6 +89,32 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+
+        // 부스 리스트 조회
+        postApi!!.getBoothList().enqueue(object : Callback<List<BoothListRes>> {
+            override fun onResponse(
+                call: Call<List<BoothListRes>>,
+                response: Response<List<BoothListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d(" 테스트", "${response.body()}")
+                    boothList = response.body() ?: emptyList()
+//                    부스 리스트 연결
+                    val Adapter = BoothAdapter(this@FestivalActivity, boothList)
+                    val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
+                    list_view.adapter = Adapter
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
                 println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }

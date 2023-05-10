@@ -39,11 +39,11 @@ class BoothDetailActivity : AppCompatActivity() {
 
         // 전달받은 부스 정보
         val intent = intent //전달할 데이터를 받을 Intent
-        val boothInfo = intent.getStringExtra("boothInfo")
+        val boothId = intent.getStringExtra("boothId")
 
         // 부스 메뉴 리스트 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
-        val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E"
+        val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA0OTk3LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODg5OTcsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA0OTk3fQ.ICpCfIDKTJfIoromaX08iMvbNM2R26D3jZboNfewomU"
         val token  = "Bearer $tokenValue"
         postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
             override fun onResponse(
@@ -93,6 +93,7 @@ class BoothDetailActivity : AppCompatActivity() {
             if (myOrderList.size != 0) {
                 val intent = Intent(this, PaymentActivity::class.java)
                 intent.putExtra("myOrderList", myOrderList)
+                intent.putExtra("boothId", boothId)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "메뉴를 담아주세요!", Toast.LENGTH_SHORT).show()
