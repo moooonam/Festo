@@ -12,10 +12,11 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface BoothAPI {
     @POST("festivals/{festival_id}/booths")
-    fun registerFestival(@Body data: RegisterBoothReq): Call<RegisterBoothRes>
+    fun registerFestival(@Path("festival_id") festival_id:String, @Body data: RegisterBoothReq): Call<RegisterBoothRes>
 
     @GET("booths/{booth_id}/orders/?completed=false")
     fun getBoothOrderList(): Call<List<BoothOrderListRes>>
@@ -24,11 +25,9 @@ interface BoothAPI {
     @GET("booths/{booth_id}/orders/?completed=true")
     fun getBoothOrderListComplete(): Call<List<BoothOrderListCompleteRes>>
 
-
     // 부스 등록 전 축제 코드 입력
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E")
     @GET("festivals/invitation")
     fun getFestivalCodeCheck(@Query("inviteCode") code: String): Call<FestivalIdRes>
-
 
 }
