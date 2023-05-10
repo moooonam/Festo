@@ -98,4 +98,13 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         return orderSummaries;
     }
+
+    @Override
+    public int countWaitingByBoothId(Long boothId) {
+        List<Order> orders = loadOrderPort.loadOrdersByBoothId(boothId, false);
+
+        return (int) orders.stream()
+                           .filter(order -> order.getOrderStatus().getNumber() <= 2)
+                           .count();
+    }
 }

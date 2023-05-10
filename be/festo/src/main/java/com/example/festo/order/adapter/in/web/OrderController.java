@@ -78,4 +78,12 @@ public class OrderController {
 
         return ResponseEntity.ok(orders);
     }
+
+    @GetMapping("/booths/{boothId}/waiting")
+    public ResponseEntity<WaitingCountResponse> getWaiting(@PathVariable("boothId") Long boothId) {
+        int waiting = loadOrderUseCase.countWaitingByBoothId(boothId);
+
+        return ResponseEntity.ok(new WaitingCountResponse(waiting));
+    }
+
 }

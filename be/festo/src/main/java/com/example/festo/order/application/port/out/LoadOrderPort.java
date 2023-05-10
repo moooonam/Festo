@@ -11,4 +11,6 @@ public interface LoadOrderPort {
     List<Order> loadOrdersByOrdererId(Long ordererId);
 
     List<Order> loadOrdersByBoothId(Long boothId, Long requesterId, boolean completed);
+
+    List<Order> loadOrdersByBoothId(Long boothId, boolean completed);
 }

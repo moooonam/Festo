@@ -13,4 +13,6 @@ public interface LoadOrderUseCase {
     List<OrderSummaryResponse> loadOrderSummariesByOrdererId(Long ordererId);
 
     List<OrderSummaryForBoothOwnerResponse> loadOrderSummariesByBoothId(Long boothId, Long requesterId, boolean completed);
+
+    int countWaitingByBoothId(Long boothId);
 }
