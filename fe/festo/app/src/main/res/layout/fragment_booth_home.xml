@@ -50,6 +50,7 @@
                     android:layout_marginStart="20dp">
 
                     <TextView
+                        android:id="@+id/boothNameTop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="부스이름"
@@ -74,6 +75,7 @@
                         android:layout_weight="1" />
 
                     <Button
+                        android:id="@+id/statusBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -303,6 +305,7 @@
                                 android:paddingBottom="10dp">
 
                                 <TextView
+                                    android:id="@+id/boothName"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="부스이름"
@@ -314,6 +317,7 @@
                                     android:layout_weight="1" />
 
                                 <TextView
+                                    android:id="@+id/boothOperatingTime"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="16:00 ~ 20:00"
@@ -321,6 +325,7 @@
                             </LinearLayout>
 
                             <TextView
+                                android:id="@+id/boothLocation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingLeft="20dp"

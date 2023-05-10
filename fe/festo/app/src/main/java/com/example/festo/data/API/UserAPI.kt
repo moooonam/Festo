@@ -2,6 +2,7 @@ package com.example.festo.data.API
 
 import com.example.festo.data.req.LoginReq
 import com.example.festo.data.req.OrderReq
+import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.BoothMenuListRes
 import com.example.festo.data.res.FestivalInfoRes
@@ -19,6 +20,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface UserAPI {
     @POST("api/v1/login")
@@ -56,18 +58,22 @@ interface UserAPI {
     fun getBoothMenuList(@Header("Authorization") token: String): Call<List<BoothMenuListRes>>
 
     // 축제 상세정보 조회. 일단 축제 1번으로 고정
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @GET("festivals/1")
     fun getFestivalDetail(): Call<FestivalInfoRes>
 
     // 주문하기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA0OTk3LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODg5OTcsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA0OTk3fQ.ICpCfIDKTJfIoromaX08iMvbNM2R26D3jZboNfewomU")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @POST("orders")
     fun orderMenu(@Body data: OrderReq) : Call<Void>
 
     // 부스 리스트 조회
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA0OTk3LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODg5OTcsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA0OTk3fQ.ICpCfIDKTJfIoromaX08iMvbNM2R26D3jZboNfewomU")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @GET("festivals/1/booths")
     fun getBoothList(): Call<List<BoothListRes>>
 
+    // 부스 상세정보 조회
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
+    @GET("booths/{booth_id}")
+    fun getBoothDetail(@Path("booth_id") booth_id: String,): Call<BoothDetailRes>
 }
