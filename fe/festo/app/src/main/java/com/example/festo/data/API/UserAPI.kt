@@ -1,5 +1,9 @@
 package com.example.festo.data.API
 
+
+import com.example.festo.data.res.BoothOrderListRes
+import com.example.festo.data.res.TestGetUserDataRes
+import com.example.festo.data.res.UserNotificationListRes
 import com.example.festo.data.req.OrderReq
 import com.example.festo.data.res.BoothMenuListRes
 import com.example.festo.data.res.FestivalInfoRes
@@ -11,6 +15,16 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface UserAPI {
+
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
+    @GET("api/v1/members/me")
+    fun getUserData(): Call<TestGetUserDataRes>
+
+    //유저 알림목록 불러오기
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
+    @GET("notifications")
+    fun getUserNotificationData(): Call<UserNotificationListRes>
+
 
     // 부스 메뉴 조회. 일단 id 2번 부스로 고정
 //    @GET("booths/{booth_id}/orders/?completed=false")
@@ -27,4 +41,5 @@ interface UserAPI {
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E")
     @POST("orders")
     fun orderMenu(@Body data: OrderReq) : Call<Void>
+
 }
