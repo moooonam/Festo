@@ -77,7 +77,8 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         BoothEntity booth = boothRepository.findById(boothId)
                                            .orElseThrow(NoSuchElementException::new);
 
-        if (!Objects.equals(booth.getOwner().getId(), requesterId)) {
+        if (!Objects.equals(booth.getOwner()
+                                 .getId(), requesterId)) {
             throw new RuntimeException("권한 없음");
         }
 
@@ -85,18 +86,27 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
                               .stream()
                               .filter(orderEntity -> {
                                   if (completed) {
-                                      return orderEntity.getOrderStatus().equals(OrderStatus.COMPLETE);
+                                      return orderEntity.getOrderStatus()
+                                                        .equals(OrderStatus.COMPLETE);
                                   }
-                                  return !orderEntity.getOrderStatus().equals(OrderStatus.COMPLETE);
+                                  return !orderEntity.getOrderStatus()
+                                                     .equals(OrderStatus.COMPLETE);
                               })
                               .map(this::mapToOrderDomain)
                               .collect(Collectors.toList());
     }
 
     @Override
+    public List<Order> loadOrdersByBoothId(Long boothId, boolean completed) {
+        return orderRepository.findAllByBooth_BoothId(boothId)
+                              .stream()
+                              .map(this::mapToOrderDomain)
+                              .collect(Collectors.toList());
+    }
+
+    @Override
     public Order updateOrderStatus(Order order) {
-        OrderEntity orderEntity = orderRepository.findById(order.getOrderId())
-                                                 .orElseThrow(NoSuchElementException::new);
+        OrderEntity orderEntity = orderRepository.findById(order.getOrderId()).orElseThrow(NoSuchElementException::new);
 
         orderEntity.updateStatus(order.getOrderStatus());
         orderRepository.save(orderEntity);

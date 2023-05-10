@@ -68,7 +68,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
             menus.add(new MenuResponse(menu.getName(), orderLine.getQuantity()));
         }
 
-        return new OrderDetailResponse(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+        return new OrderDetailResponse(order.getOrderNo()
+                                            .getNumber(), order.getOrderTime(), order.getTotalAmounts()
+                                                                                     .getValue(), menus);
     }
 
     @Override
@@ -77,8 +79,11 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         List<OrderSummaryResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
-            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
-            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines().get(0).getMenuId());
+            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo()
+                                                                                            .getBoothId());
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines()
+                                                        .get(0)
+                                                        .getMenuId());
 
             orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu));
         }
@@ -92,10 +97,27 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         List<OrderSummaryForBoothOwnerResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
-            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines().get(0).getMenuId());
-            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstMenu));
+            int count = order.getOrderLines()
+                             .stream()
+                             .mapToInt(OrderLine::getQuantity)
+                             .sum() - 1;
+
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines()
+                                                        .get(0)
+                                                        .getMenuId());
+            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstMenu, count));
         }
 
         return orderSummaries;
+    }
+
+    @Override
+    public int countWaitingByBoothId(Long boothId) {
+        List<Order> orders = loadOrderPort.loadOrdersByBoothId(boothId, false);
+
+        return (int) orders.stream()
+                           .filter(order -> order.getOrderStatus()
+                                                 .getNumber() <= 2)
+                           .count();
     }
 }
