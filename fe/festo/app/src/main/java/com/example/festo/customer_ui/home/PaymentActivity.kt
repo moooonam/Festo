@@ -37,8 +37,8 @@ class PaymentActivity : AppCompatActivity() {
 
         // 추천 메뉴
         var RecommendMenuDataList : ArrayList <RecommendMenu> = arrayListOf(
-            RecommendMenu(R.drawable.logo1,"추천메뉴1",4000),
-            RecommendMenu(R.drawable.logo2,"추천메뉴2",2000),
+            RecommendMenu("1","ddd","추천메뉴1",4000),
+            RecommendMenu("1","ddd","추천메뉴2",2000),
         )
 
         // 추천메뉴 어댑터 연결
@@ -59,6 +59,7 @@ class PaymentActivity : AppCompatActivity() {
         payBtn.setOnClickListener {
             val intent = Intent(this, TosspayActivity::class.java)
             intent.putExtra("totalPrice", totalPrice)
+            intent.putExtra("myOrderList", myOrderList)
             startActivity(intent)
 
         }
@@ -75,12 +76,6 @@ class PaymentActivity : AppCompatActivity() {
 
                 R.id.searchFragment -> {
                     val intent = Intent(this, SearchActivity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
                     startActivity(intent)
                 }
 

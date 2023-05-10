@@ -14,8 +14,6 @@ import com.example.festo.data.API.UserAPI
 import com.example.festo.data.req.LoginReq
 import com.example.festo.data.res.LoginRes
 import com.example.festo.databinding.ActivityMainBinding
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.util.Utility

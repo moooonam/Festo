@@ -12,11 +12,6 @@
         android:icon="@drawable/ic_search"
        />
     <item
-        android:id="@+id/recentFragment"
-        android:title="최근"
-        android:icon="@drawable/ic_recent"
-        />
-    <item
         android:id="@+id/orderlistFragment"
         android:title="주문목록"
         android:icon="@drawable/ic_orderlist"

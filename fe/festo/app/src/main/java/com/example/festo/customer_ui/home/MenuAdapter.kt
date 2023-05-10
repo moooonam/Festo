@@ -8,9 +8,9 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.festo.R
-import com.example.festo.customer_ui.home.Menu
+import com.example.festo.data.res.BoothMenuListRes
 
-class MenuAdapter(val context: Context, val MenuList: ArrayList<Menu>) : BaseAdapter() {
+class MenuAdapter(val context: Context, val MenuList: List<BoothMenuListRes>) : BaseAdapter() {
     var total = 0 // 합계를 저장할 변수
     lateinit var totalTextView: TextView // 합계를 보여줄 TextView
 
@@ -37,7 +37,7 @@ class MenuAdapter(val context: Context, val MenuList: ArrayList<Menu>) : BaseAda
 
         var menu = MenuList[position]
 
-        image.setImageResource(menu.image)
+//        image.setImageResource(menu.imageUrl)
         name.text = menu.name
         price.text = menu.price.toString()
         cnt.text = menu.cnt.toString()

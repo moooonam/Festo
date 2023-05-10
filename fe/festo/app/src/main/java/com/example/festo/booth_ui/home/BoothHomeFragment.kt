@@ -1,7 +1,6 @@
 package com.example.festo.booth_ui.home
 
 
-
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
@@ -14,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -31,9 +31,10 @@ class MenuListData(
     var name: String? = null,
     var price: Int? = null,
 )
+
 class BoothHomeFragment : Fragment() {
     private lateinit var listAdapter: MenuListAdapter
-    private var mBinding : FragmentBoothHomeBinding? = null
+    private var mBinding: FragmentBoothHomeBinding? = null
     private var alertDialog: AlertDialog? = null
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -44,6 +45,7 @@ class BoothHomeFragment : Fragment() {
                 addImgBtn?.setImageURI(selectedImageUri)
             }
         }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,8 +56,9 @@ class BoothHomeFragment : Fragment() {
         mBinding!!.btnAddmenu.setOnClickListener {
             showAddMenuDialog()
         }
-        return  mBinding?.root
+        return mBinding?.root
     }
+
     private fun showAddMenuDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_addmenu, null)
 
@@ -65,14 +68,24 @@ class BoothHomeFragment : Fragment() {
             .setPositiveButton("추가하기") { dialogInterface, _ ->
                 val photo = dialogView.findViewById<ImageView>(R.id.menu_img)
                 val meueName = dialogView.findViewById<EditText>(R.id.text1EditText).text.toString()
-                val Price = Integer.parseInt(dialogView.findViewById<EditText>(R.id.text2EditText).text.toString())
 
-                // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
-                val request = RegiMenuReq( meueName,Price)
-                val data = RegisterMenuReq(request, "이미지들어갈부분")
-                Log.d("잘들어감?", "${data}")
+                if (meueName.isEmpty()) {
+                    Toast.makeText(requireActivity(), "메뉴 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                } else if (dialogView.findViewById<EditText>(R.id.text2EditText).text.toString()
+                        .isEmpty()
+                ) {
+                    Toast.makeText(requireActivity(), "가격을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                } else {
+                    val Price =
+                        Integer.parseInt(dialogView.findViewById<EditText>(R.id.text2EditText).text.toString())
 
-                dialogInterface.dismiss()
+                    // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
+                    val request = RegiMenuReq(meueName, Price)
+                    val data = RegisterMenuReq(request, "이미지들어갈부분")
+                    Log.d("잘들어감?", "${data}")
+
+                    dialogInterface.dismiss()
+                }
             }
             .setNegativeButton("닫기") { dialogInterface, _ ->
                 dialogInterface.dismiss()
@@ -81,11 +94,12 @@ class BoothHomeFragment : Fragment() {
         alertDialog = dialogBuilder.create()
         alertDialog?.show()
         val addImgBtn = dialogView.findViewById<ImageView>(R.id.menu_img)
-        addImgBtn.setOnClickListener{
-            Log.d("아아아","ㅇ악")
+        addImgBtn.setOnClickListener {
+            Log.d("아아아", "ㅇ악")
             openGalleryForImage()
         }
     }
+
     private fun openGalleryForImage() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         galleryLauncher.launch(intent)
@@ -93,18 +107,19 @@ class BoothHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var MenuListDataList : ArrayList <MenuListData> = arrayListOf(
-            MenuListData(R.drawable.logo1,"까사꼬치",87),
-            MenuListData(R.drawable.logo2,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
-            MenuListData(R.drawable.logo3,"까사꼬치",87),
+        var MenuListDataList: ArrayList<MenuListData> = arrayListOf(
+            MenuListData(R.drawable.logo1, "까사꼬치", 87),
+            MenuListData(R.drawable.logo2, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
+            MenuListData(R.drawable.logo3, "까사꼬치", 87),
         )
         listAdapter = MenuListAdapter(MenuListDataList)
-        mBinding?.menulistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mBinding?.menulistFragmentListView?.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.menulistFragmentListView?.adapter = listAdapter
     }
 

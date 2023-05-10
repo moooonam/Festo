@@ -4,7 +4,7 @@ import okhttp3.MultipartBody
 
 data class RegisterFestivalReq(
     val request : RegiFestivalRequest,
-    val festivalImg : String
+    val festivalImg : MultipartBody.Part
     // 멀티파트? 로 바꿔야함
 )
 

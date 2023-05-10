@@ -3,22 +3,26 @@ package com.example.festo.customer_ui.home
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ListView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.festo.MainActivity
 import com.example.festo.R
-import com.example.festo.customer_ui.mypage.MypageFragment
-import com.example.festo.customer_ui.orderlist.OrderlistFragment
-import com.example.festo.customer_ui.recent.RecentFragment
 import com.example.festo.customer_ui.search.SearchActivity
-import com.example.festo.databinding.ActivityFestivalBinding
-import com.example.festo.databinding.ActivityHomeBinding
-import com.example.festo.databinding.FragmentHomeBinding
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.FestivalInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class FestivalActivity : AppCompatActivity() {
+    private var retrofit = RetrofitClient.client
     // 예시 데이터 정의
     var BoothList = arrayListOf<Booth>(
         Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
@@ -49,10 +53,49 @@ class FestivalActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 축제 상세정보 조회
+        val postApi = retrofit?.create(UserAPI::class.java)
+        postApi!!.getFestivalDetail().enqueue(object : Callback<FestivalInfoRes> {
+            override fun onResponse(
+                call: Call<FestivalInfoRes>,
+                response: Response<FestivalInfoRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body()?.startDate)
+                    Log.d(" 테스트", "${response.body()}")
+                    val festivalName = findViewById<TextView>(R.id.festivalName)
+                    val festivalAddress = findViewById<TextView>(R.id.festivalAddress)
+                    val festivalPeriod = findViewById<TextView>(R.id.festivalPeriod)
+
+                    // 날짜 형식 변환
+                    val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                    val outputFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+
+                    val startDateString = response.body()?.startDate
+                    val startDate = inputFormat.parse(startDateString.toString())
+                    val formattedStartDate = outputFormat.format(startDate)
+
+                    val endDateString = response.body()?.endDate
+                    val endDate = inputFormat.parse(endDateString.toString())
+                    val formattedEndDate = outputFormat.format(endDate)
+
+                    // 데이터 xml에 입력
+                    festivalName.text = response.body()?.name
+                    festivalAddress.text = response.body()?.address
+                    festivalPeriod.text = "${formattedStartDate} ~ ${formattedEndDate}"
+                }
+            }
+
+            override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
 
         // 네비게이션
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.my_bottom_nav)
-        bottomNavigationView.selectedItemId = -1
 
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
@@ -64,12 +107,6 @@ class FestivalActivity : AppCompatActivity() {
 
                 R.id.searchFragment -> {
                     val intent = Intent(this, SearchActivity::class.java)
-                    startActivity(intent)
-                }
-
-                R.id.recentFragment -> {
-                    val intent = Intent(this, HomeActivity::class.java)
-                    intent.putExtra("fragment", "RecentFragment")
                     startActivity(intent)
                 }
 
