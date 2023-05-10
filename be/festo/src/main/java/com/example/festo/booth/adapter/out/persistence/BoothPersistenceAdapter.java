@@ -1,10 +1,8 @@
 package com.example.festo.booth.adapter.out.persistence;
 
 import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
-import com.example.festo.booth.application.port.out.LoadBoothStatusPort;
-import com.example.festo.booth.application.port.out.LoadFiestaListPort;
-import com.example.festo.booth.application.port.out.SaveBoothCommand;
-import com.example.festo.booth.application.port.out.SaveBoothPort;
+import com.example.festo.booth.application.port.out.*;
+import com.example.festo.booth.domain.Booth;
 import com.example.festo.booth.domain.BoothStatus;
 import com.example.festo.festival.adapter.out.persistence.FestivalEntity;
 import com.example.festo.festival.adapter.out.persistence.FestivalRepository;
@@ -20,7 +18,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPort, LoadBoothStatusPort {
+public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPort, LoadBoothStatusPort, LoadBoothPort {
     //리포지토리 가져오기
     private final BoothRepository boothRepository;
     private final MemberRepository memberRepository;
@@ -78,7 +76,8 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public BoothStatus loadBoothStatus(Long boothId) {
-        return boothRepository.findStatusById(boothId);
+        BoothEntity booth =boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        return booth.getBoothStatus();
     }
 
     @Override
@@ -86,5 +85,39 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
         BoothEntity booth = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
         booth.setBoothStatus(boothStatus);
         boothRepository.save(booth);
+    }
+
+    @Override
+    public List<Booth> loadBoothByFiestaId(Long fiestaId) {
+        List<BoothEntity> entityList = boothRepository.findAllByFestivalFestivalId(fiestaId);
+        List<Booth> domainList = new ArrayList<>();
+        for(BoothEntity entity : entityList){
+            Booth domain = Booth.builder()
+                    .boothId(entity.getBoothId())
+                    .name(entity.getName())
+                    .boothDescription(entity.getBoothDescription())
+                    .imageUrl(entity.getImageUrl())
+                    .build();
+
+            domainList.add(domain);
+        }
+
+        return domainList;
+    }
+
+    @Override
+    public Booth loadBoothById(Long boothId) {
+        BoothEntity entity = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        Booth domain = Booth.builder()
+                .boothId(entity.getBoothId())
+                .name(entity.getName())
+                .boothDescription(entity.getBoothDescription())
+                .imageUrl(entity.getImageUrl())
+                .status(entity.getBoothStatus())
+                .openTime(entity.getOpenTime())
+                .closeTime(entity.getCloseTime())
+                .locationDescription(entity.getLocationDescription())
+                .build();
+        return domain;
     }
 }

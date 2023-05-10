@@ -11,11 +11,10 @@ import java.util.List;
 
 @Repository
 public interface BoothRepository extends JpaRepository<BoothEntity, Long> {
-//    List<BoothEntity> findAllByOwnerId(Long ownerId);
     List<FestivalEntity> findAllByOwnerId(Long ownerId);
     @Query("SELECT DISTINCT b.festival FROM BoothEntity b WHERE b.owner.id = :ownerId")
     List<FestivalEntity> findDistinctFestivalsByOwnerId(Long ownerId);
+    List<BoothEntity> findAllByFestivalFestivalId(Long festivalId);
 
-    BoothStatus findStatusById(Long boothId);
 
 }
