@@ -1,5 +1,6 @@
 package com.example.festo.booth.adapter.in.web;
 
+import com.example.festo.booth.adapter.in.web.model.BoothCreationResponse;
 import com.example.festo.booth.adapter.in.web.model.BoothRequest;
 import com.example.festo.booth.application.port.in.RegisterBoothCommand;
 import com.example.festo.booth.application.port.in.RegisterBoothUseCase;
@@ -20,25 +21,28 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class BoothController {
     private final RegisterBoothUseCase registerBoothUseCase;
+
     @PostMapping("/festivals/{festival_id}/booths")
-    public ResponseEntity<Long> createBooth(@PathVariable("festival_id") Long festivalId, @RequestPart("request") BoothRequest request, @RequestPart("boothImg") MultipartFile boothImg){
+    public ResponseEntity<BoothCreationResponse> createBooth(@PathVariable("festival_id") Long festivalId, @RequestPart("request") BoothRequest request, @RequestPart("boothImg") MultipartFile boothImg) {
         log.info("부스 등록 컨트롤러 시작");
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                                                              .getAuthentication()
+                                                              .getPrincipal();
 
         RegisterBoothCommand command = RegisterBoothCommand.builder()
-                .boothName(request.getBoothName())
-                .location(request.getLocation())
-                .description(request.getDescription())
-                .openTime(request.getOpenTime())
-                .closeTime(request.getCloseTime())
-                .festivalId(festivalId)
-                .img(boothImg)
-                .ownerId(Long.parseLong(user.getUsername()))
-                .build();
+                                                           .boothName(request.getBoothName())
+                                                           .location(request.getLocation())
+                                                           .description(request.getDescription())
+                                                           .openTime(request.getOpenTime())
+                                                           .closeTime(request.getCloseTime())
+                                                           .festivalId(festivalId)
+                                                           .img(boothImg)
+                                                           .ownerId(Long.parseLong(user.getUsername()))
+                                                           .build();
 
         Long boothId = registerBoothUseCase.registerBooth(command);
 
-        return new ResponseEntity<Long>(boothId, HttpStatus.OK);
+        return new ResponseEntity<>(new BoothCreationResponse(boothId), HttpStatus.OK);
     }
 
 }
