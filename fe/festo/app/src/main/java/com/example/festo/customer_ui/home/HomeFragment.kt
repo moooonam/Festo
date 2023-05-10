@@ -2,8 +2,10 @@ package com.example.festo.customer_ui.home
 
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 
 import android.view.LayoutInflater
 
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
+import com.example.festo.data.res.FestivalListRes
 import com.example.festo.databinding.FragmentHomeBinding
 
 
@@ -28,9 +31,9 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         var binding = FragmentHomeBinding.inflate(inflater, container, false)
         mBinding = binding
+
         /*mBinding!!.testBtn.setOnClickListener {
           *//*  val transaction = fragmentManager?.beginTransaction()
             transaction?.replace(R.id.layout_nav_bottom, FestivallistFragment())
@@ -59,6 +62,16 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        /*if (myValue != null) {
+            Log.i("##################", myValue)
+        }*/
+
+        val token = "$myValue"
+        /*postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<FestivalListRes>> {
+
+        }*/
         var FestivalItemListData: ArrayList<HomeFestivalList> = arrayListOf(
             HomeFestivalList(R.drawable.festival1, "a유등축제"),
             HomeFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),

@@ -1,5 +1,6 @@
 package com.example.festo
 
+import RetrofitClient
 import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -9,6 +10,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.customer_ui.home.HomeActivity
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.req.LoginReq
+import com.example.festo.data.res.LoginRes
 import com.example.festo.databinding.ActivityMainBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -16,8 +20,13 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
+    val api = UserAPI.create()
     private lateinit var binding: ActivityMainBinding
     @SuppressLint("StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +48,33 @@ class MainActivity : AppCompatActivity() {
             else if (tokenInfo != null) {
                 Log.i("엑세스 유지: ", tokenInfo.toString())
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
+                // 카카오 SDK 유저정보 불러오기
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.i("카카오 유저정보","사용자 정보 요청 실패 $error")
+                    } else if (user != null) {
+                        Log.i("카카오 유저정보", "사용자 정보 요청 성공 $user")
+                        // request 보낼 데이터 정의
+                        val request = LoginReq(
+                            authId = user.id,
+                            nickName = user?.kakaoAccount?.profile?.nickname,
+                            profileImgUrl = user?.kakaoAccount?.profile?.profileImageUrl
+                        )
+                        // request 보내고 콜백으로 LoginRes 데이터파일에 맞게 받아오기
+                        api.login(request).enqueue(object : retrofit2.Callback<LoginRes> {
+                            override fun onResponse(call: Call<LoginRes>, response: Response<LoginRes>) {
+                                Log.i("토큰 받기", "refresh_token ${response.body()?.refreshToken}")
+                                // 받은 토큰 sharedprefereces로 저장하기
+                                editor.putString("access_token", response.body()?.accessToken)
+                                editor.putString("myToken", response.body()?.refreshToken)
+                                editor.apply()
+                            }
+                            override fun onFailure(call: Call<LoginRes>, t: Throwable) {
+                                Log.i("정보요청 실패", "$t")
+                            }
+                        })
+                    }
+                }
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
@@ -84,10 +120,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             else if (token != null) {
-                // editor로 토큰 저장
-                editor.putString("access_token", token.accessToken)
-                editor.putString("refresh_token", token.refreshToken)
-                editor.apply()
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
                 Log.i("토큰: ", token.toString())
                 val intent = Intent(this, HomeActivity::class.java)
@@ -96,10 +128,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-        // val kakao_login_button = findViewById<ImageButton>(R.id.kakao_login_button) // 로그인 버튼
-
-        //
         binding.kakaoLoginButton.setOnClickListener {
             if(UserApiClient.instance.isKakaoTalkLoginAvailable(this@MainActivity)){
                 UserApiClient.instance.loginWithKakaoTalk(this@MainActivity, callback = callback)
