@@ -21,11 +21,11 @@ public class OrderSummaryForBoothOwnerResponse {
 
     private final int etcCount;
 
-    public OrderSummaryForBoothOwnerResponse(Order order, Menu firstMenu) {
+    public OrderSummaryForBoothOwnerResponse(Order order, Menu firstMenu, int count) {
         this.orderNo = order.getOrderNo();
         this.orderStatus = order.getOrderStatus();
         this.time = order.getOrderTime();
         this.firstMenuName = firstMenu.getName();
-        this.etcCount = order.getOrderLines().size() - 1;
+        this.etcCount = count;
     }
 }

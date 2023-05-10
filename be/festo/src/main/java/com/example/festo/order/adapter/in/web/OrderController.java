@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{orderId}/status")
-    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, OrderStatusChangeRequest orderStatusChangeRequest) {
+    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, @RequestBody OrderStatusChangeRequest orderStatusChangeRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
                                                               .getPrincipal();
@@ -78,4 +78,12 @@ public class OrderController {
 
         return ResponseEntity.ok(orders);
     }
+
+    @GetMapping("/booths/{boothId}/waiting")
+    public ResponseEntity<WaitingCountResponse> getWaiting(@PathVariable("boothId") Long boothId) {
+        int waiting = loadOrderUseCase.countWaitingByBoothId(boothId);
+
+        return ResponseEntity.ok(new WaitingCountResponse(waiting));
+    }
+
 }
