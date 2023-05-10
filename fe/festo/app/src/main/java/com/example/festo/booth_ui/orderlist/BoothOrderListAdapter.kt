@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.booth_ui.orderlist.BoothOrderListData
+import com.example.festo.data.res.BoothOrderListRes
 import com.kakao.sdk.common.KakaoSdk.init
 
-class BoothOrderListAdapter(private var list: MutableList<BoothOrderListData>) :
+class BoothOrderListAdapter(private var list: MutableList<BoothOrderListRes>) :
     RecyclerView.Adapter<BoothOrderListAdapter.ListItemViewHolder>() {
 
     inner class ListItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!),
@@ -27,13 +28,13 @@ class BoothOrderListAdapter(private var list: MutableList<BoothOrderListData>) :
         override fun onClick(v: View?) {
             val position = adapterPosition
 
-            val clickedItem = list[position]
-
-            val fragment = BoothOrderListDetailFragment.newInstance1(clickedItem)
-            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
-            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
-                .addToBackStack(null)
-                .commit()
+//            val clickedItem = list[position]
+//
+//            val fragment = BoothOrderListDetailFragment.newInstance1(clickedItem)
+//            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
+//            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
+//                .addToBackStack(null)
+//                .commit()
         }
 
         var ordernum: TextView = itemView!!.findViewById(R.id.tv_booth_ordernum)
@@ -44,14 +45,16 @@ class BoothOrderListAdapter(private var list: MutableList<BoothOrderListData>) :
         // 데어터 넣어주기
 
 
-        fun bind(data: BoothOrderListData, position: Int) {
-            ordernum.text = data.ordernum
-            state.text = data.state
-            orderlist.text = data.orderList
-            ordertime.text = data.ordertime
-            if (data.state == "대기") {
+        fun bind(data: BoothOrderListRes, position: Int) {
+            ordernum.text = data.orderNo.number.toString()
+            if (data.orderStatus == "WAITING_ACCEPTANCE") {
+                state.text = "접수대기"
+            }
+            orderlist.text = "${data.firstMenuName} 외 ${data.etcCount.toString()}개"
+            ordertime.text = data.time
+            if (data.orderStatus == "WAITING_ACCEPTANCE") {
                 change_state_btn.text = "접수"
-            } else if (data.state == "준비중") {
+            } else  {
                 change_state_btn.text = "준비완료"
             }
         }
