@@ -14,7 +14,9 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface HostAPI {
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
+
+    //축제 등록
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjkzNDUxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4Nzc0NTEsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjkzNDUxfQ.SYVxlhNtpJ7dJZILRo4IK-PKejaocbVciEk6Fo6raI4")
     @Multipart
     @POST("festivals")
     fun registerFestival(@Part("request") request: RegiFestivalRequest, @Part festivalImg: MultipartBody.Part): Call<Long>
