@@ -1,5 +1,6 @@
 package com.example.festo.festival.adapter.in.web.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -38,7 +39,9 @@ public class FestivalResponse {
         private String imageUrl;
         private String name;
         private String address;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
         private LocalDate startDate;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
         private LocalDate endDate;
         private String description;
     }
