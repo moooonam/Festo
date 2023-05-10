@@ -9,7 +9,7 @@ import java.util.Objects;
 @Embeddable
 public class OrderNo implements Serializable {
 
-    @Column(name = "order_number")
+    @Column(name = "order_number", nullable = false)
     private Integer number;
 
     protected OrderNo() {

@@ -15,13 +15,14 @@ public class OrderLine {
     private Long menuId;
 
     @Convert(converter = MoneyConverter.class)
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Money price;
 
+    @Column(nullable = false)
     private int quantity;
 
     @Convert(converter = MoneyConverter.class)
-    @Column(name = "amounts")
+    @Column(name = "amounts", nullable = false)
     private Money amounts;
 
     protected OrderLine() {

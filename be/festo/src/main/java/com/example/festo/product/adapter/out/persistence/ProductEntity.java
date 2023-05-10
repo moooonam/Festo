@@ -18,15 +18,17 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     @Convert(converter = MoneyConverter.class)
     private Money price;
 
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "booth_id")
+    @JoinColumn(name = "booth_id", nullable = false)
     private BoothEntity booth;
 
     @Builder
