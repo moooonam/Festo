@@ -19,6 +19,9 @@ class PaymentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
 
+        // 전달받은 데이터
+        val boothId = intent.getStringExtra("boothId")
+
         // 알림으로 이동
         val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
         notificationBtn.setOnClickListener {
@@ -60,6 +63,7 @@ class PaymentActivity : AppCompatActivity() {
             val intent = Intent(this, TosspayActivity::class.java)
             intent.putExtra("totalPrice", totalPrice)
             intent.putExtra("myOrderList", myOrderList)
+            intent.putExtra("boothId", boothId)
             startActivity(intent)
 
         }
