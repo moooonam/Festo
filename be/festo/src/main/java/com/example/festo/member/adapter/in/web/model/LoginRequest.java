@@ -17,7 +17,6 @@ public class LoginRequest {
     private String nickname;
 
     @NotBlank(message = "[Request] profileImageUrl는 빈 값일 수 없습니다.")
-
     private String profileImageUrl;
 
     @Builder
