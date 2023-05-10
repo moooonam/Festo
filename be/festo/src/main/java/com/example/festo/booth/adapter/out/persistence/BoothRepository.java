@@ -1,5 +1,6 @@
 package com.example.festo.booth.adapter.out.persistence;
 
+import com.example.festo.booth.domain.BoothStatus;
 import com.example.festo.festival.adapter.out.persistence.FestivalEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +15,7 @@ public interface BoothRepository extends JpaRepository<BoothEntity, Long> {
     List<FestivalEntity> findAllByOwnerId(Long ownerId);
     @Query("SELECT DISTINCT b.festival FROM BoothEntity b WHERE b.owner.id = :ownerId")
     List<FestivalEntity> findDistinctFestivalsByOwnerId(Long ownerId);
+
+    BoothStatus findStatusById(Long boothId);
 
 }

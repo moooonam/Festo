@@ -56,4 +56,7 @@ public class BoothEntity {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+    public void setBoothStatus(BoothStatus boothStatus) {
+        this.boothStatus = boothStatus;
+    }
 }
