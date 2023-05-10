@@ -1,14 +1,17 @@
 package com.example.festo.data.API
 
+import com.example.festo.data.req.BoothStatusReq
 import com.example.festo.data.req.RegiBoothRequest
 import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.data.res.BoothOrderListRes
 import com.example.festo.data.res.FestivalIdRes
 import okhttp3.MultipartBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -37,8 +40,12 @@ interface BoothAPI {
     fun getBoothOrderListComplete(@Path("booth_id") booth_id: String): Call<List<BoothOrderListCompleteRes>>
 
     // 부스 등록 전 축제 코드 입력
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @GET("festivals/invitation")
     fun getFestivalCodeCheck(@Query("inviteCode") code: String): Call<FestivalIdRes>
 
+    // 부스 영업 상태 변경
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
+    @PATCH("/booths/{booth_id}/status")
+    fun changeBoothStatus(@Path("booth_id") booth_id: String, @Body data: BoothStatusReq): Call<Void>
 }

@@ -12,11 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothMenuListRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class BoothDetailActivity : AppCompatActivity() {
@@ -41,8 +44,35 @@ class BoothDetailActivity : AppCompatActivity() {
         val intent = intent //전달할 데이터를 받을 Intent
         val boothId = intent.getStringExtra("boothId")
 
-        // 부스 메뉴 리스트 retrofit
+        // 부스 상세정보 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
+        postApi!!.getBoothDetail(boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
+            override fun onResponse(
+                call: Call<BoothDetailRes>,
+                response: Response<BoothDetailRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d(" 테스트", "${response.body()}")
+                    val boothName = findViewById<TextView>(R.id.boothName)
+                    val boothLocation = findViewById<TextView>(R.id.boothLocation)
+                    val boothExplanation = findViewById<TextView>(R.id.boothExplanation)
+
+                    // 데이터 xml에 입력
+                    boothName.text = response.body()?.name
+                    boothLocation.text = response.body()?.boothDescription
+                    boothExplanation.text = response.body()?.locationDescription
+                }
+            }
+
+            override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+        // 부스 메뉴 리스트 retrofit
         val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA0OTk3LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODg5OTcsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA0OTk3fQ.ICpCfIDKTJfIoromaX08iMvbNM2R26D3jZboNfewomU"
         val token  = "Bearer $tokenValue"
         postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
