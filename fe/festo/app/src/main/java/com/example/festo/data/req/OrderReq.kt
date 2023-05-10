@@ -2,17 +2,17 @@ package com.example.festo.data.req
 
 data class OrderReq (
     val boothId: Long,
-    val orderInfo: OrderInfo,
+    val orderMenus: List<OrderInfo>,
     val paymentInfo: PaymentInfo
 )
 
-data class OrderInfo (
-    val productId: Long,
+data class OrderInfo(
+    val menuId: Long,
     val quantity: Int
 )
 
-data class PaymentInfo (
-    val paymentKey: String,
-    val orderId: String,
+data class PaymentInfo(
+    val paymentKey: String?,
+    val orderId: String?,
     val amount: Int
 )

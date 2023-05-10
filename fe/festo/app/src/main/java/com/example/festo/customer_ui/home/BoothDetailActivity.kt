@@ -23,19 +23,6 @@ class BoothDetailActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var menuList = emptyList<BoothMenuListRes>()
 
-    // 예시데이터 정의
-//    var Menulist = arrayListOf<Menu>(
-//        Menu(com.example.festo.R.drawable.logo1, "이름1", 1000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo2, "이름2", 4000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo3, "이름3", 3000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo1, "이름1", 2000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo2, "이름2", 1000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo3, "이름3", 5000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo1, "이름1", 1000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo2, "이름2", 1000, false, 0),
-//        Menu(com.example.festo.R.drawable.logo3, "이름3", 1000, false, 0),
-//    )
-
     // 주문할 메뉴를 담을 리스트
     var myOrderList = arrayListOf<MyOrderList>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,14 +43,16 @@ class BoothDetailActivity : AppCompatActivity() {
 
         // 부스 메뉴 리스트 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.getBoothMenuList().enqueue(object : Callback<List<BoothMenuListRes>> {
+        val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E"
+        val token  = "Bearer $tokenValue"
+        postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
             override fun onResponse(
                 call: Call<List<BoothMenuListRes>>,
                 response: Response<List<BoothMenuListRes>>
             ) {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.get(1))
+                    println(response.body())
                     Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
@@ -96,7 +85,7 @@ class BoothDetailActivity : AppCompatActivity() {
         payBtn.setOnClickListener {
             for (menu in menuList) {
                 if (menu.check && menu.cnt != 0) {
-                    val myOrderItem = MyOrderList(menu.imageUrl, menu.name, menu.price, menu.cnt)
+                    val myOrderItem = MyOrderList(menu.productId, menu.imageUrl, menu.name, menu.price, menu.cnt)
                     myOrderList.add(myOrderItem)
                 }
             }
