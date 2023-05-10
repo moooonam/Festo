@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class OrderDetail {
+public class OrderDetailResponse {
 
     private final int orderNo;
 
@@ -16,5 +16,5 @@ public class OrderDetail {
 
     private final int totalPrice;
 
-    private final List<ProductResponse> menus;
+    private final List<MenuResponse> menus;
 }

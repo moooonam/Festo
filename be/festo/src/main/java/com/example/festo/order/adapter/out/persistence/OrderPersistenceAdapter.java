@@ -4,18 +4,19 @@ import com.example.festo.booth.adapter.out.persistence.BoothEntity;
 import com.example.festo.booth.adapter.out.persistence.BoothRepository;
 import com.example.festo.member.adapter.out.persistence.MemberRepository;
 import com.example.festo.member.domain.Member;
-import com.example.festo.order.adapter.in.web.model.OrderSummary;
 import com.example.festo.order.application.port.out.LoadOrderPort;
 import com.example.festo.order.application.port.out.PlaceOrderPort;
 import com.example.festo.order.application.port.out.UpdateOrderStatusPort;
 import com.example.festo.order.domain.BoothInfo;
 import com.example.festo.order.domain.Order;
+import com.example.festo.order.domain.OrderStatus;
 import com.example.festo.order.domain.Orderer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
@@ -40,6 +41,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         OrderEntity orderEntity = OrderEntity.builder()
                                              .orderer(orderer)
                                              .booth(boothEntity)
+                                             .orderNo(order.getOrderNo())
                                              .orderLines(order.getOrderLines())
                                              .totalAmounts(order.getTotalAmounts())
                                              .orderStatus(order.getOrderStatus())
@@ -64,7 +66,39 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
     @Override
     public List<Order> loadOrdersByOrdererId(Long ordererId) {
 
-        return orderRepository.findOrdersByOrdererId(ordererId)
+        return orderRepository.findAllByOrdererId(ordererId)
+                              .stream()
+                              .map(this::mapToOrderDomain)
+                              .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Order> loadOrdersByBoothId(Long boothId, Long requesterId, boolean completed) {
+        BoothEntity booth = boothRepository.findById(boothId)
+                                           .orElseThrow(NoSuchElementException::new);
+
+        if (!Objects.equals(booth.getOwner()
+                                 .getId(), requesterId)) {
+            throw new RuntimeException("권한 없음");
+        }
+
+        return orderRepository.findAllByBooth_BoothId(boothId)
+                              .stream()
+                              .filter(orderEntity -> {
+                                  if (completed) {
+                                      return orderEntity.getOrderStatus()
+                                                        .equals(OrderStatus.COMPLETE);
+                                  }
+                                  return !orderEntity.getOrderStatus()
+                                                     .equals(OrderStatus.COMPLETE);
+                              })
+                              .map(this::mapToOrderDomain)
+                              .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Order> loadOrdersByBoothId(Long boothId, boolean completed) {
+        return orderRepository.findAllByBooth_BoothId(boothId)
                               .stream()
                               .map(this::mapToOrderDomain)
                               .collect(Collectors.toList());
@@ -72,8 +106,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
 
     @Override
     public Order updateOrderStatus(Order order) {
-        OrderEntity orderEntity = orderRepository.findById(order.getOrderId())
-                                                 .orElseThrow(NoSuchElementException::new);
+        OrderEntity orderEntity = orderRepository.findById(order.getOrderId()).orElseThrow(NoSuchElementException::new);
 
         orderEntity.updateStatus(order.getOrderStatus());
         orderRepository.save(orderEntity);
@@ -89,9 +122,12 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         BoothInfo boothInfo = new BoothInfo(booth.getBoothId(), booth.getOwner().getId(), booth.getName());
 
         return Order.builder()
+                    .orderId(orderEntity.getOrderId())
                     .orderNo(orderEntity.getOrderNo())
                     .boothInfo(boothInfo)
+                    .orderStatus(orderEntity.getOrderStatus())
                     .orderer(orderer)
+                    .totalAmounts(orderEntity.getTotalAmounts())
                     .orderTime(orderEntity.getOrderTime())
                     .orderLines(orderEntity.getOrderLines())
                     .build();

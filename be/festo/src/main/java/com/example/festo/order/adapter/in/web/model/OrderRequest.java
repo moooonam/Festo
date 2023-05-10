@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderRequest {
 
-    private List<OrderProduct> orderProducts;
+    private List<OrderMenu> orderMenus;
 
     private Long ordererMemberId;
 

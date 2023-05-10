@@ -23,7 +23,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final UpdateOrderStatusPort updateOrderPort;
 
-    private final LoadProductPort loadProductPort;
+    private final LoadMenuPort loadMenuPort;
 
     private final LoadBoothInfoPort loadBoothInfoPort;
 
@@ -35,21 +35,16 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     @Override
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
-        for (OrderProduct orderProduct : orderRequest.getOrderProducts()) {
-            Product product = loadProductPort.loadProduct(orderProduct.getProductId());
-            orderLines.add(new OrderLine(orderProduct.getProductId(), product.getPrice(), orderProduct.getQuantity()));
+        for (OrderMenu orderMenu : orderRequest.getOrderMenus()) {
+            Menu menu = loadMenuPort.loadMenu(orderMenu.getMenuId());
+            orderLines.add(new OrderLine(orderMenu.getMenuId(), menu.getPrice(), orderMenu.getQuantity()));
         }
 
         Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
         OrderNo orderNo = OrderNo.of(placeOrderPort.nextOrderNo(orderRequest.getBoothId()));
         BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(orderRequest.getBoothId());
 
-        Order order = Order.builder()
-                           .orderNo(orderNo)
-                           .boothInfo(boothInfo)
-                           .orderer(orderer)
-                           .orderLines(orderLines)
-                           .build();
+        Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
         placeOrderPort.placeOrder(order);
     }
@@ -64,30 +59,65 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
     }
 
     @Override
-    public OrderDetail loadOrderDetail(Long orderId) {
+    public OrderDetailResponse loadOrderDetail(Long orderId) {
         Order order = loadOrderPort.loadOrder(orderId);
 
-        List<ProductResponse> menus = new ArrayList<>();
+        List<MenuResponse> menus = new ArrayList<>();
         for (OrderLine orderLine : order.getOrderLines()) {
-            Product product = loadProductPort.loadProduct(orderLine.getProductId());
-            menus.add(new ProductResponse(product.getName(), orderLine.getQuantity()));
+            Menu menu = loadMenuPort.loadMenu(orderLine.getMenuId());
+            menus.add(new MenuResponse(menu.getName(), orderLine.getQuantity()));
         }
 
-        return new OrderDetail(order.getOrderNo().getNumber(), order.getOrderTime(), order.getTotalAmounts().getValue(), menus);
+        return new OrderDetailResponse(order.getOrderNo()
+                                            .getNumber(), order.getOrderTime(), order.getTotalAmounts()
+                                                                                     .getValue(), menus);
     }
 
     @Override
-    public List<OrderSummary> loadOrderSummariesByOrdererId(Long ordererId) {
+    public List<OrderSummaryResponse> loadOrderSummariesByOrdererId(Long ordererId) {
         List<Order> orders = loadOrderPort.loadOrdersByOrdererId(ordererId);
 
-        List<OrderSummary> orderSummaries = new ArrayList<>();
+        List<OrderSummaryResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
-            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo().getBoothId());
-            Product firstProduct = loadProductPort.loadProduct(order.getOrderLines().get(0).getProductId());
+            FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo()
+                                                                                            .getBoothId());
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines()
+                                                        .get(0)
+                                                        .getMenuId());
 
-            orderSummaries.add(new OrderSummary(order, festivalInfo, firstProduct));
+            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu));
         }
 
         return orderSummaries;
+    }
+
+    @Override
+    public List<OrderSummaryForBoothOwnerResponse> loadOrderSummariesByBoothId(Long boothId, Long requesterId, boolean completed) {
+        List<Order> orders = loadOrderPort.loadOrdersByBoothId(boothId, requesterId, completed);
+
+        List<OrderSummaryForBoothOwnerResponse> orderSummaries = new ArrayList<>();
+        for (Order order : orders) {
+            int count = order.getOrderLines()
+                             .stream()
+                             .mapToInt(OrderLine::getQuantity)
+                             .sum() - 1;
+
+            Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines()
+                                                        .get(0)
+                                                        .getMenuId());
+            orderSummaries.add(new OrderSummaryForBoothOwnerResponse(order, firstMenu, count));
+        }
+
+        return orderSummaries;
+    }
+
+    @Override
+    public int countWaitingByBoothId(Long boothId) {
+        List<Order> orders = loadOrderPort.loadOrdersByBoothId(boothId, false);
+
+        return (int) orders.stream()
+                           .filter(order -> order.getOrderStatus()
+                                                 .getNumber() <= 2)
+                           .count();
     }
 }

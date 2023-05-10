@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class OrderEntity {
 
     @Id
@@ -31,6 +33,7 @@ public class OrderEntity {
     private OrderNo orderNo;
 
     @ManyToOne
+    @JoinColumn(name = "booth_id")
     private BoothEntity booth;
 
     @ManyToOne
@@ -52,8 +55,9 @@ public class OrderEntity {
     private List<OrderLine> orderLines;
 
     @Builder
-    public OrderEntity(BoothEntity booth, Member orderer, List<OrderLine> orderLines, Money totalAmounts, OrderStatus orderStatus) {
+    public OrderEntity(BoothEntity booth, OrderNo orderNo, Member orderer, List<OrderLine> orderLines, Money totalAmounts, OrderStatus orderStatus) {
         this.booth = booth;
+        this.orderNo = orderNo;
         this.orderer = orderer;
         this.orderLines = orderLines;
         this.totalAmounts = totalAmounts;

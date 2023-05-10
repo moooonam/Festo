@@ -43,6 +43,16 @@ public class Order {
         this.orderLines = orderLines;
     }
 
+    public Order(OrderNo orderNo, BoothInfo boothInfo, Orderer orderer, List<OrderLine> orderLines) {
+        this.orderNo = orderNo;
+        this.boothInfo = boothInfo;
+        this.orderer = orderer;
+        this.orderLines = orderLines;
+        this.orderStatus = OrderStatus.WAITING_ACCEPTANCE;
+
+        calculateTotalAmounts(this.orderLines);
+    }
+
     private void calculateTotalAmounts(List<OrderLine> orderLines) {
         this.totalAmounts = new Money(orderLines.stream()
                                                 .mapToInt(x -> x.getAmounts()

@@ -4,32 +4,32 @@ import com.example.festo.order.domain.*;
 import lombok.Getter;
 
 @Getter
-public class OrderSummary {
+public class OrderSummaryResponse {
 
-    private String festivalName;
+    private final String festivalName;
 
-    private OrderNo orderNo;
+    private final OrderNo orderNo;
 
-    private Long boothId;
+    private final Long boothId;
 
-    private String boothName;
+    private final String boothName;
 
-    private String imageUrl;
+    private final String imageUrl;
 
-    private OrderStatus orderStatus;
+    private final OrderStatus orderStatus;
 
-    private String productName;
+    private final String productName;
 
-    private int etcCount;
+    private final int etcCount;
 
-    public OrderSummary(Order order, FestivalInfo festivalInfo, Product firstProduct) {
+    public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Menu firstMenu) {
         this.festivalName = festivalInfo.getFestivalName();
         this.orderNo = order.getOrderNo();
         this.boothId = order.getBoothInfo().getBoothId();
         this.boothName = order.getBoothInfo().getBoothName();
         this.imageUrl = festivalInfo.getImageUrl();
         this.orderStatus = order.getOrderStatus();
-        this.productName = firstProduct.getName();
+        this.productName = firstMenu.getName();
         this.etcCount = order.getOrderLines().size() - 1;
     }
 }
