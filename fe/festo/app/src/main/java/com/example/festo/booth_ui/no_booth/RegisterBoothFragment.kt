@@ -21,6 +21,7 @@ import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.req.RegiBoothRequest
 import com.example.festo.data.req.RegisterBoothReq
+import com.example.festo.data.res.RegisterBoothRes
 import com.example.festo.databinding.FragmentRegisterboothBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -95,7 +96,7 @@ class RegisterBoothFragment : Fragment() {
 
             if (binding.etBoothName.text.toString().isEmpty()) {
                 Toast.makeText(requireActivity(), "부스 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
-            } else if (binding.tvStartTime.text.toString() == "00 : 00 " && binding.tvEndTime.text.toString() == " 00 : 00") {
+            } else if (binding.tvStartTime.text.toString() == "00:00" && binding.tvEndTime.text.toString() == "00:00") {
                 Toast.makeText(requireActivity(), "운영시간을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else if (binding.etBoothLocation.text.toString().isEmpty()) {
                 Toast.makeText(requireActivity(), "부스 위치를 입력해 주세요", Toast.LENGTH_SHORT).show()
@@ -114,14 +115,15 @@ class RegisterBoothFragment : Fragment() {
                 val data = RegisterBoothReq(request, imagePart)
                 Log.d("제발", "${data}")
                 fun postRegisterBooth() {
+                    Log.d("이미지파트", "${imagePart.body}")
                     val postApi = retrofit?.create(BoothAPI::class.java)
                     postApi!!.registerBooth(
                         "1", request, imagePart
                     )
-                        .enqueue(object : Callback<Long> {
+                        .enqueue(object : Callback<RegisterBoothRes> {
                             override fun onResponse(
-                                call: Call<Long>,
-                                response: Response<Long>
+                                call: Call<RegisterBoothRes>,
+                                response: Response<RegisterBoothRes>
                             ) {
                                 Log.d(
                                     "부스테스트트",
@@ -129,7 +131,7 @@ class RegisterBoothFragment : Fragment() {
                                 )
                             }
 
-                            override fun onFailure(call: Call<Long>, t: Throwable) {
+                            override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
                                 t.printStackTrace()
                                 Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }
@@ -160,7 +162,7 @@ class RegisterBoothFragment : Fragment() {
         val filePath = getRealPathFromURI(uri)
         val file = File(filePath)
         val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-        return MultipartBody.Part.createFormData("festivalImg", file.name, requestFile)
+        return MultipartBody.Part.createFormData("boothImg", file.name, requestFile)
     }
 
     fun getRealPathFromURI(path: Uri): String {

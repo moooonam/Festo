@@ -4,7 +4,7 @@ import okhttp3.MultipartBody
 
 data class RegisterBoothReq(
     val request : RegiBoothRequest,
-    val boothimg : MultipartBody.Part
+    val boothImg : MultipartBody.Part
     // 멀티파트? 로 바꿔야함
 )
 

@@ -135,17 +135,21 @@ class RegisterFestivalFragment : Fragment() {
                 Log.d("과연", "${data}")
                 fun postRegisterFestival() {
                     val postApi = retrofit?.create(HostAPI::class.java)
-                    postApi!!.registerFestival( request, imagePart
+                    postApi!!.registerFestival(
+                        request, imagePart
                     )
-                        .enqueue(object : Callback<Long> {
+                        .enqueue(object : Callback<RegisterFestivalRes> {
                             override fun onResponse(
-                                call: Call<Long>,
-                                response: Response<Long>
+                                call: Call<RegisterFestivalRes>,
+                                response: Response<RegisterFestivalRes>
                             ) {
-                                Log.d("테스트트", "${response.isSuccessful()}, ${response.code()}, ${response}")
+                                Log.d(
+                                    "테스트트",
+                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+                                )
                             }
 
-                            override fun onFailure(call: Call<Long>, t: Throwable) {
+                            override fun onFailure(call: Call<RegisterFestivalRes>, t: Throwable) {
                                 t.printStackTrace()
                                 Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }

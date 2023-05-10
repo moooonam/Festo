@@ -5,6 +5,7 @@ import com.example.festo.data.req.RegiBoothRequest
 import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.data.res.BoothOrderListRes
 import com.example.festo.data.res.FestivalIdRes
+import com.example.festo.data.res.RegisterBoothRes
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -21,21 +22,21 @@ interface BoothAPI {
 
     // 부스 등록하기
     @Multipart
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjkzNDUxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4Nzc0NTEsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjkzNDUxfQ.SYVxlhNtpJ7dJZILRo4IK-PKejaocbVciEk6Fo6raI4")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
     @POST("festivals/{festival_id}/booths")
     fun registerBooth(
         @Path("festival_id") festival_id: String,
         @Part("request") request: RegiBoothRequest,
         @Part boothImg: MultipartBody.Part
-    ): Call<Long>
+    ): Call<RegisterBoothRes>
 
     // 부스 신규,준비중 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjkzNDUxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4Nzc0NTEsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjkzNDUxfQ.SYVxlhNtpJ7dJZILRo4IK-PKejaocbVciEk6Fo6raI4")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
     @GET("booths/{booth_id}/orders?completed=false")
     fun getBoothOrderList(@Path("booth_id") booth_id: String): Call<List<BoothOrderListRes>>
 
     // 부스 완료된 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjkzNDUxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4Nzc0NTEsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjkzNDUxfQ.SYVxlhNtpJ7dJZILRo4IK-PKejaocbVciEk6Fo6raI4")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
     @GET("booths/{booth_id}/orders?completed=true")
     fun getBoothOrderListComplete(@Path("booth_id") booth_id: String): Call<List<BoothOrderListCompleteRes>>
 
