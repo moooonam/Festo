@@ -9,10 +9,11 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface BoothAPI {
     @POST("festivals/{festival_id}/booths")
-    fun registerFestival(@Body data: RegisterBoothReq): Call<RegisterBoothRes>
+    fun registerFestival(@Path("festival_id") festival_id:String, @Body data: RegisterBoothReq): Call<RegisterBoothRes>
 
     @GET("booths/{booth_id}/orders/?completed=false")
     fun getBoothOrderList(): Call<List<BoothOrderListRes>>
@@ -20,4 +21,5 @@ interface BoothAPI {
 
     @GET("booths/{booth_id}/orders/?completed=true")
     fun getBoothOrderListComplete(): Call<List<BoothOrderListCompleteRes>>
+
 }
