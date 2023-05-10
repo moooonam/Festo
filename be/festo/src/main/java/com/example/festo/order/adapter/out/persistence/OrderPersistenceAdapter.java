@@ -41,6 +41,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         OrderEntity orderEntity = OrderEntity.builder()
                                              .orderer(orderer)
                                              .booth(boothEntity)
+                                             .orderNo(order.getOrderNo())
                                              .orderLines(order.getOrderLines())
                                              .totalAmounts(order.getTotalAmounts())
                                              .orderStatus(order.getOrderStatus())
@@ -111,9 +112,12 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
         BoothInfo boothInfo = new BoothInfo(booth.getBoothId(), booth.getOwner().getId(), booth.getName());
 
         return Order.builder()
+                    .orderId(orderEntity.getOrderId())
                     .orderNo(orderEntity.getOrderNo())
                     .boothInfo(boothInfo)
+                    .orderStatus(orderEntity.getOrderStatus())
                     .orderer(orderer)
+                    .totalAmounts(orderEntity.getTotalAmounts())
                     .orderTime(orderEntity.getOrderTime())
                     .orderLines(orderEntity.getOrderLines())
                     .build();
