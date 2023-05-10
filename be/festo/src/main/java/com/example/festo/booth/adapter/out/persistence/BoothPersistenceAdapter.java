@@ -1,5 +1,7 @@
 package com.example.festo.booth.adapter.out.persistence;
 
+import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
+import com.example.festo.booth.application.port.out.LoadFiestaListPort;
 import com.example.festo.booth.application.port.out.SaveBoothCommand;
 import com.example.festo.booth.application.port.out.SaveBoothPort;
 import com.example.festo.booth.domain.BoothStatus;
@@ -10,12 +12,14 @@ import com.example.festo.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class BoothPersistenceAdapter implements SaveBoothPort {
+public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPort {
     //리포지토리 가져오기
     private final BoothRepository boothRepository;
     private final MemberRepository memberRepository;
@@ -50,5 +54,24 @@ public class BoothPersistenceAdapter implements SaveBoothPort {
         boothEntity.setImageUrl(imgUrl);
         boothRepository.save(boothEntity);
         return boothEntity.getBoothId();
+    }
+
+    @Override
+    public List<FiestaResponse.Owner> loadFiestaListByOwnerId(Long ownerId) {
+//        List<FestivalEntity> festivalhList = boothRepository.findAllByOwnerId(ownerId);
+        List<FestivalEntity> festivalhList = boothRepository.findDistinctFestivalsByOwnerId(ownerId);
+        List<FiestaResponse.Owner> fiestaList = new ArrayList<>();
+        for(FestivalEntity festival : festivalhList){
+            FiestaResponse.Owner domain = FiestaResponse.Owner.builder()
+                    .festivalId(festival.getFestivalId())
+                    .name(festival.getName())
+                    .imageUrl(festival.getImageUrl())
+                    .build();
+
+            fiestaList.add(domain);
+        }
+
+
+        return fiestaList;
     }
 }

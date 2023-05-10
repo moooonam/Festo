@@ -1,18 +1,24 @@
 package com.example.festo.booth.application.sevice;
 
+import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
+import com.example.festo.booth.application.port.in.GetFiestaListUseCase;
 import com.example.festo.booth.application.port.in.RegisterBoothCommand;
 import com.example.festo.booth.application.port.in.RegisterBoothUseCase;
+import com.example.festo.booth.application.port.out.LoadFiestaListPort;
 import com.example.festo.booth.application.port.out.SaveBoothCommand;
 import com.example.festo.booth.application.port.out.SaveBoothPort;
 import com.example.festo.booth.application.port.out.SaveImgPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class BoothService implements RegisterBoothUseCase {
+public class BoothService implements RegisterBoothUseCase, GetFiestaListUseCase {
     private final SaveImgPort saveImgPort;
     private final SaveBoothPort saveBoothPort;
+    private final LoadFiestaListPort loadFiestaListPort;
     @Override
     public Long registerBooth(RegisterBoothCommand registerBoothCommand) {
         SaveBoothCommand saveBoothCommand = SaveBoothCommand.builder()
@@ -31,5 +37,10 @@ public class BoothService implements RegisterBoothUseCase {
         saveBoothId = saveBoothPort.updateSetImg(saveBoothId,imgUrl);
 
         return saveBoothId;
+    }
+
+    @Override
+    public List<FiestaResponse.Owner> getFiestaListByOwner(Long ownerId) {
+        return loadFiestaListPort.loadFiestaListByOwnerId(ownerId);
     }
 }
