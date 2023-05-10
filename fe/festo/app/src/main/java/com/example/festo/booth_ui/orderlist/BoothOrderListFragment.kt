@@ -54,12 +54,15 @@ class BoothOrderListFragment : Fragment() {
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderList("1").enqueue(object : Callback<List<BoothOrderListRes>> {
+            postApi!!.getBoothOrderList("3").enqueue(object : Callback<List<BoothOrderListRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!
+                        listAdapter = BoothOrderListAdapter(orderListData as MutableList<BoothOrderListRes>)
+                        mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                        mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
 //                    Log.d("테스트중", "onResponse: ${response.body()}")
-                        Log.d(" 부스 주문내역 과연", "${response},  ${response.code()}")
+                        Log.d(" 부스 주문내역 과연", "${response},  ${response.body()}")
                     }
                     else {
                         Log.d(" 부스 주문내역 successful 아닐때", "${response},  ${response.code()}")
@@ -85,9 +88,9 @@ class BoothOrderListFragment : Fragment() {
             BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
             BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
         )
-        listAdapter = BoothOrderListAdapter(BoothOrderListDataList)
-        mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
+//        listAdapter = BoothOrderListAdapter(orderListData as MutableList<BoothOrderListRes>)
+//        mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+//        mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
     }
 
     override fun onDestroyView() {
