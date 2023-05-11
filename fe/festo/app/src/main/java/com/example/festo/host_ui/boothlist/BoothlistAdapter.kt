@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.data.res.BoothListRes
 
-class BoothlistAdapter(private var list: ArrayList<BoothListData>): RecyclerView.Adapter<BoothlistAdapter.ListItemViewHolder> () {
+class BoothlistAdapter(private var list: List<BoothListRes>): RecyclerView.Adapter<BoothlistAdapter.ListItemViewHolder> () {
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
@@ -19,12 +20,12 @@ class BoothlistAdapter(private var list: ArrayList<BoothListData>): RecyclerView
 
 
         // onBindViewHolder의 역할을 대신한다.
-        fun bind(data: BoothListData, position: Int) {
+        fun bind(data: BoothListRes, position: Int) {
 //            image.setImageResource(data.image!!)
             name.text = data.name
             category.text = data.category
-            explanation.text = data.explanation
-            totalOrder.text = data.totalOrder.toString()
+            explanation.text = data.description
+//            totalOrder.text = data.totalOrder.toString()
         }
     }
 
