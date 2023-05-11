@@ -33,7 +33,7 @@ class NoBoothMainFragment : Fragment() {
         mBinding = binding
 
 //        val code = mBinding!!.festivalCode.text.toString()
-        val code = "135330"
+        val code = "290552"
         // 축제 코드 확인 후 부스 등록 페이지로 이동
         mBinding!!.goRegister.setOnClickListener {
             val postApi = retrofit?.create(BoothAPI::class.java)

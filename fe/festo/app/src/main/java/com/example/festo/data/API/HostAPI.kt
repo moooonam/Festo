@@ -17,7 +17,7 @@ import retrofit2.http.Part
 interface HostAPI {
 
     //축제 등록
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @Multipart
     @POST("festivals")
     fun registerFestival(

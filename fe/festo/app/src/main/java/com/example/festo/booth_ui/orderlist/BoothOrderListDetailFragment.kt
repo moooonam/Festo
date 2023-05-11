@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.databinding.FragmentBoothOrderlistDetailBinding
 
 class BoothOrderDetailListData(
@@ -32,28 +33,28 @@ class BoothOrderListDetailFragment : Fragment() {
 
         return mBinding?.root
     }
-    companion object  {
-        fun newInstance1(clickedItem: BoothOrderListData ): BoothOrderListDetailFragment {
-            val fragment = BoothOrderListDetailFragment()
-            // 매개변수 전달 등의 초기화 작업 수행
-            val args = Bundle().apply {
-                // 필요한 데이터 전달
-                clickedItem.id?.let { putInt("clickedItemId", it) }
-            }
-            fragment.arguments = args
-            return fragment
-        }
-        fun newInstance2(clickedItem: BoothOrderListCompleteData ): BoothOrderListDetailFragment {
-            val fragment = BoothOrderListDetailFragment()
-            // 매개변수 전달 등의 초기화 작업 수행
-            val args = Bundle().apply {
-                // 필요한 데이터 전달
-                clickedItem.id?.let { putInt("clickedItemId", it) }
-            }
-            fragment.arguments = args
-            return fragment
-        }
-    }
+//    companion object  {
+//        fun newInstance1(clickedItem: BoothOrderListCompleteRes ): BoothOrderListDetailFragment {
+//            val fragment = BoothOrderListDetailFragment()
+//            // 매개변수 전달 등의 초기화 작업 수행
+//            val args = Bundle().apply {
+//                // 필요한 데이터 전달
+//                clickedItem.id?.let { putInt("clickedItemId", it) }
+//            }
+//            fragment.arguments = args
+//            return fragment
+//        }
+//        fun newInstance2(clickedItem: BoothOrderListCompleteData ): BoothOrderListDetailFragment {
+//            val fragment = BoothOrderListDetailFragment()
+//            // 매개변수 전달 등의 초기화 작업 수행
+//            val args = Bundle().apply {
+//                // 필요한 데이터 전달
+//                clickedItem.id?.let { putInt("clickedItemId", it) }
+//            }
+//            fragment.arguments = args
+//            return fragment
+//        }
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
