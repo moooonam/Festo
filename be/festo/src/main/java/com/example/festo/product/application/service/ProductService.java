@@ -12,6 +12,7 @@ import com.example.festo.product.application.port.out.SaveProductPort;
 import com.example.festo.product.domain.BoothInfo;
 import com.example.festo.product.domain.Product;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AuthorizationServiceException;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class ProductService implements RegisterProductUseCase, LoadProductUseCas
         BoothInfo boothInfo = loadBoothInfoPort.loadBoothInfo(registerProductCommand.getBoothId());
 
         if (!boothInfo.isOwner(registerProductCommand.getRequesterId())) {
-            throw new RuntimeException("권한 없음");
+            throw new AuthorizationServiceException("부스 관리자만 상품을 등록할 수 있습니다.");
         }
 
         Product product = Product.builder()

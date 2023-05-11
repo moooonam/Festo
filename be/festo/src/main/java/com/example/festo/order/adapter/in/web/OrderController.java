@@ -4,6 +4,7 @@ import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
 import com.example.festo.order.application.port.in.PlaceOrderUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,7 @@ public class OrderController {
     private final OrderStatusChangeUseCase orderStatusChangeUseCase;
 
     @PostMapping("/orders")
-    public ResponseEntity<Void> order(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Void> order(@RequestBody @Valid OrderRequest orderRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
                                                               .getPrincipal();
@@ -37,7 +38,7 @@ public class OrderController {
     }
 
     @PatchMapping("/orders/{orderId}/status")
-    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, @RequestBody OrderStatusChangeRequest orderStatusChangeRequest) {
+    public ResponseEntity<Void> updateState(@PathVariable("orderId") Long orderId, @RequestBody @Valid OrderStatusChangeRequest orderStatusChangeRequest) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
                                                               .getPrincipal();
