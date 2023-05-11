@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
-import com.example.festo.customer_ui.orderlist.OrderListData
+import com.example.festo.data.res.UserOrderListRes
 
-class OrderlistAdapter(private var list: MutableList<OrderListData>) :
+class OrderlistAdapter(private var list: List<UserOrderListRes>) :
     RecyclerView.Adapter<OrderlistAdapter.ListItemViewHolder>() {
 
     // inner class로 ViewHolder 정의
@@ -24,14 +25,28 @@ class OrderlistAdapter(private var list: MutableList<OrderListData>) :
 
 
         // onBindViewHolder의 역할을 대신한다.
-        fun bind(data: OrderListData, position: Int) {
-            festival.text = data.festival
-            date.text = data.date
-            booth.text = data.booth
-            menusummary.text = data.menu
-            ordernumber.text = "주문번호 : ${data.ordernum}번"
-            boothImg.setImageResource(data.boothImg!!)
-            orderstate.text = data.state
+        fun bind(data: UserOrderListRes, position: Int) {
+            festival.text = data.festivalName
+//            date.text = data.date
+            booth.text = data.boothName
+            menusummary.text = "${data.productName} 외 ${data.etcCount}건"
+            ordernumber.text = "주문번호 ${data.orderNo?.number}번"
+            if (data.orderStatus == "WAITING_ACCEPTANCE") {
+                orderstate.text = "주문 대기"
+            } else if (data.orderStatus ==  "PREPARING_ORDER") {
+                orderstate.text = "준비중"
+            } else if (data.orderStatus ==  "WAITING_RECEIVE") {
+                orderstate.text = "준비 완료"
+            } else if (data.orderStatus ==  "COMPLETE") {
+                orderstate.text = "픽업 완료"
+            } else if (data.orderStatus ==  "CANCELED") {
+                orderstate.text = "주문 취소"
+            }
+
+            Glide.with(itemView.context)
+                .load(data.imageUrl)
+                .into(boothImg)
+
         }
     }
 

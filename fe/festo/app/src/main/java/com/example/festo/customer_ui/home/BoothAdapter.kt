@@ -6,8 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.BoothListRes
@@ -15,6 +17,7 @@ import com.example.festo.data.res.BoothWaitingRes
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.AccessController.getContext
 
 class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListRes>, private val token: String) : BaseAdapter() {
     private var retrofit = RetrofitClient.client
@@ -32,7 +35,7 @@ class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListR
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.item_booth, null)
-//        val logo = view.findViewById<ImageView>(R.id.boothLogoImage)
+        val boothImg = view.findViewById<ImageView>(R.id.boothLogoImage)
         val name = view.findViewById<TextView>(R.id.boothName)
         val category = view.findViewById<TextView>(R.id.boothCategory)
         val explanation = view.findViewById<TextView>(R.id.boothExplanation)
@@ -67,7 +70,10 @@ class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListR
             }
         })
 
-//        logo.setImageResource(booth.logo)
+        Glide.with(view.getContext())
+            .load(booth.imageUrl)
+            .into(boothImg)
+
         name.text = booth.name
         category.text = booth.category
         explanation.text = booth.description

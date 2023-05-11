@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.no_booth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -47,11 +48,14 @@ class NoBoothMainFragment : Fragment() {
         mBinding?.festivalRecyclerView?.adapter = listAdapter
 
 
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
         // 축제 코드 확인 후 부스 등록 페이지로 이동
         mBinding!!.goRegister.setOnClickListener {
             var code = mBinding!!.festivalCode.text.toString()
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getFestivalCodeCheck(code).enqueue(object : Callback<FestivalIdRes> {
+            postApi!!.getFestivalCodeCheck(token, code).enqueue(object : Callback<FestivalIdRes> {
                 override fun onResponse(
                     call: Call<FestivalIdRes>,
                     response: Response<FestivalIdRes>
