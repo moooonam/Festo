@@ -2,6 +2,7 @@ package com.example.festo.customer_ui.home
 
 
 
+import RetrofitClient
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,11 +18,18 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
+import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.databinding.FragmentHomeBinding
+import retrofit2.Call
+import retrofit2.Response
+import com.example.festo.data.res.FestivalListRes as FestivalListRes1
 
 
 class HomeFragment : Fragment() {
+    private var retrofit = RetrofitClient.client
+    private var festivalList = emptyList<FestivalListRes>()
+
     private var mBinding: FragmentHomeBinding? = null
     private var festivalItemData = ArrayList<HomeFestivalList>()
     private lateinit var listAdapter: FestivalItemListAdapter
@@ -62,17 +70,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val api = retrofit?.create(UserAPI::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
-        /*if (myValue != null) {
-            Log.i("##################", myValue)
-        }*/
-
         val token = "$myValue"
-        /*postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<FestivalListRes>> {
+        api!!.getFestivalList(token).enqueue(object:retrofit2.Callback<List<FestivalListRes>> {
+            override fun onResponse(
+                call: Call<List<FestivalListRes>>,
+                response: Response<List<FestivalListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.i("성공다", "${response.body()}")
+                    festivalList = response.body()?: emptyList()
+                    // 리스트 연결
+                    listAdapter = FestivalItemListAdapter(festivalList)
+                    mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                    mBinding?.festivalRecyclerView?.adapter = listAdapter
 
-        }*/
-        var FestivalItemListData: ArrayList<HomeFestivalList> = arrayListOf(
+                }
+            }
+            override fun onFailure(call: Call<List<FestivalListRes>>, t: Throwable) {
+                Log.i("실패다", "$t")
+            }
+
+        })
+        /*var FestivalItemListData: ArrayList<HomeFestivalList> = arrayListOf(
             HomeFestivalList(R.drawable.festival1, "a유등축제"),
             HomeFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
             HomeFestivalList(R.drawable.festival1, "c유등축제"),
@@ -84,7 +106,7 @@ class HomeFragment : Fragment() {
         )
         listAdapter = FestivalItemListAdapter(FestivalItemListData)
         mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.festivalRecyclerView?.adapter = listAdapter
+        mBinding?.festivalRecyclerView?.adapter = listAdapter*/
     }
 
     override fun onDestroyView() {

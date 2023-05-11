@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/searchBar"
+        android:id="@+id/searchBar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
