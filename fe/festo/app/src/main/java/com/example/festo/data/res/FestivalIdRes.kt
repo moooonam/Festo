@@ -1,5 +1,5 @@
 package com.example.festo.data.res
 
 class FestivalIdRes (
-    val festivalId: Long,
+    val festivalId: String,
 )
