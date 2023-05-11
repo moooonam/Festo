@@ -8,6 +8,7 @@ import com.example.festo.order.domain.OrderLine;
 import com.example.festo.order.domain.OrderNo;
 import com.example.festo.order.domain.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,17 +34,19 @@ public class OrderEntity {
     private OrderNo orderNo;
 
     @ManyToOne
-    @JoinColumn(name = "booth_id")
+    @JoinColumn(name = "booth_id", nullable = false)
     private BoothEntity booth;
 
     @ManyToOne
+    @Column(nullable = false)
     private Member orderer;
 
+    @Column(nullable = false)
     @Convert(converter = MoneyConverter.class)
     private Money totalAmounts;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private OrderStatus orderStatus;
 
     @CreatedDate
@@ -51,7 +54,7 @@ public class OrderEntity {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "order_line", joinColumns = @JoinColumn(name = "order_number"))
-    @OrderColumn(name = "line_idx")
+    @OrderColumn(name = "line_idx", nullable = false)
     private List<OrderLine> orderLines;
 
     @Builder
@@ -62,6 +65,11 @@ public class OrderEntity {
         this.orderLines = orderLines;
         this.totalAmounts = totalAmounts;
         this.orderStatus = orderStatus;
+    }
+
+    @PrePersist
+    public void onPrePersist(){
+        this.orderTime = LocalDateTime.now();
     }
 
     public void updateStatus(OrderStatus orderStatus) {

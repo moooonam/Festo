@@ -19,15 +19,19 @@ public class BoothEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boothId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private LocalTime openTime;
+    @Column(nullable = false)
     private LocalTime closeTime;
+    @Column(nullable = false)
     private String locationDescription;
+    @Column(nullable = false)
     private String boothDescription;
     private String imageUrl;
-    private String category;
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private BoothStatus boothStatus;
 
     @ManyToOne
@@ -39,7 +43,7 @@ public class BoothEntity {
     private FestivalEntity festival;
 
     @Builder
-    public BoothEntity(Long boothId, String name, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, String category, BoothStatus boothStatus, Member owner, FestivalEntity festival) {
+    public BoothEntity(Long boothId, String name, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, BoothStatus boothStatus, Member owner, FestivalEntity festival) {
         this.boothId = boothId;
         this.name = name;
         this.openTime = openTime;
@@ -47,7 +51,6 @@ public class BoothEntity {
         this.locationDescription = locationDescription;
         this.boothDescription = boothDescription;
         this.imageUrl = imageUrl;
-        this.category = category;
         this.boothStatus = boothStatus;
         this.owner = owner;
         this.festival = festival;

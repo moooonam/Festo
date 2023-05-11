@@ -4,6 +4,8 @@ import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
 import com.example.festo.booth.application.port.out.*;
 import com.example.festo.booth.domain.Booth;
 import com.example.festo.booth.domain.BoothStatus;
+import com.example.festo.common.exception.CustomNoSuchException;
+import com.example.festo.common.exception.ErrorCode;
 import com.example.festo.festival.adapter.out.persistence.FestivalEntity;
 import com.example.festo.festival.adapter.out.persistence.FestivalRepository;
 import com.example.festo.member.adapter.out.persistence.MemberRepository;
@@ -26,8 +28,8 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public Long saveBooth(SaveBoothCommand saveBoothCommand, Long ownerId, Long festivalId) {
-        Member owner = memberRepository.findById(ownerId).orElseThrow(NoSuchElementException::new);
-        FestivalEntity festival = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        Member owner = memberRepository.findById(ownerId).orElseThrow(()-> new CustomNoSuchException(ErrorCode.MEMBER_NOT_FOUND));
+        FestivalEntity festival = festivalRepository.findById(festivalId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND));
 
         BoothEntity boothEntity = BoothEntity.builder()
                 .name(saveBoothCommand.getBoothName())
@@ -49,7 +51,7 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public Long updateSetImg(Long boothId, String imgUrl) {
-        BoothEntity boothEntity = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        BoothEntity boothEntity = boothRepository.findById(boothId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.BOOTH_NOT_FOUND));
         boothEntity.setImageUrl(imgUrl);
         boothRepository.save(boothEntity);
         return boothEntity.getBoothId();
@@ -57,7 +59,6 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public List<FiestaResponse.Owner> loadFiestaListByOwnerId(Long ownerId) {
-//        List<FestivalEntity> festivalhList = boothRepository.findAllByOwnerId(ownerId);
         List<FestivalEntity> festivalhList = boothRepository.findDistinctFestivalsByOwnerId(ownerId);
         List<FiestaResponse.Owner> fiestaList = new ArrayList<>();
         for(FestivalEntity festival : festivalhList){
@@ -76,13 +77,13 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public BoothStatus loadBoothStatus(Long boothId) {
-        BoothEntity booth =boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        BoothEntity booth =boothRepository.findById(boothId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.BOOTH_NOT_FOUND));
         return booth.getBoothStatus();
     }
 
     @Override
     public void setBoothStatus(BoothStatus boothStatus,Long boothId) {
-        BoothEntity booth = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        BoothEntity booth = boothRepository.findById(boothId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.BOOTH_NOT_FOUND));
         booth.setBoothStatus(boothStatus);
         boothRepository.save(booth);
     }
@@ -107,7 +108,7 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
 
     @Override
     public Booth loadBoothById(Long boothId) {
-        BoothEntity entity = boothRepository.findById(boothId).orElseThrow(NoSuchElementException::new);
+        BoothEntity entity = boothRepository.findById(boothId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.BOOTH_NOT_FOUND));
         Booth domain = Booth.builder()
                 .boothId(entity.getBoothId())
                 .name(entity.getName())

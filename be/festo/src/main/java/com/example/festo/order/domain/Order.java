@@ -5,6 +5,7 @@ import com.example.festo.order.adapter.in.web.model.OrderStatusChangeRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.security.access.AuthorizationServiceException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -62,11 +63,11 @@ public class Order {
 
     public void updateStatus(OrderStatusChangeRequest orderStatusChangeRequest) {
         if (!validateQualification(orderStatusChangeRequest.getRequesterId())) {
-            throw new RuntimeException("주문 상태 변경 권한 없음"); // TODO 정확한 예외 처리
+            throw new AuthorizationServiceException("부스 관리자만 주문 상태를 변경할 수 있습니다.");
         }
 
         OrderStatus status = OrderStatus.findBy(orderStatusChangeRequest.getRequestStatus());
-        validateChangeable(status);
+//        validateChangeable(status);
 
         this.orderStatus = status;
     }

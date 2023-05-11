@@ -32,8 +32,10 @@ public class BoothService implements RegisterBoothUseCase, GetFiestaListUseCase,
                 .build();
 
         Long saveBoothId = saveBoothPort.saveBooth(saveBoothCommand, registerBoothCommand.getOwnerId(), registerBoothCommand.getFestivalId());
-
-        String imgUrl = saveImgPort.saveBoothImg(registerBoothCommand.getImg(),saveBoothId);
+        String imgUrl=null;
+        if(!registerBoothCommand.getImg().isEmpty()){
+            imgUrl = saveImgPort.saveBoothImg(registerBoothCommand.getImg(),saveBoothId);
+        }
 
         saveBoothId = saveBoothPort.updateSetImg(saveBoothId,imgUrl);
 

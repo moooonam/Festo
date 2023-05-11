@@ -5,6 +5,7 @@ import com.example.festo.product.adapter.in.web.model.ProductResponse;
 import com.example.festo.product.application.port.in.LoadProductUseCase;
 import com.example.festo.product.application.port.in.RegisterProductCommand;
 import com.example.festo.product.application.port.in.RegisterProductUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,7 @@ public class ProductController {
     @PostMapping("/booths/{booth_id}/menu")
     public ResponseEntity<Long> addMenu(
             @PathVariable("booth_id") Long boothId,
-            @RequestPart("request") ProductRegisterRequest request,
+            @RequestPart("request") @Valid ProductRegisterRequest request,
             @RequestPart("productImage") MultipartFile productImage) {
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()

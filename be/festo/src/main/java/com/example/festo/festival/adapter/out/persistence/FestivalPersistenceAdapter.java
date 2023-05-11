@@ -1,5 +1,7 @@
 package com.example.festo.festival.adapter.out.persistence;
 
+import com.example.festo.common.exception.CustomNoSuchException;
+import com.example.festo.common.exception.ErrorCode;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
 import com.example.festo.festival.application.port.out.*;
 import com.example.festo.festival.domain.Festival;
@@ -25,7 +27,7 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
     @Override
     public Long saveFestival(SaveFestivalCommand saveFestivalCommand, Long managerId) {
         Member manager = memberRepository.findById(managerId)
-                                         .orElseThrow(NoSuchElementException::new);
+                                         .orElseThrow(() -> new CustomNoSuchException(ErrorCode.MEMBER_NOT_FOUND));
 
         String inviteCode = randomCode();
 
@@ -49,7 +51,7 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
     @Override
     public Long updateSetImg(Long festivalId, String imgUrl) {
         FestivalEntity festivalEntity = festivalRepository.findById(festivalId)
-                                                          .orElseThrow(NoSuchElementException::new);
+                                                          .orElseThrow(() -> new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND));
         festivalEntity.setImageUrl(imgUrl);
         festivalRepository.save(festivalEntity);
         return festivalEntity.getFestivalId();
@@ -127,19 +129,19 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public Long loadFestivalIdByInviteCode(String inviteCode) {
-        FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElse(null);
+        FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElseThrow(() -> new CustomNoSuchException(ErrorCode.INVITE_CODE_NOT_FOUND));
         return festivalEntity.getFestivalId();
     }
 
     @Override
     public String loadInviteCodeByFestivalId(Long festivalId) {
-        FestivalEntity festivalEntity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        FestivalEntity festivalEntity = festivalRepository.findById(festivalId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND));
         return festivalEntity.getInviteCode();
     }
 
     @Override
     public Festival loadFestivalDetailByFestivalId(Long festivalId) {
-        FestivalEntity entity = festivalRepository.findById(festivalId).orElseThrow(NoSuchElementException::new);
+        FestivalEntity entity = festivalRepository.findById(festivalId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND));
         Festival domain = new Festival(entity.getFestivalId(),entity.getName(),entity.getDescription(),entity.getInviteCode(),entity.getAddress(),entity.getStartDate(),entity.getEndDate(),entity.getImageUrl());
         return domain;
     }
