@@ -7,6 +7,7 @@ import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
 import com.example.festo.booth.adapter.in.web.model.RequestStatus;
 import com.example.festo.booth.application.port.in.*;
 import com.example.festo.booth.domain.Booth;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class BoothController {
     private final GetBoothListUseCase getBoothListUseCase;
     private final GetBoothDetailUseCase getBoothDetailUseCase;
     @PostMapping("/festivals/{festival_id}/booths")
-    public ResponseEntity<BoothCreationResponse> createBooth(@PathVariable("festival_id") Long festivalId, @RequestPart("request") BoothRequest request, @RequestPart("boothImg") MultipartFile boothImg) {
+    public ResponseEntity<BoothCreationResponse> createBooth(@PathVariable("festival_id") Long festivalId, @Valid @RequestPart("request") BoothRequest request, @RequestPart("boothImg") MultipartFile boothImg) {
         log.info("부스 등록 컨트롤러 시작");
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
@@ -65,14 +66,19 @@ public class BoothController {
     @PatchMapping("booths/{booth_id}/status")
     public ResponseEntity<?> changeBoothStatus(@PathVariable("booth_id")Long boothId, @RequestBody RequestStatus status){
         log.info("부스 상태 변경 컨트롤러 시작");
-        log.info(status.getStatus());
+
+        if(!(status.equals("CLOSE") || status.equals("OPEN"))){
+            return new ResponseEntity<>("OPEN과 CLOSE만 가능합니다.", HttpStatus.BAD_REQUEST);
+        }
+
         boolean resultResponse = changeBoothStatusUseCase.changeBoothStatus(status.getStatus(),boothId);
 
         if(resultResponse){
             return new ResponseEntity<>("변경이 완료돠었습니다.", HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("변경을 하지 못합니다.", HttpStatus.BAD_REQUEST);
+            if(status.equals("CLOSE")) return new ResponseEntity<>("이미 마감하였습니다.", HttpStatus.BAD_REQUEST);
+            else return new ResponseEntity<>("이미 오픈 중입니다.", HttpStatus.BAD_REQUEST);
         }
 
     }

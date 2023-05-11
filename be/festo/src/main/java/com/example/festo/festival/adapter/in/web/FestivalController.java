@@ -4,6 +4,7 @@ import com.example.festo.festival.adapter.in.web.model.FestivalRequest;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
 import com.example.festo.festival.application.port.in.*;
 import com.example.festo.festival.domain.Festival;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class FestivalController {
     private final GetFestivalDetailUseCase getFestivalDetailUseCase;
 
     @PostMapping("festivals")
-    public ResponseEntity<FestivalResponse.Creation> createFestival(@RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg) {
+    public ResponseEntity<FestivalResponse.Creation> createFestival(@Valid @RequestPart("request") FestivalRequest request, @RequestPart("festivalImg") MultipartFile festivalImg) {
         log.info("페스티벌 등록 컨트롤러 시작");
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                                                               .getAuthentication()
@@ -56,7 +57,7 @@ public class FestivalController {
     }
 
     @GetMapping("festivals/search")
-    public ResponseEntity<List<FestivalResponse.Search>> getFestivalsBySearch(@RequestParam("keyword") String keyword) {
+    public ResponseEntity<List<FestivalResponse.Search>> getFestivalsBySearch(@RequestParam(value = "keyword") String keyword) {
         log.info("페스티벌 검색 조회 컨트롤러 시작");
         List<FestivalResponse.Search> festivalList = getFestivalsUseCase.getFestivalBySearch(keyword);
         return new ResponseEntity<List<FestivalResponse.Search>>(festivalList, HttpStatus.OK);
@@ -65,10 +66,12 @@ public class FestivalController {
     @GetMapping("festivals/invitation")
     public ResponseEntity<?> getFestivalIdByInviteCode(@RequestParam("inviteCode") String inviteCode) {
         log.info("페스티벌 초대코드 입력 컨트롤러 시작");
-        Long festivalId = getFestivalIdUseCase.getFestivalIdByInviteCode(inviteCode);
-        if (festivalId == null) {
-            return new ResponseEntity<>("존재하지 않는 코드입니다.", HttpStatus.BAD_REQUEST);
+        if(inviteCode.length() != 6) {
+            return new ResponseEntity<>("초대코드는 총 6자리입니다.", HttpStatus.BAD_REQUEST);
         }
+
+        Long festivalId = getFestivalIdUseCase.getFestivalIdByInviteCode(inviteCode);
+
         return new ResponseEntity<>(new FestivalResponse.Invitation(festivalId), HttpStatus.OK);
     }
 

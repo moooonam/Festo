@@ -16,17 +16,22 @@ public class FestivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long festivalId;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
     private LocalDate startDate;
+    @Column(nullable = false)
     private LocalDate endDate;
     private String imageUrl;
     @Column(unique = true, nullable = false)
     private String inviteCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private FestivalStatus festivalStatus;
 
     @ManyToOne
