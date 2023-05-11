@@ -2,6 +2,7 @@ package com.example.festo.data.API
 
 import com.example.festo.data.req.BoothStatusReq
 import com.example.festo.data.req.RegiBoothRequest
+import com.example.festo.data.req.RegiMenuReq
 import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.data.res.BoothOrderListRes
 import com.example.festo.data.res.FestivalIdRes
@@ -29,6 +30,16 @@ interface BoothAPI {
         @Part("request") request: RegiBoothRequest,
         @Part boothImg: MultipartBody.Part
     ): Call<RegisterBoothRes>
+
+    // 메뉴 등록하기
+    @Multipart
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
+    @POST("booths/{booth_id}/menu")
+    fun registerMenu(
+        @Path("booth_id") booth_id:String,
+        @Part("request") request: RegiMenuReq,
+        @Part productImage: MultipartBody.Part
+    ): Call<Long>
 
     // 부스 신규,준비중 주문내역 불러오기
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
