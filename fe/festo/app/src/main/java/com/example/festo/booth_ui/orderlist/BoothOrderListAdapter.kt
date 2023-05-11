@@ -7,10 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
-import com.example.festo.booth_ui.BoothMainActivity
-import com.example.festo.booth_ui.orderlist.BoothOrderListData
 import com.example.festo.data.res.BoothOrderListRes
-import com.kakao.sdk.common.KakaoSdk.init
 
 class BoothOrderListAdapter(private var list: MutableList<BoothOrderListRes>) :
     RecyclerView.Adapter<BoothOrderListAdapter.ListItemViewHolder>() {
@@ -54,7 +51,7 @@ class BoothOrderListAdapter(private var list: MutableList<BoothOrderListRes>) :
             ordertime.text = data.time
             if (data.orderStatus == "WAITING_ACCEPTANCE") {
                 change_state_btn.text = "접수"
-            } else  {
+            } else {
                 change_state_btn.text = "준비완료"
             }
         }

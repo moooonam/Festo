@@ -22,7 +22,7 @@ interface BoothAPI {
 
     // 부스 등록하기
     @Multipart
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @POST("festivals/{festival_id}/booths")
     fun registerBooth(
         @Path("festival_id") festival_id: String,
@@ -31,12 +31,12 @@ interface BoothAPI {
     ): Call<RegisterBoothRes>
 
     // 부스 신규,준비중 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @GET("booths/{booth_id}/orders?completed=false")
     fun getBoothOrderList(@Path("booth_id") booth_id: String): Call<List<BoothOrderListRes>>
 
     // 부스 완료된 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA1ODgyLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODk4ODIsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA1ODgyfQ.5PtXj3w0RR06cq_Rz9KAqlm3RlWwVihAl4kuXMDWZbQ")
+    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @GET("booths/{booth_id}/orders?completed=true")
     fun getBoothOrderListComplete(@Path("booth_id") booth_id: String): Call<List<BoothOrderListCompleteRes>>
 

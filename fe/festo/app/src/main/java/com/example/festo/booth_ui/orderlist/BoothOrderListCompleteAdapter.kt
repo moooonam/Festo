@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.booth_ui.BoothMainActivity
+import com.example.festo.data.res.BoothOrderListCompleteRes
 
-class BoothOrderListCompleteAdapter(private var list: MutableList<BoothOrderListCompleteData>) :
+class BoothOrderListCompleteAdapter(private var list: MutableList<BoothOrderListCompleteRes>) :
     RecyclerView.Adapter<BoothOrderListCompleteAdapter.ListItemViewHolder>() {
     inner class ListItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!),
         View.OnClickListener {
@@ -21,21 +22,21 @@ class BoothOrderListCompleteAdapter(private var list: MutableList<BoothOrderList
 
             val clickedItem = list[position]
 
-            val fragment = BoothOrderListDetailFragment.newInstance2(clickedItem)
-            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
-            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
-                .addToBackStack(null)
-                .commit()
+//            val fragment = BoothOrderListDetailFragment.newInstance2(clickedItem)
+//            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
+//            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
+//                .addToBackStack(null)
+//                .commit()
         }
         var ordernum: TextView = itemView!!.findViewById(R.id.tv_booth_ordernum_complete)
         var orderdate: TextView = itemView!!.findViewById(R.id.tv_booth_orderdate_complete)
         var ordertime: TextView = itemView!!.findViewById(R.id.tv_booth_ordertime_complete)
         var orderlist: TextView = itemView!!.findViewById(R.id.tv_booth_orderlist_complete)
-        fun bind(data: BoothOrderListCompleteData, position: Int) {
-            ordernum.text = data.ordernum
-            orderdate.text = data.orderdate
-            ordertime.text = data.ordertime
-            orderlist.text = data.orderList
+        fun bind(data: BoothOrderListCompleteRes, position: Int) {
+            ordernum.text = data.orderNo.number.toString()
+            orderdate.text = data.time
+//            ordertime.text = data.ordertime
+            orderlist.text = "${data.firstMenuName} 외 ${data.etcCount.toString()}개"
         }
 
     }

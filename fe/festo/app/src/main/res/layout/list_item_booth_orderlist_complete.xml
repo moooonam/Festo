@@ -29,7 +29,7 @@
                 android:id="@+id/tv_booth_orderdate_complete"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="47dp"
                 android:layout_marginTop="5dp"
                 android:text="주문일자"
                 android:textSize="12sp" />
@@ -47,7 +47,8 @@
 
         <TextView
             android:id="@+id/tv_booth_orderlist_complete"
-            android:layout_width="150dp"
+            android:layout_width="160dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"

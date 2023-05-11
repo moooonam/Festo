@@ -17,14 +17,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BoothOrderListData(
-    var id: Int?= null,
-    var ordernum: String? = null,
-    var state: String? = null,
-    var ordertime: String? = null,
-    var orderList: String? = null,
-    var etcnum: Int? = null,
-)
 class BoothOrderListFragment : Fragment() {
     private  lateinit var listAdapter: BoothOrderListAdapter
     private var retrofit = RetrofitClient.client
@@ -54,7 +46,7 @@ class BoothOrderListFragment : Fragment() {
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderList("3").enqueue(object : Callback<List<BoothOrderListRes>> {
+            postApi!!.getBoothOrderList("2").enqueue(object : Callback<List<BoothOrderListRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!
@@ -75,22 +67,6 @@ class BoothOrderListFragment : Fragment() {
             })
         }
         getBoothOrderList()
-        var BoothOrderListDataList: ArrayList<BoothOrderListData> = arrayListOf(
-            BoothOrderListData(1,"01","대기","15:00","닭꼬치",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-            BoothOrderListData(2,"01","준비중","15:00","닭꼬치이잉잉이잉잉이",2),
-        )
-//        listAdapter = BoothOrderListAdapter(orderListData as MutableList<BoothOrderListRes>)
-//        mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
     }
 
     override fun onDestroyView() {

@@ -3,9 +3,12 @@ package com.example.festo.data.res
 import java.time.LocalDateTime
 
 class BoothOrderListCompleteRes (
-    val orderNo: Long,
-    val status: String,
-    val time: LocalDateTime,
-    val firstProductName: String,
+    val orderNo: CompleteOderNumber,
+    val orderStatus: String,
+    val time: String,
+    val firstMenuName: String,
     val etcCount: Int
     )
+data class CompleteOderNumber(
+    val number: Long
+)
