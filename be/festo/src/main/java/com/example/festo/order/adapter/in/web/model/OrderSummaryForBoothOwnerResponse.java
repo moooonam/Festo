@@ -4,6 +4,7 @@ import com.example.festo.order.domain.Order;
 import com.example.festo.order.domain.OrderNo;
 import com.example.festo.order.domain.OrderStatus;
 import com.example.festo.order.domain.Menu;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class OrderSummaryForBoothOwnerResponse {
 
     private final OrderStatus orderStatus;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd/HH:mm", timezone = "Asia/Seoul")
     private final LocalDateTime time;
 
     private final String firstMenuName;
