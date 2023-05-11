@@ -5,10 +5,10 @@ import com.example.festo.data.req.OrderReq
 import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.BoothWaitingRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.LoginRes
-import com.example.festo.data.res.SearchFestivalRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserNotificationListRes
 import com.google.gson.Gson
@@ -61,10 +61,9 @@ interface UserAPI {
     @GET("booths/1/menus")
     fun getBoothMenuList(@Header("Authorization") token: String): Call<List<BoothMenuListRes>>
 
-    // 축제 상세정보 조회. 일단 축제 1번으로 고정
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
-    @GET("festivals/1")
-    fun getFestivalDetail(): Call<FestivalInfoRes>
+    // 축제 상세정보 조회
+      @GET("festivals/{festival_id}")
+    fun getFestivalDetail(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?): Call<FestivalInfoRes>
 
     // 주문하기
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
@@ -72,12 +71,15 @@ interface UserAPI {
     fun orderMenu(@Body data: OrderReq) : Call<Void>
 
     // 부스 리스트 조회
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
-    @GET("festivals/1/booths")
-    fun getBoothList(): Call<List<BoothListRes>>
+     @GET("festivals/{festival_id}/booths")
+    fun getBoothList(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?): Call<List<BoothListRes>>
 
     // 부스 상세정보 조회
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @GET("booths/{booth_id}")
     fun getBoothDetail(@Path("booth_id") booth_id: String,): Call<BoothDetailRes>
+
+    // 부스 대기인원 조회
+    @GET("booths/{booth_id}/waiting")
+    fun getBoothWaiting(@Header("Authorization") token: String, @Path("booth_id") booth_id: Long?,): Call<BoothWaitingRes>
 }
