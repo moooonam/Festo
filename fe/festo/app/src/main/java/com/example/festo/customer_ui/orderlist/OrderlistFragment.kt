@@ -1,6 +1,8 @@
 package com.example.festo.customer_ui.orderlist
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.customer_ui.mypage.OrderlistAdapter
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.UserOrderListRes
 import com.example.festo.databinding.FragmentOrderlistBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OrderListData(
     var boothImg: Int? = null,
@@ -22,6 +29,8 @@ class OrderListData(
     var state: String? = null,
 )
 class OrderlistFragment : Fragment() {
+    private var retrofit = RetrofitClient.client
+    private var orderlist = emptyList<UserOrderListRes>()
     private lateinit var listAdapter: OrderlistAdapter
     private var mBinding : FragmentOrderlistBinding? = null
     override fun onCreateView(
@@ -45,14 +54,43 @@ class OrderlistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var OrderListDataList : ArrayList <OrderListData> = arrayListOf(
-           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 2개",87,"23.04.27 16:10","준비완료"),
-           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 3개",87,"23.04.27 16:10","준비완료"),
-           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 4개",87,"23.04.27 16:10","준비완료"),
-        )
-        listAdapter = OrderlistAdapter(OrderListDataList)
-        mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.orderlistFragmentListView?.adapter = listAdapter
+//        var OrderListDataList : ArrayList <OrderListData> = arrayListOf(
+//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 2개",87,"23.04.27 16:10","준비완료"),
+//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 3개",87,"23.04.27 16:10","준비완료"),
+//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 4개",87,"23.04.27 16:10","준비완료"),
+//        )
+//        listAdapter = OrderlistAdapter(OrderListDataList)
+//        mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+//        mBinding?.orderlistFragmentListView?.adapter = listAdapter
+
+
+        // 유저의 주문내역 조회
+        val postApi = retrofit?.create(UserAPI::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        println(token)
+        postApi!!.getOrderList(token).enqueue(object : Callback<List<UserOrderListRes>> {
+            override fun onResponse(
+                call: Call<List<UserOrderListRes>>,
+                response: Response<List<UserOrderListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body()?.size)
+                    Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
+                    orderlist = response.body() ?: emptyList()
+                    listAdapter = OrderlistAdapter(orderlist)
+                    mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                    mBinding?.orderlistFragmentListView?.adapter = listAdapter
+                }
+            }
+
+            override fun onFailure(call: Call<List<UserOrderListRes>>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
     }
     override fun onDestroyView() {
         mBinding = null

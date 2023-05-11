@@ -1,6 +1,7 @@
 package com.example.festo.customer_ui.home
 
 import MenuAdapter
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -46,7 +47,10 @@ class BoothDetailActivity : AppCompatActivity() {
 
         // 부스 상세정보 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.getBoothDetail(boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.getBoothDetail(token, boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
             override fun onResponse(
                 call: Call<BoothDetailRes>,
                 response: Response<BoothDetailRes>
@@ -73,9 +77,7 @@ class BoothDetailActivity : AppCompatActivity() {
         })
 
         // 부스 메뉴 리스트 retrofit
-        val tokenValue = "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzA0OTk3LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4ODg5OTcsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzA0OTk3fQ.ICpCfIDKTJfIoromaX08iMvbNM2R26D3jZboNfewomU"
-        val token  = "Bearer $tokenValue"
-        postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
+        postApi!!.getBoothMenuList(token, boothId.toString()).enqueue(object : Callback<List<BoothMenuListRes>> {
             override fun onResponse(
                 call: Call<List<BoothMenuListRes>>,
                 response: Response<List<BoothMenuListRes>>

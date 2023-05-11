@@ -3,8 +3,10 @@ package com.example.festo.host_ui.boothlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.res.BoothListRes
 
@@ -12,7 +14,7 @@ class BoothlistAdapter(private var list: List<BoothListRes>): RecyclerView.Adapt
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
-//        var image: TextView = itemView!!.findViewById(R.id.boothImage)
+        var image: ImageView = itemView!!.findViewById(R.id.boothImage)
         var name: TextView = itemView!!.findViewById(R.id.boothName)
         var category: TextView = itemView!!.findViewById(R.id.boothCategory)
         var explanation: TextView = itemView!!.findViewById(R.id.boothExplanation)
@@ -21,7 +23,9 @@ class BoothlistAdapter(private var list: List<BoothListRes>): RecyclerView.Adapt
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: BoothListRes, position: Int) {
-//            image.setImageResource(data.image!!)
+            Glide.with(itemView.context)
+                .load(data.imageUrl)
+                .into(image)
             name.text = data.name
             category.text = data.category
             explanation.text = data.description

@@ -11,6 +11,7 @@ import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.LoginRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserNotificationListRes
+import com.example.festo.data.res.UserOrderListRes
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
@@ -58,28 +59,31 @@ interface UserAPI {
     // 부스 메뉴 조회. 일단 id 2번 부스로 고정
 //    @GET("booths/{booth_id}/orders/?completed=false")
 //    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjk0MjAxLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NzgyMDEsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjk0MjAxfQ.AeidYEQ6RWsFYvzh6z1l990YGjAFHCkfiKV85UU2D7E")
-    @GET("booths/1/menus")
-    fun getBoothMenuList(@Header("Authorization") token: String): Call<List<BoothMenuListRes>>
+    @GET("booths/{booth_id}/menus")
+    fun getBoothMenuList(@Header("Authorization") token: String, @Path("booth_id") booth_id: String): Call<List<BoothMenuListRes>>
 
     // 축제 상세정보 조회
-      @GET("festivals/{festival_id}")
+    @GET("festivals/{festival_id}")
     fun getFestivalDetail(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?): Call<FestivalInfoRes>
 
     // 주문하기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
-    @POST("orders")
-    fun orderMenu(@Body data: OrderReq) : Call<Void>
+     @POST("orders")
+    fun orderMenu(@Header("Authorization") token: String, @Body data: OrderReq) : Call<Void>
 
     // 부스 리스트 조회
      @GET("festivals/{festival_id}/booths")
     fun getBoothList(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?): Call<List<BoothListRes>>
 
     // 부스 상세정보 조회
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
-    @GET("booths/{booth_id}")
-    fun getBoothDetail(@Path("booth_id") booth_id: String,): Call<BoothDetailRes>
+     @GET("booths/{booth_id}")
+    fun getBoothDetail(@Header("Authorization") token: String, @Path("booth_id") booth_id: String): Call<BoothDetailRes>
 
     // 부스 대기인원 조회
     @GET("booths/{booth_id}/waiting")
-    fun getBoothWaiting(@Header("Authorization") token: String, @Path("booth_id") booth_id: Long?,): Call<BoothWaitingRes>
+    fun getBoothWaiting(@Header("Authorization") token: String, @Path("booth_id") booth_id: Long?): Call<BoothWaitingRes>
+
+    // 주문 내역 조회
+    @GET("orders")
+    fun getOrderList(@Header("Authorization") token: String): Call<List<UserOrderListRes>>
+
 }

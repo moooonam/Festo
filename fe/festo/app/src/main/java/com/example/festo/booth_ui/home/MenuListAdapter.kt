@@ -3,8 +3,10 @@ package com.example.festo.booth_ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.res.BoothMenuListRes
 
@@ -12,13 +14,15 @@ class MenuListAdapter(private var list: List<BoothMenuListRes>): RecyclerView.Ad
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
-        //        var image: TextView = itemView!!.findViewById(R.id.menuImage)
+        var image: ImageView = itemView!!.findViewById(R.id.menuImage)
         var name: TextView = itemView!!.findViewById(R.id.menuName)
         var price: TextView = itemView!!.findViewById(R.id.menuPrice)
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: BoothMenuListRes, position: Int) {
-//            image.setImageResource(data.image!!)
+            Glide.with(itemView.context)
+                .load(data.imageUrl)
+                .into(image)
             name.text = data.name
             price.text = data.price.toString()
         }

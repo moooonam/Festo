@@ -7,6 +7,7 @@ import android.widget.BaseAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.res.BoothMenuListRes
 
@@ -41,6 +42,9 @@ class MenuAdapter(val context: Context, val MenuList: List<BoothMenuListRes>) : 
         name.text = menu.name
         price.text = menu.price.toString()
         cnt.text = menu.cnt.toString()
+        Glide.with(view.getContext())
+            .load(menu.imageUrl)
+            .into(image)
 
         if (totalTextView == null) {
             totalTextView = parent!!.findViewById(R.id.totalTextView)
