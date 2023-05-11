@@ -10,6 +10,7 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.festo.R
+import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.API.UserAPI
@@ -46,7 +47,8 @@ class NoBoothMainFragment : Fragment() {
                         println("성공!!!!!!!!!!!!!!!!!!!")
                         Log.d(" 테스트", "${response.body()}")
                         val transaction = fragmentManager?.beginTransaction()
-                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
+//                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
+                        transaction?.replace(R.id.no_booth_layout_nav_bottom, BoothHomeFragment())
                         transaction?.commit()
                     }
                 }
