@@ -1,5 +1,6 @@
 package com.example.festo.festival.adapter.out.persistence;
 
+import com.example.festo.common.exception.CustomIsPresentException;
 import com.example.festo.common.exception.CustomNoSuchException;
 import com.example.festo.common.exception.ErrorCode;
 import com.example.festo.festival.adapter.in.web.model.FestivalResponse;
@@ -19,15 +20,14 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort, LoadFestivalIdPort, LoadInviteCodePort,LoadFestivalDetailPort {
+public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestivalListPort, LoadFestivalIdPort, LoadInviteCodePort,LoadFestivalDetailPort,LoadIsOpenFestivalPort {
     private final MemberRepository memberRepository;
     private final FestivalRepository festivalRepository;
 
     @Override
-    public Long saveFestival(SaveFestivalCommand saveFestivalCommand, Long managerId) {
+    public Long saveFestival(SaveFestivalCommand saveFestivalCommand, Long managerId){
         Member manager = memberRepository.findById(managerId)
                                          .orElseThrow(() -> new CustomNoSuchException(ErrorCode.MEMBER_NOT_FOUND));
-        //manager가 운영하고 있는 페스티벌이 있는지 조회
 
         String inviteCode = randomCode();
 
@@ -157,5 +157,14 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
         FestivalEntity entity = festivalRepository.findById(festivalId).orElseThrow(() -> new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND));
         Festival domain = new Festival(entity.getFestivalId(),entity.getName(),entity.getDescription(),entity.getInviteCode(),entity.getAddress(),entity.getStartDate(),entity.getEndDate(),entity.getImageUrl());
         return domain;
+    }
+
+    @Override
+    public boolean isOpenFestivalByManagerId(Long managerId) {
+        Optional<FestivalEntity> festivalEntityOptional = festivalRepository.findByManagerId(managerId);
+        if(festivalEntityOptional.isEmpty()){
+            return true;
+        }
+        return false;
     }
 }

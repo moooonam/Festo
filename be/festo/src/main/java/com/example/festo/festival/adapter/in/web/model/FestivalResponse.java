@@ -67,4 +67,22 @@ public class FestivalResponse {
             this.festivalId = festivalId;
         }
     }
+    @Getter
+    public static class InviteCode {
+
+        private final String inviteCode;
+
+        public InviteCode(String inviteCode) {
+            this.inviteCode = inviteCode;
+        }
+    }
+    @Getter
+    public static class IsOpen {
+
+        private final boolean isOpen;
+
+        public IsOpen(boolean isOpen) {
+            this.isOpen = isOpen;
+        }
+    }
 }
