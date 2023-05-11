@@ -30,7 +30,16 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
                                          .orElseThrow(() -> new CustomNoSuchException(ErrorCode.MEMBER_NOT_FOUND));
 
         String inviteCode = randomCode();
-
+        Optional<Boolean> isOpen = festivalRepository.existsByManagerId(managerId);
+        isOpen.ifPresent(isOpenValue -> {
+            if(isOpenValue) {
+                try {
+                    throw new CustomIsPresentException(ErrorCode.FESTIVAL_IS_PRESENT);
+                } catch (CustomIsPresentException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         FestivalEntity festivalEntity = FestivalEntity.builder()
                                                       .name(saveFestivalCommand.getFestivalName())
                                                       .description(saveFestivalCommand.getDescription())
