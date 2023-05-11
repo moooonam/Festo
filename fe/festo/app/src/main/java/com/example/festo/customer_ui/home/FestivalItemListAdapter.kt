@@ -10,28 +10,31 @@ import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
-import java.io.FilterReader
+import com.example.festo.data.res.FestivalListRes
 import java.util.Locale
 
-class FestivalItemListAdapter(private var list: ArrayList<HomeFestivalList>) :
+class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
     RecyclerView.Adapter<FestivalItemListAdapter.ViewHolder>(), Filterable {
 
-    var mDataListAll = ArrayList<HomeFestivalList>(list)
-    var mAccount: MutableList<HomeFestivalList> = list
+    var mDataListAll = ArrayList<FestivalListRes>(list)
+    var mAccount: MutableList<FestivalListRes> = list as MutableList<FestivalListRes>
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        var image: ImageView = itemView.findViewById(R.id.photo_image)
-        var title: TextView = itemView.findViewById(R.id.photo_name_text)
+        var imageUrl: ImageView = itemView.findViewById(R.id.photo_image)
+        var name: TextView = itemView.findViewById(R.id.photo_name_text)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bind(data: HomeFestivalList, position: Int) {
-            image.setImageResource(data.image!!)
-            title.text = data.title
+        fun bind(data: FestivalListRes, position: Int) {
+            Glide.with(itemView.context)
+                .load(data.imageUrl)
+                .into(imageUrl)
+            name.text = data.name
         }
 
         override fun onClick(v: View) {
@@ -59,13 +62,13 @@ class FestivalItemListAdapter(private var list: ArrayList<HomeFestivalList>) :
 
     private val exampleFilter: Filter = object : Filter() {
         override fun performFiltering(constraint: CharSequence): FilterResults {
-            val filteredList: MutableList<HomeFestivalList> = ArrayList()
+            val filteredList: MutableList<FestivalListRes> = ArrayList()
             if (constraint.isEmpty()) {
                 filteredList.addAll(mDataListAll)
             } else {
                 val filterPattern = constraint.toString().lowercase(Locale.getDefault()).trim { it <= ' ' }
                 for (item in mDataListAll) {
-                    if (item.title?.lowercase(Locale.getDefault())!!.contains(filterPattern)) {
+                    if (item.name?.lowercase(Locale.getDefault())!!.contains(filterPattern)) {
                         filteredList.add(item)
                     }
                 }
@@ -77,7 +80,7 @@ class FestivalItemListAdapter(private var list: ArrayList<HomeFestivalList>) :
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
             mAccount.clear()
-            mAccount.addAll(results?.values as Collection<HomeFestivalList>)
+            mAccount.addAll(results?.values as Collection<FestivalListRes>)
             notifyDataSetChanged()
         }
     }

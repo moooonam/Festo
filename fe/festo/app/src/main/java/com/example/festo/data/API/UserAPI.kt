@@ -8,6 +8,7 @@ import com.example.festo.data.res.BoothMenuListRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.LoginRes
+import com.example.festo.data.res.SearchFestivalRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserNotificationListRes
 import com.google.gson.Gson
@@ -40,6 +41,9 @@ interface UserAPI {
 
     @GET("festivals")
     fun getFestivalList(@Header("Authorization") token: String): Call<List<FestivalListRes>>
+
+    /*@GET("festivals/search")
+    fun searchFestival(@Header("Authorization") token: String): Call<List<SearchFestivalRes>>*/
 
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
     @GET("api/v1/members/me")

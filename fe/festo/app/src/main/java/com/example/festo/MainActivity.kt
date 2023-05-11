@@ -46,33 +46,6 @@ class MainActivity : AppCompatActivity() {
             else if (tokenInfo != null) {
                 Log.i("엑세스 유지: ", tokenInfo.toString())
                 Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                // 카카오 SDK 유저정보 불러오기
-                UserApiClient.instance.me { user, error ->
-                    if (error != null) {
-                        Log.i("카카오 유저정보","사용자 정보 요청 실패 $error")
-                    } else if (user != null) {
-                        Log.i("카카오 유저정보", "사용자 정보 요청 성공 $user")
-                        // request 보낼 데이터 정의
-                        val request = LoginReq(
-                            authId = user.id,
-                            nickName = user?.kakaoAccount?.profile?.nickname,
-                            profileImgUrl = user?.kakaoAccount?.profile?.profileImageUrl
-                        )
-                        // request 보내고 콜백으로 LoginRes 데이터파일에 맞게 받아오기
-                        api.login(request).enqueue(object : retrofit2.Callback<LoginRes> {
-                            override fun onResponse(call: Call<LoginRes>, response: Response<LoginRes>) {
-                                Log.i("토큰 받기", "refresh_token ${response.body()?.refreshToken}")
-                                // 받은 토큰 sharedprefereces로 저장하기
-                                editor.putString("access_token", response.body()?.accessToken)
-                                editor.putString("myToken", response.body()?.refreshToken)
-                                editor.apply()
-                            }
-                            override fun onFailure(call: Call<LoginRes>, t: Throwable) {
-                                Log.i("정보요청 실패", "$t")
-                            }
-                        })
-                    }
-                }
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
@@ -119,7 +92,34 @@ class MainActivity : AppCompatActivity() {
             }
             else if (token != null) {
                 Toast.makeText(this, "로그인에 성공하였습니다.", Toast.LENGTH_SHORT).show()
-                Log.i("토큰: ", token.toString())
+                // Log.i("토큰: ", token.toString())
+                // 카카오 SDK 유저정보 불러오기
+                UserApiClient.instance.me { user, error ->
+                    if (error != null) {
+                        Log.i("카카오 유저정보","사용자 정보 요청 실패 $error")
+                    } else if (user != null) {
+                        Log.i("카카오 유저정보", "사용자 정보 요청 성공 $user")
+                        // request 보낼 데이터 정의
+                        val request = LoginReq(
+                            authId = user.id,
+                            nickname = user?.kakaoAccount?.profile?.nickname,
+                            profileImageUrl = user?.kakaoAccount?.profile?.profileImageUrl
+                        )
+                        // request 보내고 콜백으로 LoginRes 데이터파일에 맞게 받아오기
+                        api.login(request).enqueue(object : retrofit2.Callback<LoginRes> {
+                            override fun onResponse(call: Call<LoginRes>, response: Response<LoginRes>) {
+                                Log.i("토큰 받기", "refresh_token ${response.body()?.refreshToken}")
+                                // 받은 토큰 sharedprefereces로 저장하기
+                                editor.putString("access_token", response.body()?.accessToken)
+                                editor.putString("myToken", response.body()?.refreshToken)
+                                editor.apply()
+                            }
+                            override fun onFailure(call: Call<LoginRes>, t: Throwable) {
+                                Log.i("정보요청 실패", "$t")
+                            }
+                        })
+                    }
+                }
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
