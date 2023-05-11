@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 public class OrderSummaryResponse {
 
+
     private final String festivalName;
 
     private final OrderNo orderNo;
@@ -15,6 +16,8 @@ public class OrderSummaryResponse {
     private final String boothName;
 
     private final String imageUrl;
+
+    private final Long orderId;
 
     private final OrderStatus orderStatus;
 
@@ -29,6 +32,7 @@ public class OrderSummaryResponse {
         this.boothName = order.getBoothInfo().getBoothName();
         this.imageUrl = festivalInfo.getImageUrl();
         this.orderStatus = order.getOrderStatus();
+        this.orderId = order.getOrderId();
         this.productName = firstMenu.getName();
         this.etcCount = order.getOrderLines().size() - 1;
     }
