@@ -64,6 +64,11 @@ public class OrderEntity {
         this.orderStatus = orderStatus;
     }
 
+    @PrePersist
+    public void onPrePersist(){
+        this.orderTime = LocalDateTime.now();
+    }
+
     public void updateStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
