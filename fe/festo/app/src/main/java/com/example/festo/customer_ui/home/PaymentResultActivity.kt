@@ -65,7 +65,10 @@ class PaymentResultActivity : AppCompatActivity() {
         // 주문 retrofit 전송
         println(orderReq)
         val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.orderMenu(orderReq).enqueue(object : Callback<Void> {
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.orderMenu(token, orderReq).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     println("주문성공!!!!!!!!!!!!!!!!!!!")

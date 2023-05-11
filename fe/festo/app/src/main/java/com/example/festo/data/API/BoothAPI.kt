@@ -75,15 +75,10 @@ interface BoothAPI {
     ) : Call<Long>
 
     // 부스 등록 전 축제 코드 입력
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @GET("festivals/invitation")
-    fun getFestivalCodeCheck(@Query("inviteCode") code: String): Call<FestivalIdRes>
+    fun getFestivalCodeCheck(@Header("Authorization") token: String, @Query("inviteCode") code: String): Call<FestivalIdRes>
 
     // 부스 영업 상태 변경
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
-    @PATCH("/booths/{booth_id}/status")
-    fun changeBoothStatus(
-        @Path("booth_id") booth_id: String,
-        @Body data: BoothStatusReq
-    ): Call<Void>
+     @PATCH("/booths/{booth_id}/status")
+    fun changeBoothStatus(@Header("Authorization") token: String, @Path("booth_id") booth_id: String, @Body data: BoothStatusReq): Call<Void>
 }

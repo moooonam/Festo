@@ -1,6 +1,7 @@
 package com.example.festo.host_ui.boothlist
 
 import RetrofitClient
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -53,7 +54,10 @@ class BoothListFragment : Fragment() {
 
         // 부스 리스트 조회
         val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.getBoothList().enqueue(object : Callback<List<BoothListRes>> {
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.getBoothList(token, "1").enqueue(object : Callback<List<BoothListRes>> {
             override fun onResponse(
                 call: Call<List<BoothListRes>>,
                 response: Response<List<BoothListRes>>

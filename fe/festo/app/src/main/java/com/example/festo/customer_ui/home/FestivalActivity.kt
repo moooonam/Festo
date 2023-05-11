@@ -1,6 +1,7 @@
 package com.example.festo.customer_ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -24,23 +25,12 @@ import java.util.Locale
 class FestivalActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var boothList = emptyList<BoothListRes>()
-    // 예시 데이터 정의
-//    var BoothList = arrayListOf<Booth>(
-//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-//        Booth(R.drawable.logo1, "이름1", "카테고리1", "엄청맛있어욥", "5", "10", "12"),
-//        Booth(R.drawable.logo2, "이름2", "카테고리2", "우와아아아아", "7", "25", "27"),
-//        Booth(R.drawable.logo3, "이름3", "카테고리3", "잠온다", "1", "5", "10"),
-//    )
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_festival)
+        val festival_id = intent.getStringExtra("festivalId")
 
         // 하나의 축제에 대한 부스 리스트 어댑터 연결
 //        val Adapter = BoothAdapter(this, BoothList)
@@ -55,8 +45,11 @@ class FestivalActivity : AppCompatActivity() {
         }
 
         // 축제 상세정보 조회
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
         val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.getFestivalDetail().enqueue(object : Callback<FestivalInfoRes> {
+        postApi!!.getFestivalDetail(token, festival_id).enqueue(object : Callback<FestivalInfoRes> {
             override fun onResponse(
                 call: Call<FestivalInfoRes>,
                 response: Response<FestivalInfoRes>
@@ -96,7 +89,7 @@ class FestivalActivity : AppCompatActivity() {
 
 
         // 부스 리스트 조회
-        postApi!!.getBoothList().enqueue(object : Callback<List<BoothListRes>> {
+        postApi!!.getBoothList(token, festival_id).enqueue(object : Callback<List<BoothListRes>> {
             override fun onResponse(
                 call: Call<List<BoothListRes>>,
                 response: Response<List<BoothListRes>>
@@ -107,7 +100,7 @@ class FestivalActivity : AppCompatActivity() {
                     Log.d(" 테스트", "${response.body()}")
                     boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
-                    val Adapter = BoothAdapter(this@FestivalActivity, boothList)
+                    val Adapter = BoothAdapter(this@FestivalActivity, boothList, token)
                     val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
                     list_view.adapter = Adapter
 

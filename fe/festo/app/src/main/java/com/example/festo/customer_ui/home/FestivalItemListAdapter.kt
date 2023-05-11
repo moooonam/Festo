@@ -11,10 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.annotation.GlideModule
 import com.example.festo.R
 import com.example.festo.data.res.FestivalListRes
 import java.util.Locale
 
+@GlideModule
 class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
     RecyclerView.Adapter<FestivalItemListAdapter.ViewHolder>(), Filterable {
 
@@ -40,7 +42,8 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
         override fun onClick(v: View) {
             val context: Context = v.context
             val intent = Intent(context, FestivalActivity::class.java)
-            // 인텐트에 필요한 데이터를 추가하는 경우에는 여기서 추가합니다.
+            val data = list[adapterPosition]
+            intent.putExtra("festivalId", data.festivalId.toString())
             context.startActivity(intent)
         }
     }

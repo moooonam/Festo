@@ -1,6 +1,7 @@
 package com.example.festo.booth_ui.home
 
 
+import RetrofitClient
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -23,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.API.UserAPI
@@ -31,7 +33,6 @@ import com.example.festo.data.req.RegiMenuReq
 import com.example.festo.data.req.RegisterMenuReq
 import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothMenuListRes
-import com.example.festo.data.res.RegisterBoothRes
 import com.example.festo.databinding.FragmentBoothHomeBinding
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -185,7 +186,10 @@ class BoothHomeFragment : Fragment() {
         val postApi = retrofit?.create(UserAPI::class.java)
         var boothStatus: String // 부스 현재 상태
         var change = "CLOSE"// 부스 상태 바꿀때 보낼 req
-        postApi!!.getBoothDetail("1").enqueue(object : Callback<BoothDetailRes> {
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.getBoothDetail(token,"1").enqueue(object : Callback<BoothDetailRes> {
             override fun onResponse(
                 call: Call<BoothDetailRes>,
                 response: Response<BoothDetailRes>
@@ -194,6 +198,7 @@ class BoothHomeFragment : Fragment() {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body())
                     Log.d(" 테스트", "${response.body()}")
+                    val boothImage = view.findViewById<ImageView>(R.id.boothImage)
                     val boothNameTop = view.findViewById<TextView>(R.id.boothNameTop)
                     val boothName = view.findViewById<TextView>(R.id.boothName)
                     val boothOperatingTime = view.findViewById<TextView>(R.id.boothOperatingTime)
@@ -209,6 +214,9 @@ class BoothHomeFragment : Fragment() {
                     }
 
                     // 데이터 xml에 입력
+                    Glide.with(requireContext())
+                        .load(response.body()?.imageUrl)
+                        .into(boothImage);
                     boothNameTop.text = response.body()?.name
                     boothName.text = response.body()?.name
                     boothLocation.text = response.body()?.locationDescription
@@ -225,10 +233,7 @@ class BoothHomeFragment : Fragment() {
 
 
         // 부스 메뉴 리스트 retrofit
-        val tokenValue =
-            "eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo"
-        val token = "Bearer $tokenValue"
-        postApi!!.getBoothMenuList(token).enqueue(object : Callback<List<BoothMenuListRes>> {
+        postApi!!.getBoothMenuList(token, "1").enqueue(object : Callback<List<BoothMenuListRes>> {
             override fun onResponse(
                 call: Call<List<BoothMenuListRes>>,
                 response: Response<List<BoothMenuListRes>>
@@ -257,12 +262,12 @@ class BoothHomeFragment : Fragment() {
         changeStatusBtn.setOnClickListener {
             // 부스 영업 상태 변경 retrofit
             val postApiStatus = retrofit?.create(BoothAPI::class.java)
-            postApiStatus!!.changeBoothStatus("1", BoothStatusReq(change))
+            postApiStatus!!.changeBoothStatus(token, "1", BoothStatusReq(change))
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             println("상태변경성공!!!!!!!!!!!!!!!!!!!")
-                            postApi!!.getBoothDetail("1").enqueue(object : Callback<BoothDetailRes> {
+                            postApi!!.getBoothDetail(token,"1").enqueue(object : Callback<BoothDetailRes> {
                                 override fun onResponse(
                                     call: Call<BoothDetailRes>,
                                     response: Response<BoothDetailRes>
