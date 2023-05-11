@@ -33,10 +33,10 @@ class NoBoothMainFragment : Fragment() {
         var binding = FragmentNoBoothMainBinding.inflate(inflater, container, false)
         mBinding = binding
 
-//        val code = mBinding!!.festivalCode.text.toString()
-        val code = "290552"
+
         // 축제 코드 확인 후 부스 등록 페이지로 이동
         mBinding!!.goRegister.setOnClickListener {
+            var code = mBinding!!.festivalCode.text.toString()
             val postApi = retrofit?.create(BoothAPI::class.java)
             postApi!!.getFestivalCodeCheck(code).enqueue(object : Callback<FestivalIdRes> {
                 override fun onResponse(
@@ -45,16 +45,18 @@ class NoBoothMainFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         println("성공!!!!!!!!!!!!!!!!!!!")
-                        Log.d(" 테스트", "${response.body()}")
+                        Log.d(" 테스트", "${response.body()?.festivalId}")
+                        Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
                         val transaction = fragmentManager?.beginTransaction()
-//                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
-                        transaction?.replace(R.id.no_booth_layout_nav_bottom, BoothHomeFragment())
+                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
+//                        transaction?.replace(R.id.no_booth_layout_nav_bottom, BoothHomeFragment())
                         transaction?.commit()
+                    } else {
+                        Toast.makeText(activity, "축제 코드를 확인해 주세요", Toast.LENGTH_SHORT).show()
                     }
                 }
                 override fun onFailure(call: Call<FestivalIdRes>, t: Throwable) {
                     println("실패!!!!!!!!!!!!!!!!!!!")
-                    Toast.makeText(activity, "축제 코드를 확인해 주세요", Toast.LENGTH_SHORT).show()
                     t.printStackTrace()
                 }
             })
