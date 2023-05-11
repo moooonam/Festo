@@ -38,7 +38,7 @@ public class OrderEntity {
     private BoothEntity booth;
 
     @ManyToOne
-    @Column(nullable = false)
+    @JoinColumn(name = "orderer_id")
     private Member orderer;
 
     @Column(nullable = false)
