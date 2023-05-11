@@ -3,6 +3,7 @@ package com.example.festo.data.res
 import java.time.LocalDateTime
 
 class BoothOrderListCompleteRes (
+    val orderId: Long,
     val orderNo: CompleteOderNumber,
     val orderStatus: String,
     val time: String,

@@ -1,8 +1,10 @@
 package com.example.festo.data.API
 
 import com.example.festo.data.req.BoothStatusReq
+import com.example.festo.data.req.ChangeOrderStateReq
 import com.example.festo.data.req.RegiBoothRequest
 import com.example.festo.data.req.RegiMenuReq
+import com.example.festo.data.res.BoothOrderDetailRes
 import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.data.res.BoothOrderListRes
 import com.example.festo.data.res.FestivalIdRes
@@ -11,6 +13,7 @@ import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
@@ -23,9 +26,9 @@ interface BoothAPI {
 
     // 부스 등록하기
     @Multipart
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @POST("festivals/{festival_id}/booths")
     fun registerBooth(
+        @Header("Authorization") token: String,
         @Path("festival_id") festival_id: String,
         @Part("request") request: RegiBoothRequest,
         @Part boothImg: MultipartBody.Part
@@ -33,23 +36,43 @@ interface BoothAPI {
 
     // 메뉴 등록하기
     @Multipart
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @POST("booths/{booth_id}/menu")
     fun registerMenu(
-        @Path("booth_id") booth_id:String,
+        @Header("Authorization") token: String,
+        @Path("booth_id") booth_id: String,
         @Part("request") request: RegiMenuReq,
         @Part productImage: MultipartBody.Part
     ): Call<Long>
 
     // 부스 신규,준비중 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @GET("booths/{booth_id}/orders?completed=false")
-    fun getBoothOrderList(@Path("booth_id") booth_id: String): Call<List<BoothOrderListRes>>
+    fun getBoothOrderList(
+        @Header("Authorization") token: String,
+        @Path("booth_id") booth_id: String
+    ): Call<List<BoothOrderListRes>>
 
     // 부스 완료된 주문내역 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
+
     @GET("booths/{booth_id}/orders?completed=true")
-    fun getBoothOrderListComplete(@Path("booth_id") booth_id: String): Call<List<BoothOrderListCompleteRes>>
+    fun getBoothOrderListComplete(
+        @Header("Authorization") token: String,
+        @Path("booth_id") booth_id: String
+    ): Call<List<BoothOrderListCompleteRes>>
+
+    // 주문상세내역 조회
+    @GET("orders/{order_id}")
+    fun getBoothOrderDetail(
+        @Header("Authorization") token: String,
+        @Path("order_id") order_id: String
+    ) : Call<BoothOrderDetailRes>
+
+    // 주문상태변경
+    @PATCH("/orders/{order_id}/status")
+    fun changeOrderStatus(
+        @Header("Authorization") token: String,
+        @Path("order_id") order_id: String,
+        @Body data: ChangeOrderStateReq
+    ) : Call<Long>
 
     // 부스 등록 전 축제 코드 입력
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
@@ -59,5 +82,8 @@ interface BoothAPI {
     // 부스 영업 상태 변경
     @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc4MzUsInN1YiI6IjIiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzODM1fQ.TtSFsz7ScldLe5Ny1WhDX8oxs_L9Dz12BQ0d4_6AePo")
     @PATCH("/booths/{booth_id}/status")
-    fun changeBoothStatus(@Path("booth_id") booth_id: String, @Body data: BoothStatusReq): Call<Void>
+    fun changeBoothStatus(
+        @Path("booth_id") booth_id: String,
+        @Body data: BoothStatusReq
+    ): Call<Void>
 }

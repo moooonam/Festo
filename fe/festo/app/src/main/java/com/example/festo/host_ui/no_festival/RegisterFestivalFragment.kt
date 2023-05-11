@@ -2,6 +2,7 @@ package com.example.festo.host_ui.no_festival
 
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.icu.text.SimpleDateFormat
@@ -131,11 +132,16 @@ class RegisterFestivalFragment : Fragment() {
                     startDate,
                     endDate
                 )
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                val myValue = sharedPreferences.getString("myToken", "")
+                val token = "$myValue"
                 val data = RegisterFestivalReq(request, imagePart)
                 Log.d("과연", "${data}")
                 fun postRegisterFestival() {
                     val postApi = retrofit?.create(HostAPI::class.java)
                     postApi!!.registerFestival(
+                        token,
                         request, imagePart
                     )
                         .enqueue(object : Callback<RegisterFestivalRes> {

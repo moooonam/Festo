@@ -4,6 +4,7 @@ package com.example.festo.booth_ui.no_booth
 import RetrofitClient
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.icu.util.Calendar
@@ -112,12 +113,16 @@ class RegisterBoothFragment : Fragment() {
                     binding.tvEndTime.text.toString()
 
                 )
+                val sharedPreferences =
+                    requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                val myValue = sharedPreferences.getString("myToken", "")
+                val token = "$myValue"
                 val data = RegisterBoothReq(request, imagePart)
                 Log.d("제발", "${data}")
                 fun postRegisterBooth() {
                     Log.d("이미지파트", "${imagePart.body}")
                     val postApi = retrofit?.create(BoothAPI::class.java)
-                    postApi!!.registerBooth(
+                    postApi!!.registerBooth( token,
                         "1", request, imagePart
                     )
                         .enqueue(object : Callback<RegisterBoothRes> {
