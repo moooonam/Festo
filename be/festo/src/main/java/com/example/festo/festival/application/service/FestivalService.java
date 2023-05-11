@@ -34,7 +34,12 @@ public class FestivalService implements RegisterFestivalUseCase, GetFestivalsUse
                 .build();
 
         Long saveFestivalId = saveFestivalPort.saveFestival(saveFestivalCommand,registerFestivalCommand.getManagerId());
-        String imgUrl = saveImgPort.saveFestivalImg(registerFestivalCommand.getImg(),saveFestivalId);
+
+        String imgUrl=null;
+
+        if(!registerFestivalCommand.getImg().isEmpty()){
+            imgUrl = saveImgPort.saveFestivalImg(registerFestivalCommand.getImg(),saveFestivalId);
+        }
 
         saveFestivalId = saveFestivalPort.updateSetImg(saveFestivalId,imgUrl);
         return saveFestivalId;
