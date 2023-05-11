@@ -2,6 +2,7 @@ package com.example.festo.order.adapter.in.web.model;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderMenu {
 
-    @NotBlank(message = "[Request] menuId는 빈 값일 수 없습니다.")
+    @NotNull(message = "[Request] menuId는 빈 값일 수 없습니다.")
     private Long menuId;
 
     @Min(value = 1, message = "[Request] quantity는 최소 1 이상이어야 합니다.")
