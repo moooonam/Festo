@@ -35,12 +35,12 @@ class MypageFragment : Fragment() {
         mBinding = binding
         mBinding!!.ivProfile2.setOnClickListener{
             // 등록된 부스가 있는 경우
-//            val intent = Intent(getActivity(), BoothMainActivity::class.java)
-//            startActivity(intent)
+            val intent = Intent(getActivity(), BoothMainActivity::class.java)
+            startActivity(intent)
 
             // 등록된 부스가 없는 경우
-            val intent = Intent(getActivity(), NoBoothMainActivity::class.java)
-            startActivity(intent)
+//            val intent = Intent(getActivity(), NoBoothMainActivity::class.java)
+//            startActivity(intent)
         }
 
         mBinding!!.ivProfile3.setOnClickListener{

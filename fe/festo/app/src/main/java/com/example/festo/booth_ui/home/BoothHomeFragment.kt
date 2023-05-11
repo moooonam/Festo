@@ -4,6 +4,8 @@ package com.example.festo.booth_ui.home
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -28,10 +30,15 @@ import com.example.festo.data.req.RegiMenuReq
 import com.example.festo.data.req.RegisterMenuReq
 import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.RegisterBoothRes
 import com.example.festo.databinding.FragmentBoothHomeBinding
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 //class MenuListData(
 //    var image: Int? = null,
@@ -42,7 +49,7 @@ import retrofit2.Response
 class BoothHomeFragment : Fragment() {
     private var retrofit = RetrofitClient.client
     private var menuList = emptyList<BoothMenuListRes>()
-
+    private lateinit var imagePart: MultipartBody.Part
     private lateinit var listAdapter: MenuListAdapter
     private var mBinding: FragmentBoothHomeBinding? = null
     private var alertDialog: AlertDialog? = null
@@ -52,10 +59,27 @@ class BoothHomeFragment : Fragment() {
                 val data: Intent? = result.data
                 val selectedImageUri = data?.data
                 val addImgBtn = alertDialog?.findViewById<ImageView>(R.id.menu_img)
+                imagePart = getImageBody(data?.data!!)
                 addImgBtn?.setImageURI(selectedImageUri)
             }
         }
+    private fun getImageBody(uri: Uri): MultipartBody.Part {
+        val filePath = getRealPathFromURI(uri)
+        val file = File(filePath)
+        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+        return MultipartBody.Part.createFormData("productImage", file.name, requestFile)
+    }
 
+    fun getRealPathFromURI(path: Uri): String {
+
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor? = requireActivity().contentResolver.query(path, proj, null, null, null)
+        var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+        var result = c?.getString(index!!)
+
+        return result!!
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,7 +103,6 @@ class BoothHomeFragment : Fragment() {
             .setPositiveButton("추가하기") { dialogInterface, _ ->
                 val photo = dialogView.findViewById<ImageView>(R.id.menu_img)
                 val meueName = dialogView.findViewById<EditText>(R.id.text1EditText).text.toString()
-
                 if (meueName.isEmpty()) {
                     Toast.makeText(requireActivity(), "메뉴 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
                 } else if (dialogView.findViewById<EditText>(R.id.text2EditText).text.toString()
@@ -92,9 +115,32 @@ class BoothHomeFragment : Fragment() {
 
                     // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
                     val request = RegiMenuReq(meueName, Price)
-                    val data = RegisterMenuReq(request, "이미지들어갈부분")
+                    val data = RegisterMenuReq(request, imagePart)
                     Log.d("잘들어감?", "${data}")
+                    fun postRegisterMenu() {
+                        Log.d("이미지파트", "${imagePart}")
+                        val postApi = retrofit?.create(BoothAPI::class.java)
+                        postApi!!.registerMenu(
+                            "2", request, imagePart
+                        )
+                            .enqueue(object : Callback<Long> {
+                                override fun onResponse(
+                                    call: Call<Long>,
+                                    response: Response<Long>
+                                ) {
+                                    Log.d(
+                                        "부스메뉴테스트트",
+                                        "${response.isSuccessful()}, ${response.code()}, ${response}"
+                                    )
+                                }
 
+                                override fun onFailure(call: Call<Long>, t: Throwable) {
+                                    t.printStackTrace()
+                                    Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+                                }
+                            })
+                    }
+                    postRegisterMenu()
                     dialogInterface.dismiss()
                 }
             }

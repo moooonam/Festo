@@ -1,8 +1,10 @@
 package com.example.festo.data.req
 
+import okhttp3.MultipartBody
+
 data class RegisterMenuReq(
     val request: RegiMenuReq,
-    val producImage: String, //멀티파트 바꿔야행
+    val productImage: MultipartBody.Part, //멀티파트 바꿔야행
 )
 data class RegiMenuReq (
     val productName: String,
