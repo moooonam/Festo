@@ -1,5 +1,7 @@
 package com.example.festo.order.application.service;
 
+import com.example.festo.common.event.Events;
+import com.example.festo.common.event.FcmEvent;
 import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
@@ -31,7 +33,6 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final OrdererService ordererService;
 
-
     @Override
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
@@ -56,6 +57,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         order.updateStatus(orderStatusChangeRequest);
 
         updateOrderPort.updateOrderStatus(order);
+
+        // TODO
+        Events.raise(new FcmEvent("test title", "test content"));
     }
 
     @Override
