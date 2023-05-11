@@ -28,6 +28,7 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
     public Long saveFestival(SaveFestivalCommand saveFestivalCommand, Long managerId) {
         Member manager = memberRepository.findById(managerId)
                                          .orElseThrow(() -> new CustomNoSuchException(ErrorCode.MEMBER_NOT_FOUND));
+        //manager가 운영하고 있는 페스티벌이 있는지 조회
 
         String inviteCode = randomCode();
 
@@ -129,7 +130,10 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public Long loadFestivalIdByInviteCode(String inviteCode) {
+        //현재 운영중인지 체크하고 없으면  nosuch
         FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElseThrow(() -> new CustomNoSuchException(ErrorCode.INVITE_CODE_NOT_FOUND));
+
+
         return festivalEntity.getFestivalId();
     }
 
