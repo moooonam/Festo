@@ -12,10 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -77,18 +76,23 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public List<FestivalResponse.MainPage> findAllFestivals() {
-        List<MainFestivalProjection> mainFestivalProjectionList = festivalRepository.findAllProjectedBy();
-
+        List<FestivalEntity> festivalEntityList = festivalRepository.findAll();
         List<FestivalResponse.MainPage> commandList = new ArrayList<>();
-        for (MainFestivalProjection mainFestivalProjection : mainFestivalProjectionList) {
-            FestivalResponse.MainPage command = FestivalResponse.MainPage.builder()
-                                                                         .festivalId(mainFestivalProjection.getFestivalId())
-                                                                         .imageUrl(mainFestivalProjection.getImageUrl())
-                                                                         .name(mainFestivalProjection.getName())
-                                                                         .build();
+        LocalDate nowDate = LocalDateTime.now().toLocalDate();
+        for (FestivalEntity festivalEntity : festivalEntityList) {
+            if((festivalEntity.getEndDate().isAfter(nowDate)||festivalEntity.getEndDate().isEqual(nowDate)) && (festivalEntity.getStartDate().isBefore(nowDate)||festivalEntity.getStartDate().isEqual(nowDate))){
+                FestivalResponse.MainPage command = FestivalResponse.MainPage.builder()
+                        .festivalId(festivalEntity.getFestivalId())
+                        .imageUrl(festivalEntity.getImageUrl())
+                        .name(festivalEntity.getName())
+                        .startDate(festivalEntity.getStartDate())
+                        .endDate(festivalEntity.getEndDate())
+                        .build();
 
-            commandList.add(command);
+                commandList.add(command);
+            }
         }
+
 
         return commandList;
     }
@@ -130,11 +134,16 @@ public class FestivalPersistenceAdapter implements SaveFestivalPort, LoadFestiva
 
     @Override
     public Long loadFestivalIdByInviteCode(String inviteCode) {
-        //현재 운영중인지 체크하고 없으면  nosuch
         FestivalEntity festivalEntity =festivalRepository.findByInviteCode(inviteCode).orElseThrow(() -> new CustomNoSuchException(ErrorCode.INVITE_CODE_NOT_FOUND));
+        LocalDate nowDate = LocalDateTime.now().toLocalDate();
+        if((festivalEntity.getEndDate().isAfter(nowDate)||festivalEntity.getEndDate().isEqual(nowDate)) && (festivalEntity.getStartDate().isBefore(nowDate)||festivalEntity.getStartDate().isEqual(nowDate))) {
+            return festivalEntity.getFestivalId();
+        }
+        else{
+            throw new CustomNoSuchException(ErrorCode.FESTIVAL_NOT_FOUND);
+        }
 
 
-        return festivalEntity.getFestivalId();
     }
 
     @Override

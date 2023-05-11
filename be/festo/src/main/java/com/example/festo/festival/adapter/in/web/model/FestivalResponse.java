@@ -14,6 +14,8 @@ public class FestivalResponse {
         private Long festivalId;
         private String imageUrl;
         private String name;
+        private LocalDate startDate;
+        private LocalDate endDate;
     }
 
     @Getter
