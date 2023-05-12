@@ -88,8 +88,6 @@ class BoothHomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var boothId = arguments?.getString("boothId")
-        Log.d("제발나와!!12222222222222222222222!!!!11", boothId.toString())
 
         var binding = FragmentBoothHomeBinding.inflate(inflater, container, false)
         mBinding = binding
@@ -174,25 +172,15 @@ class BoothHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        var MenuListDataList: ArrayList<MenuListData> = arrayListOf(
-//            MenuListData(R.drawable.logo1, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo2, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//            MenuListData(R.drawable.logo3, "까사꼬치", 87),
-//        )
 
-        var boothId = arguments?.getString("boothId")
-        Log.d("제발나와!!!!!!!!!!11", boothId.toString())
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val boothId = sharedPreferences.getString("boothId", "")
 
         // 부스 상세정보 retrofit. 일단 1로 고정해놨음
         val postApi = retrofit?.create(UserAPI::class.java)
         var boothStatus: String // 부스 현재 상태
         var change = "CLOSE"// 부스 상태 바꿀때 보낼 req
-        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+//        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
         postApi!!.getBoothDetail(token, boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
@@ -308,17 +296,6 @@ class BoothHomeFragment : Fragment() {
                         t.printStackTrace()
                     }
                 })
-        }
-    }
-
-    companion object {
-        fun newInstance(boothId: Long): BoothHomeFragment {
-            val args = Bundle().apply {
-                putLong("boothId", boothId)
-            }
-            return BoothHomeFragment().apply {
-                arguments = args
-            }
         }
     }
 

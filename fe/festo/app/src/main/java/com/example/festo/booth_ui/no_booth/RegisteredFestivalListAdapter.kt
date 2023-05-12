@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.no_booth
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -39,12 +40,20 @@ class RegisteredFestivalListAdapter(private var list: List<MyBoothListRes>) :
             name.text = data.name
         }
 
+        @SuppressLint("CommitPrefEdits")
         override fun onClick(v: View) {
             val context: Context = v.context
-            val intent = Intent(context, BoothMainActivity::class.java)
             val data = list[adapterPosition]
-            intent.putExtra("boothId", data.boothId)
+            // SharedPreferences 인스턴스 생성
+            val sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
+            val editor = sharedPreferences.edit()
+            editor.putString("boothId", data.boothId.toString())
+            editor.apply() // 또는 editor.commit() 사용 가능
+
+            val intent = Intent(context, BoothMainActivity::class.java)
             context.startActivity(intent)
+
         }
     }
 

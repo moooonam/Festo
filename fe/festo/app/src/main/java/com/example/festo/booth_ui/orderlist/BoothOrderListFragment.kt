@@ -57,17 +57,18 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
         super.onViewCreated(view, savedInstanceState)
 
         // 전달받은 부스 아이디
-        val boothId = arguments?.getLong("boothId")
-        Log.d("주문내역에서 부스아이디출력", "$boothId")
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val boothId = sharedPreferences.getString("boothId", "")
+
 
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
-            val sharedPreferences =
-                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+//            val sharedPreferences =
+//                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
             val myValue = sharedPreferences.getString("myToken", "")
             val token = "$myValue"
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderList(token,"4").enqueue(object : Callback<List<BoothOrderListRes>> {
+            postApi!!.getBoothOrderList(token, boothId.toString()).enqueue(object : Callback<List<BoothOrderListRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!
@@ -88,17 +89,6 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
             })
         }
         getBoothOrderList()
-    }
-
-    companion object {
-        fun newInstance(boothId: Long): BoothOrderListFragment {
-            val args = Bundle().apply {
-                putLong("boothId", boothId)
-            }
-            return BoothOrderListFragment().apply {
-                arguments = args
-            }
-        }
     }
 
     override fun onDestroyView() {

@@ -80,24 +80,6 @@ class BoothMypageFragment : Fragment() {
         return  mBinding?.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // 전달받은 부스 아이디
-        val boothId = arguments?.getLong("boothId")
-        Log.d("마이페이지에서 부스아이디출력", "$boothId")
-    }
-
-    companion object {
-        fun newInstance(boothId: Long): BoothMypageFragment {
-            val args = Bundle().apply {
-                putLong("boothId", boothId)
-            }
-            return BoothMypageFragment().apply {
-                arguments = args
-            }
-        }
-    }
 
     override fun onDestroyView() {
         mBinding = null

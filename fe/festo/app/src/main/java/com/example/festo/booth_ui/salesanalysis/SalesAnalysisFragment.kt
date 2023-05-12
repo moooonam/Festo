@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.salesanalysis
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -154,8 +155,9 @@ class SalesAnalysisFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 전달받은 부스 아이디
-        val boothId = arguments?.getLong("boothId")
-        Log.d("매출분석에서 부스아이디출력", "$boothId")
+        // 전달받은 부스 아이디
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val boothId = sharedPreferences.getString("boothId", "")
 
 
         var NewMenuDataList : ArrayList <NewMenuData> = arrayListOf(
@@ -166,17 +168,6 @@ class SalesAnalysisFragment : Fragment() {
         listAdapter = NewMenuListAdapter(NewMenuDataList)
         mBinding?.newMenuListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.newMenuListView?.adapter = listAdapter
-    }
-
-    companion object {
-        fun newInstance(boothId: Long): SalesAnalysisFragment {
-            val args = Bundle().apply {
-                putLong("boothId", boothId)
-            }
-            return SalesAnalysisFragment().apply {
-                arguments = args
-            }
-        }
     }
 
     override fun onDestroyView() {
