@@ -1,27 +1,39 @@
 package com.example.festo.booth_ui.orderlist
 
+import android.app.FragmentManager
+import android.app.FragmentTransaction
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.data.API.BoothAPI
+import com.example.festo.data.API.OnBoothOrderListCompleteListener
 import com.example.festo.data.res.BoothOrderListRes
 import com.example.festo.databinding.FragmentBoothOrderlistBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BoothOrderListFragment : Fragment() {
+class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
     private  lateinit var listAdapter: BoothOrderListAdapter
     private var retrofit = RetrofitClient.client
     private var orderListData = emptyList<BoothOrderListRes>()
     private var mBinding : FragmentBoothOrderlistBinding? = null
+
+    override fun onBoothOrderListComplete() {
+        val transaction = fragmentManager?.beginTransaction()
+        transaction?.replace(R.id.booth_layout_nav_bottom, BoothOrderListFragment())
+        transaction?.commit()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,12 +57,16 @@ class BoothOrderListFragment : Fragment() {
 
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
+            val sharedPreferences =
+                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            val myValue = sharedPreferences.getString("myToken", "")
+            val token = "$myValue"
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderList("2").enqueue(object : Callback<List<BoothOrderListRes>> {
+            postApi!!.getBoothOrderList(token,"4").enqueue(object : Callback<List<BoothOrderListRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!
-                        listAdapter = BoothOrderListAdapter(orderListData as MutableList<BoothOrderListRes>)
+                        listAdapter = BoothOrderListAdapter( orderListData as MutableList<BoothOrderListRes>, token, this@BoothOrderListFragment)
                         mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                         mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
 //                    Log.d("테스트중", "onResponse: ${response.body()}")
@@ -73,4 +89,5 @@ class BoothOrderListFragment : Fragment() {
         mBinding = null
         super.onDestroyView()
     }
+
 }

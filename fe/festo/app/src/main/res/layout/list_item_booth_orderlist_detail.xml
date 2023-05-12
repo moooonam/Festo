@@ -18,7 +18,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="5dp"
             android:text="메뉴"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
 
 
 
@@ -29,7 +29,7 @@
             android:layout_marginStart="13dp"
             android:layout_marginTop="5dp"
             android:text="주문수량"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
 
 
     </LinearLayout>

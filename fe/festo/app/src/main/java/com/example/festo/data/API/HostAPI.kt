@@ -21,10 +21,10 @@ import retrofit2.http.Path
 interface HostAPI {
 
     //축제 등록
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNzIzNzg5LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5MDc3ODksInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNzIzNzg5fQ.AASSSNLIMLfhVMAkhwRhZswzoSoYdqrOhqZYTGt74aA")
     @Multipart
     @POST("festivals")
     fun registerFestival(
+        @Header("Authorization") token: String,
         @Part("request") request: RegiFestivalRequest,
         @Part festivalImg: MultipartBody.Part
     ): Call<RegisterFestivalRes>

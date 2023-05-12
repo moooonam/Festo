@@ -119,11 +119,15 @@ class BoothHomeFragment : Fragment() {
                     val request = RegiMenuReq(meueName, Price)
                     val data = RegisterMenuReq(request, imagePart)
                     Log.d("잘들어감?", "${data}")
+                    val sharedPreferences =
+                        requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                    val myValue = sharedPreferences.getString("myToken", "")
+                    val token = "$myValue"
                     fun postRegisterMenu() {
                         Log.d("이미지파트", "${imagePart}")
                         val postApi = retrofit?.create(BoothAPI::class.java)
                         postApi!!.registerMenu(
-                            "2", request, imagePart
+                            token,"4", request, imagePart
                         )
                             .enqueue(object : Callback<Long> {
                                 override fun onResponse(

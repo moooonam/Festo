@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.orderlist
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,14 +21,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class BoothOrderListCompleteData(
-    var id: Int?= null,
-    var ordernum: String? = null,
-    var orderdate: String? = null,
-    var ordertime: String? = null,
-    var orderList: String? = null,
-    var etcnum: Int? = null,
-)
+
 
 class BoothOrderListCompleteFragment : Fragment() {
     private  lateinit var listAdapter: BoothOrderListCompleteAdapter
@@ -56,8 +50,12 @@ class BoothOrderListCompleteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fun getCompleteBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
+            val sharedPreferences =
+                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            val myValue = sharedPreferences.getString("myToken", "")
+            val token = "$myValue"
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderListComplete("2").enqueue(object : Callback<List<BoothOrderListCompleteRes>> {
+            postApi!!.getBoothOrderListComplete(token,"4").enqueue(object : Callback<List<BoothOrderListCompleteRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListCompleteRes>>, response: Response<List<BoothOrderListCompleteRes>>) {
                     if (response.isSuccessful) {
                         completeOrderListData = response.body()!!
@@ -79,11 +77,7 @@ class BoothOrderListCompleteFragment : Fragment() {
             })
         }
         getCompleteBoothOrderList()
-        var BoothOrderCompleteListDataList: ArrayList<BoothOrderListCompleteData> = arrayListOf(
-            BoothOrderListCompleteData(1,"01","2023.05.03","15:00","닭꼬치",2),
-            BoothOrderListCompleteData(2,"02","2023.05.03","15:00","닭꼬치이잉이이이이",2),
-            BoothOrderListCompleteData(3,"03","2023.05.03","15:00","닭꼬치",2),
-        )
+
     }
 
     override fun onDestroyView() {

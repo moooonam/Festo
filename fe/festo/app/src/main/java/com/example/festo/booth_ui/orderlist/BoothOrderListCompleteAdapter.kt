@@ -22,11 +22,11 @@ class BoothOrderListCompleteAdapter(private var list: MutableList<BoothOrderList
 
             val clickedItem = list[position]
 
-//            val fragment = BoothOrderListDetailFragment.newInstance2(clickedItem)
-//            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
-//            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
-//                .addToBackStack(null)
-//                .commit()
+            val fragment = BoothOrderListDetailFragment.newInstance2(clickedItem)
+            val fragmentManager = (v?.context as BoothMainActivity).supportFragmentManager
+            fragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, fragment)
+                .addToBackStack(null)
+                .commit()
         }
         var ordernum: TextView = itemView!!.findViewById(R.id.tv_booth_ordernum_complete)
         var orderdate: TextView = itemView!!.findViewById(R.id.tv_booth_orderdate_complete)
@@ -34,8 +34,9 @@ class BoothOrderListCompleteAdapter(private var list: MutableList<BoothOrderList
         var orderlist: TextView = itemView!!.findViewById(R.id.tv_booth_orderlist_complete)
         fun bind(data: BoothOrderListCompleteRes, position: Int) {
             ordernum.text = data.orderNo.number.toString()
-            orderdate.text = data.time
-//            ordertime.text = data.ordertime
+            var time = data.time
+            orderdate.text = time.substring(0 until 10)
+            ordertime.text = time.substring(11)
             orderlist.text = "${data.firstMenuName} 외 ${data.etcCount.toString()}개"
         }
 
