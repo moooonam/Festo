@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.festo.booth_ui.BoothMainActivity
+import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.IsHaveFestivalRes
@@ -78,6 +79,7 @@ class BoothMypageFragment : Fragment() {
         }
         return  mBinding?.root
     }
+
 
     override fun onDestroyView() {
         mBinding = null

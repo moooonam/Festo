@@ -50,12 +50,13 @@ class BoothOrderListCompleteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fun getCompleteBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
-            val sharedPreferences =
-                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            // 전달받은 부스 아이디
+            val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            val boothId = sharedPreferences.getString("boothId", "")
             val myValue = sharedPreferences.getString("myToken", "")
             val token = "$myValue"
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderListComplete(token,"4").enqueue(object : Callback<List<BoothOrderListCompleteRes>> {
+            postApi!!.getBoothOrderListComplete(token,boothId.toString()).enqueue(object : Callback<List<BoothOrderListCompleteRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListCompleteRes>>, response: Response<List<BoothOrderListCompleteRes>>) {
                     if (response.isSuccessful) {
                         completeOrderListData = response.body()!!

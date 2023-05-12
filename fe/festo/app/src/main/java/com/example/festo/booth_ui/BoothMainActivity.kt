@@ -2,6 +2,7 @@ package com.example.festo.booth_ui
 
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.booth_ui.home.BoothHomeFragment
@@ -19,9 +20,10 @@ class BoothMainActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityBoothMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_booth_main)
+        setContentView(mBinding.root)
         supportFragmentManager.beginTransaction().replace(R.id.booth_layout_nav_bottom, BoothHomeFragment()).commit()
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.booth_bottom_nav)
+
 
         bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {

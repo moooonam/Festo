@@ -1,7 +1,9 @@
 package com.example.festo.booth_ui.salesanalysis
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.databinding.FragmentBoothSalesanalysisBinding
 import com.example.festo.host_ui.boothlist.BoothListData
 import com.example.festo.host_ui.boothlist.BoothlistAdapter
@@ -150,6 +153,13 @@ class SalesAnalysisFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 전달받은 부스 아이디
+        // 전달받은 부스 아이디
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val boothId = sharedPreferences.getString("boothId", "")
+
+
         var NewMenuDataList : ArrayList <NewMenuData> = arrayListOf(
             NewMenuData(R.drawable.logo1,"까사꼬치"),
             NewMenuData(R.drawable.logo2,"까사꼬치"),

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.API.OnBoothOrderListCompleteListener
@@ -55,14 +56,19 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 전달받은 부스 아이디
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val boothId = sharedPreferences.getString("boothId", "")
+
+
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
-            val sharedPreferences =
-                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+//            val sharedPreferences =
+//                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
             val myValue = sharedPreferences.getString("myToken", "")
             val token = "$myValue"
             val postApi = retrofit?.create(BoothAPI::class.java)
-            postApi!!.getBoothOrderList(token,"4").enqueue(object : Callback<List<BoothOrderListRes>> {
+            postApi!!.getBoothOrderList(token, boothId.toString()).enqueue(object : Callback<List<BoothOrderListRes>> {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!

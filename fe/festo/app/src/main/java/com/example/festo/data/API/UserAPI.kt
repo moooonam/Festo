@@ -10,6 +10,7 @@ import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.IsHaveFestivalRes
 import com.example.festo.data.res.LoginRes
+import com.example.festo.data.res.MyBoothListRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserInfoRes
 import com.example.festo.data.res.UserNotificationListRes
@@ -96,4 +97,10 @@ interface UserAPI {
     // 축제 여부 조회
     @GET("festival/{member_id}/manager")
     fun getIsHaveFestival(@Header("Authorization")token: String, @Path("member_id") member_id: String): Call<IsHaveFestivalRes>
+
+
+    // 내가 등록한 부스 리스트 조회
+    @GET("/booths/{owner_id}/owner")
+    fun getMyBoothList(@Header("Authorization") token: String,  @Path("owner_id") owner_id: String): Call<List<MyBoothListRes>>
+
 }
