@@ -111,6 +111,9 @@ class SearchActivity : AppCompatActivity() {
                     })
                     searchBar.addTextChangeListener(object : TextWatcher{
                         override fun afterTextChanged(s: Editable?) {
+                            listAdapter.updateList(searchList.filter {
+                                it.name!!.contains(s.toString())
+                            })
                         }
                         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                         }

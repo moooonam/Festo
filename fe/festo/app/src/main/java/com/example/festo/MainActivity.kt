@@ -10,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.customer_ui.home.HomeActivity
+import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.req.LoginReq
 import com.example.festo.data.res.LoginRes
@@ -30,13 +31,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        // setContentView(R.layout.activity_main)
         setContentView(binding.root)
 
         // SharedPreferences 인스턴스 생성
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
         val editor = sharedPreferences.edit()
+
 
         // 로그인 정보 확인
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
@@ -99,11 +100,18 @@ class MainActivity : AppCompatActivity() {
                         Log.i("카카오 유저정보","사용자 정보 요청 실패 $error")
                     } else if (user != null) {
                         Log.i("카카오 유저정보", "사용자 정보 요청 성공 $user")
+                        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                        val fcmToken = sharedPreferences.getString("FCM_TOKEN", "")
+                        if (fcmToken != null) {
+                            Log.i("fcm토큰 DB쏘기", fcmToken)
+                        }
+
                         // request 보낼 데이터 정의
                         val request = LoginReq(
                             authId = user.id,
                             nickname = user?.kakaoAccount?.profile?.nickname,
-                            profileImageUrl = user?.kakaoAccount?.profile?.profileImageUrl
+                            profileImageUrl = user?.kakaoAccount?.profile?.profileImageUrl,
+                            fcmDeviceToken = fcmToken
                         )
                         // request 보내고 콜백으로 LoginRes 데이터파일에 맞게 받아오기
                         api.login(request).enqueue(object : retrofit2.Callback<LoginRes> {

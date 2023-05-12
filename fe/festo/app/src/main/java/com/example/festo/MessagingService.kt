@@ -5,11 +5,15 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.festo.customer_ui.home.HomeActivity
+import com.example.festo.customer_ui.orderlist.OrderlistActivity
+import com.example.festo.customer_ui.search.SearchActivity
 import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -26,7 +30,9 @@ class MessagingService : FirebaseMessagingService() {
 
     // token 처리
     override fun onNewToken(token: String) {
-        Log.d(TAG,"Refreshed token: $token")
+        Log.d(TAG,"FCM token: $token")
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("FCM_TOKEN", token).apply()
         sendRegistrationToServer(token)
     }
 
@@ -58,15 +64,22 @@ class MessagingService : FirebaseMessagingService() {
 
     @SuppressLint("MissingPermission")
     private fun showNotification(title: String?, body: String?) {
+        /*val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("FRAGMENT_NAME", "OrderlistFragment")
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)*/
+
         val notificationBuilder = NotificationCompat.Builder(this, default_notification_channel_id!!)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle(title)
+            .setContentText(body)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            //.setFullScreenIntent(pendingIntent, true)
+            //.setContentIntent(pendingIntent)
             /*.apply {
                 if (body != null) {
                     setContentText(body)
                 }
             }*/
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
 
 
         with(NotificationManagerCompat.from(this)) {
