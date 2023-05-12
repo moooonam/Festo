@@ -31,8 +31,8 @@ class HomeFragment : Fragment() {
     private var festivalList = emptyList<FestivalListRes>()
 
     private var mBinding: FragmentHomeBinding? = null
-    private var festivalItemData = ArrayList<HomeFestivalList>()
-    private lateinit var listAdapter: FestivalItemListAdapter
+    private var listAdapter: FestivalItemListAdapter? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,14 +42,31 @@ class HomeFragment : Fragment() {
         var binding = FragmentHomeBinding.inflate(inflater, container, false)
         mBinding = binding
 
-        /*mBinding!!.testBtn.setOnClickListener {
-          *//*  val transaction = fragmentManager?.beginTransaction()
-            transaction?.replace(R.id.layout_nav_bottom, FestivallistFragment())
-            transaction?.commit()*//*
-            val intent = Intent(getActivity(), BoothDetailActivity::class.java)
-            startActivity(intent)
-//            return@setOnClickListener inflater.inflate(R.layout.fragment_festivallist, container, false)
-        }*/
+
+        listAdapter = FestivalItemListAdapter(festivalList)
+        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mBinding?.festivalRecyclerView?.adapter = listAdapter
+
+        val api = retrofit?.create(UserAPI::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        api!!.getFestivalList(token).enqueue(object:retrofit2.Callback<List<FestivalListRes>> {
+            override fun onResponse(
+                call: Call<List<FestivalListRes>>,
+                response: Response<List<FestivalListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.i("성공다", "${response.body()}")
+                    festivalList = response.body()?: emptyList()
+                    // 리사이클러뷰 업데이트
+                    listAdapter?.updateList(festivalList)
+                }
+            }
+            override fun onFailure(call: Call<List<FestivalListRes>>, t: Throwable) {
+                Log.i("실패다", "$t")
+            }
+        })
 
         mBinding!!.notificationBtn.setOnClickListener{
             val transaction = fragmentManager?.beginTransaction()
@@ -65,48 +82,12 @@ class HomeFragment : Fragment() {
             }
         }
         return mBinding?.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val api = retrofit?.create(UserAPI::class.java)
-        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val myValue = sharedPreferences.getString("myToken", "")
-        val token = "$myValue"
-        api!!.getFestivalList(token).enqueue(object:retrofit2.Callback<List<FestivalListRes>> {
-            override fun onResponse(
-                call: Call<List<FestivalListRes>>,
-                response: Response<List<FestivalListRes>>
-            ) {
-                if (response.isSuccessful) {
-                    Log.i("성공다", "${response.body()}")
-                    festivalList = response.body()?: emptyList()
-                    // 리스트 연결
-                    listAdapter = FestivalItemListAdapter(festivalList)
-                    mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                    mBinding?.festivalRecyclerView?.adapter = listAdapter
-
-                }
-            }
-            override fun onFailure(call: Call<List<FestivalListRes>>, t: Throwable) {
-                Log.i("실패다", "$t")
-            }
-
-        })
-        /*var FestivalItemListData: ArrayList<HomeFestivalList> = arrayListOf(
-            HomeFestivalList(R.drawable.festival1, "a유등축제"),
-            HomeFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
-            HomeFestivalList(R.drawable.festival1, "c유등축제"),
-            HomeFestivalList(R.drawable.festival2, "d광양 전통숯불구이 축제"),
-            HomeFestivalList(R.drawable.festival1, "e유등축제"),
-            HomeFestivalList(R.drawable.festival2, "f광양 전통숯불구이 축제"),
-            HomeFestivalList(R.drawable.festival1, "g유등축제"),
-            HomeFestivalList(R.drawable.festival2, "h광양 전통숯불구이 축제"),
-        )
-        listAdapter = FestivalItemListAdapter(FestivalItemListData)
-        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.festivalRecyclerView?.adapter = listAdapter*/
+        /*listAdapter = FestivalItemListAdapter(festivalList)
+        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)*/
     }
 
     override fun onDestroyView() {

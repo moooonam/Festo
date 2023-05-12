@@ -1,5 +1,6 @@
 package com.example.festo.customer_ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -19,7 +20,9 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
     RecyclerView.Adapter<FestivalItemListAdapter.ViewHolder>(), Filterable {
 
     var mDataListAll = ArrayList<FestivalListRes>(list)
-    var mAccount: MutableList<FestivalListRes> = list as MutableList<FestivalListRes>
+    // var mAccount: MutableList<FestivalListRes> = list as MutableList<FestivalListRes>
+    var mAccount: MutableList<FestivalListRes> = mutableListOf()
+
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
@@ -44,6 +47,7 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
             context.startActivity(intent)
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_festivallist, parent, false)
@@ -83,5 +87,11 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
             mAccount.addAll(results?.values as Collection<FestivalListRes>)
             notifyDataSetChanged()
         }
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(newList: List<FestivalListRes>) {
+        list = newList
+        mDataListAll = ArrayList(newList)
+        notifyDataSetChanged()
     }
 }

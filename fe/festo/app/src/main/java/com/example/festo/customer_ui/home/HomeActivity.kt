@@ -102,9 +102,6 @@ class HomeActivity : AppCompatActivity() {
                 .replace(R.id.layout_nav_bottom, MypageFragment()).commit()
             bottomNavigationView.setSelectedItemId(R.id.mypageFragment)
         }
-
-
-
     }
 
     fun getHashKey() {
