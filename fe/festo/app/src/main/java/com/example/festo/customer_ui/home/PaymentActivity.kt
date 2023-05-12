@@ -1,18 +1,27 @@
 package com.example.festo.customer_ui.home
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.festo.R
 import com.example.festo.customer_ui.search.SearchActivity
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.BoothDetailRes
+import com.example.festo.data.res.UserInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Suppress("DEPRECATION")
 class PaymentActivity : AppCompatActivity() {
+    private var retrofit = RetrofitClient.client
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,6 +30,11 @@ class PaymentActivity : AppCompatActivity() {
 
         // 전달받은 데이터
         val boothId = intent.getStringExtra("boothId")
+        val boothName = intent.getStringExtra("boothName")
+
+        // 부스 이름 연결
+        val name = findViewById<TextView>(R.id.boothName)
+        name.text = boothName
 
         // 알림으로 이동
         val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
@@ -38,10 +52,39 @@ class PaymentActivity : AppCompatActivity() {
         val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
         list_view.adapter = Adapter
 
+        // 나의 정보 불러오기
+        val postApi = retrofit?.create(UserAPI::class.java)
+        val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.getUserInfo(token).enqueue(object :
+            Callback<UserInfoRes> {
+            override fun onResponse(
+                call: Call<UserInfoRes>,
+                response: Response<UserInfoRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("유저정보", "${response.body()}")
+                    val userNickname = findViewById<TextView>(R.id.userNickname)
+
+                    // 데이터 xml에 입력
+                    userNickname.text = "${response.body()?.nickname}님,"
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
+                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+
         // 추천 메뉴
-        var RecommendMenuDataList : ArrayList <RecommendMenu> = arrayListOf(
-            RecommendMenu("1","ddd","추천메뉴1",4000),
-            RecommendMenu("1","ddd","추천메뉴2",2000),
+        var RecommendMenuDataList: ArrayList<RecommendMenu> = arrayListOf(
+            RecommendMenu("1", "ddd", "추천메뉴1", 4000),
+            RecommendMenu("1", "ddd", "추천메뉴2", 2000),
         )
 
         // 추천메뉴 어댑터 연결

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.festo.R
 import java.security.AccessControlContext
 
@@ -25,7 +26,7 @@ class MyOrderListAdapter(val context: Context, val myOrderList: ArrayList<MyOrde
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view : View = LayoutInflater.from(context).inflate(R.layout.item_ordermenu, null)
-        val image = view.findViewById<ImageView>(R.id.menuImage)
+        val menuImage = view.findViewById<ImageView>(R.id.menuImage)
         val name = view.findViewById<TextView>(R.id.menuName)
         val cnt = view.findViewById<TextView>(R.id.menuCnt)
         val price = view.findViewById<TextView>(R.id.menuPrice)
@@ -33,7 +34,9 @@ class MyOrderListAdapter(val context: Context, val myOrderList: ArrayList<MyOrde
 
         val myorderlist = myOrderList[position]
 
-//        image.setImageResource(myorderlist.image)
+        Glide.with(context)
+            .load(myorderlist.image)
+            .into(menuImage)
         name.text = myorderlist.name
         cnt.text = myorderlist.cnt.toString()
         price.text = "${myorderlist.price}원"
