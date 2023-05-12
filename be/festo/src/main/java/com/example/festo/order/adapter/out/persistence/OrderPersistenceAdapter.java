@@ -30,7 +30,7 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
     private final BoothRepository boothRepository;
 
     @Override
-    public void placeOrder(Order order) {
+    public Long placeOrder(Order order) {
         Member orderer = memberRepository.findById(order.getOrderer()
                                                         .getMemberId())
                                          .orElseThrow(NoSuchElementException::new);
@@ -47,7 +47,9 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
                                              .orderStatus(order.getOrderStatus())
                                              .build();
 
-        orderRepository.save(orderEntity);
+        orderEntity = orderRepository.save(orderEntity);
+
+        return orderEntity.getOrderId();
     }
 
     @Override
