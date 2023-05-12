@@ -4,7 +4,7 @@ import com.example.festo.order.domain.Order;
 
 public interface PlaceOrderPort {
 
-    void placeOrder(Order order);
+    Long placeOrder(Order order);
 
     int nextOrderNo(Long boothId);
 }

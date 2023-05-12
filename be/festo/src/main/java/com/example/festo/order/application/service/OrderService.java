@@ -1,5 +1,7 @@
 package com.example.festo.order.application.service;
 
+import com.example.festo.common.event.Events;
+import com.example.festo.order.domain.OrderStatusChangedEvent;
 import com.example.festo.order.adapter.in.web.model.*;
 import com.example.festo.order.application.port.in.LoadOrderUseCase;
 import com.example.festo.order.application.port.in.OrderStatusChangeUseCase;
@@ -31,7 +33,6 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
     private final OrdererService ordererService;
 
-
     @Override
     public void placeOrder(OrderRequest orderRequest) {
         List<OrderLine> orderLines = new ArrayList<>();
@@ -46,7 +47,8 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
-        placeOrderPort.placeOrder(order);
+        Long orderId = placeOrderPort.placeOrder(order);
+        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo().getNumber(), orderer.getMemberId(), order.getBoothInfo().getOwnerId(), order.getOrderStatus().name()));
     }
 
     @Transactional
@@ -56,6 +58,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         order.updateStatus(orderStatusChangeRequest);
 
         updateOrderPort.updateOrderStatus(order);
+        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo().getNumber(), order.getOrderer().getMemberId(), order.getBoothInfo().getOwnerId(), order.getOrderStatus().name()));
     }
 
     @Override
