@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<NotificationEntity, Long> {
-    List<NotificationEntity> finAllByReceiverId(Long receiverId);
+    List<NotificationEntity> findAllByReceiverIdOrderByTimeStampDesc(Long receiverId);
 }

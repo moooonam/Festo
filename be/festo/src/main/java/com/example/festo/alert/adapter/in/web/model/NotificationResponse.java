@@ -4,7 +4,9 @@ import com.example.festo.alert.domain.Notification;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.TimeZone;
 
 @Getter
 public class NotificationResponse {
@@ -27,10 +29,10 @@ public class NotificationResponse {
     public NotificationResponse(Notification notification) {
         this.notificationId = notification.getNotificationId();
         this.content = notification.getContent();
-        this.festivalId = notification.getFestivalId();
-        this.festivalName = notification.getFestivalName();
-        this.boothId = notification.getBoothId();
-        this.boothName = notification.getBoothName();
-        this.time = notification.getTime();
+        this.festivalId = notification.getFestivalInfo().getFestivalId();
+        this.festivalName = notification.getFestivalInfo().getFestivalName();
+        this.boothId = notification.getBoothInfo().getBoothId();
+        this.boothName = notification.getBoothInfo().getBoothName();
+        this.time = LocalDateTime.ofInstant(Instant.ofEpochMilli(notification.getTimeStamp()), TimeZone.getDefault().toZoneId());
     }
 }

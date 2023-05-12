@@ -1,33 +1,30 @@
 package com.example.festo.alert.domain;
 
+import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class Notification {
 
     private final Long notificationId;
 
+    private final Long receiverId;
+
     private final String content;
 
-    private final Long festivalId;
+    private final FestivalInfo festivalInfo;
 
-    private final String festivalName;
+    private final BoothInfo boothInfo;
 
-    private final Long boothId;
+    private final long timeStamp;
 
-    private final String boothName;
-
-    private final LocalDateTime time;
-
-    public Notification(Long notificationId, String content, Long festivalId, String festivalName, Long boothId, String boothName, LocalDateTime time) {
+    @Builder
+    public Notification(Long notificationId, Long receiverId, String content, FestivalInfo festivalInfo, BoothInfo boothInfo, long timeStamp) {
         this.notificationId = notificationId;
+        this.receiverId = receiverId;
         this.content = content;
-        this.festivalId = festivalId;
-        this.festivalName = festivalName;
-        this.boothId = boothId;
-        this.boothName = boothName;
-        this.time = time;
+        this.festivalInfo = festivalInfo;
+        this.boothInfo = boothInfo;
+        this.timeStamp = timeStamp;
     }
 }
