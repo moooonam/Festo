@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context="com.example.festo.host_ui.mypage.HostMypageFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -23,7 +24,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="65dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -38,65 +39,100 @@
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="@color/white"
                 android:text="마이페이지"
                 app:layout_constraintBottom_toBottomOf="parent" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tv_greating3"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="안녕하세요"
+                android:layout_marginStart="20dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="170dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="프로필 전환"
+                android:layout_marginStart="50dp"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_profile1"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:paddingHorizontal="10dp"
+                    android:src="@drawable/mypage2" />
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:id="@+id/iv_profile1"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:paddingHorizontal="10dp"
-                        android:src="@drawable/user_mypage_unactive" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="손님"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                    android:text="손님"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_profile2"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:paddingHorizontal="10dp"
+                    android:src="@drawable/mypage4" />
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:id="@+id/iv_profile2"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:paddingHorizontal="10dp"
-                        android:src="@drawable/booth_mypage_unactive" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="부스"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                    android:text="부스"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/iv_profile3"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:paddingHorizontal="10dp"
+                    android:src="@drawable/mypage5" />
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-                    <ImageView
-                        android:id="@+id/iv_profile3"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:paddingHorizontal="10dp"
-                        android:src="@drawable/festival_mypage_active" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="축제"
-                        android:layout_gravity="center"/>
-                </LinearLayout>
+                    android:text="축제"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"/>
             </LinearLayout>
         </LinearLayout>
 
