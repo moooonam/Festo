@@ -4,6 +4,7 @@ import com.example.festo.data.req.RegiFestivalRequest
 import com.example.festo.data.req.RegisterFestivalReq
 import com.example.festo.data.req.TestReq
 import com.example.festo.data.res.FestivalCodeRes
+import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.data.res.RegisterBoothRes
 import com.example.festo.data.res.RegisterFestivalRes
 import okhttp3.MultipartBody
@@ -17,6 +18,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import java.lang.reflect.Array
 
 interface HostAPI {
 
@@ -28,6 +30,11 @@ interface HostAPI {
         @Part("request") request: RegiFestivalRequest,
         @Part festivalImg: MultipartBody.Part
     ): Call<RegisterFestivalRes>
+    //
+    @GET("festivals/manager")
+    fun getMyFestival(
+        @Header("Authorization") token: String,
+    ) :Call<List<MyFestivalRes>>
 
     //  축제 코드 조회
     @GET("/festivals/{festival_id}/invitecode")
