@@ -116,10 +116,11 @@ class MainActivity : AppCompatActivity() {
                         // request 보내고 콜백으로 LoginRes 데이터파일에 맞게 받아오기
                         api.login(request).enqueue(object : retrofit2.Callback<LoginRes> {
                             override fun onResponse(call: Call<LoginRes>, response: Response<LoginRes>) {
-                                Log.i("토큰 받기", "refresh_token ${response.body()?.refreshToken}")
+                                Log.i("토큰 받기", "refresh_token ${response.body()}")
                                 // 받은 토큰 sharedprefereces로 저장하기
                                 editor.putString("access_token", response.body()?.accessToken)
                                 editor.putString("myToken", response.body()?.refreshToken)
+                                editor.putString("memberId", response.body()?.memberId)
                                 editor.apply()
                             }
                             override fun onFailure(call: Call<LoginRes>, t: Throwable) {
