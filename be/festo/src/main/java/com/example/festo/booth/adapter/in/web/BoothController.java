@@ -125,13 +125,15 @@ public class BoothController {
     public ResponseEntity<?> getBoothListByOwner(@PathVariable("owner_id")Long ownerId){
         log.info("부스운영자가 운영 중인 부스 목록 리스트 상세 조회 컨트롤러 시작");
         List<Booth> domainList = getBoothListUseCase.getBoothListByOwner(ownerId);
-        List<BoothResponse.Booths> boothList = new ArrayList<>();
+        List<BoothResponse.BoothsByOwner> boothList = new ArrayList<>();
         for(Booth domain : domainList){
-            BoothResponse.Booths boothResponse = BoothResponse.Booths.builder()
+            BoothResponse.BoothsByOwner boothResponse = BoothResponse.BoothsByOwner.builder()
                     .boothId(domain.getBoothId())
                     .name(domain.getName())
                     .description(domain.getBoothDescription())
                     .imageUrl(domain.getImageUrl())
+                    .festivalName(domain.getFiesta().getFiestaName())
+                    .festivalImageUrl(domain.getFiesta().getFiestaImgUrl())
                     .build();
 
             boothList.add(boothResponse);

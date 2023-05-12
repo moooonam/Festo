@@ -4,6 +4,7 @@ import com.example.festo.booth.adapter.in.web.model.FiestaResponse;
 import com.example.festo.booth.application.port.out.*;
 import com.example.festo.booth.domain.Booth;
 import com.example.festo.booth.domain.BoothStatus;
+import com.example.festo.booth.domain.Fiesta;
 import com.example.festo.common.exception.CustomNoSuchException;
 import com.example.festo.common.exception.ErrorCode;
 import com.example.festo.festival.adapter.out.persistence.FestivalEntity;
@@ -127,12 +128,9 @@ public class BoothPersistenceAdapter implements SaveBoothPort, LoadFiestaListPor
         List<BoothEntity> entityList = boothRepository.findAllByOwnerId(ownerId);
         List<Booth> domainList = new ArrayList<>();
         for(BoothEntity entity : entityList){
-            Booth domain = Booth.builder()
-                    .boothId(entity.getBoothId())
-                    .name(entity.getName())
-                    .boothDescription(entity.getBoothDescription())
-                    .imageUrl(entity.getImageUrl())
-                    .build();
+            Fiesta fiesta = new Fiesta(entity.getFestival().getFestivalId(),entity.getFestival().getName(),entity.getFestival().getImageUrl());
+
+            Booth domain = new Booth(entity.getBoothId(),entity.getName(),entity.getOpenTime(),entity.getCloseTime(),entity.getLocationDescription(),entity.getBoothDescription(),entity.getImageUrl(),entity.getBoothStatus(),fiesta);
 
             domainList.add(domain);
         }

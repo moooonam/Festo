@@ -17,6 +17,7 @@ public class Booth {
     private BoothStatus status;
     private Menu menu;
     private Owner owner;
+    private Fiesta fiesta;
 
     @Builder
     public Booth(Long boothId, String name, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, BoothStatus status) {
@@ -28,6 +29,18 @@ public class Booth {
         this.boothDescription = boothDescription;
         this.imageUrl = imageUrl;
         this.status = status;
+    }
+
+    public Booth(Long boothId, String name, LocalTime openTime, LocalTime closeTime, String locationDescription, String boothDescription, String imageUrl, BoothStatus status,Fiesta fiesta) {
+        this.boothId = boothId;
+        this.name = name;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.locationDescription = locationDescription;
+        this.boothDescription = boothDescription;
+        this.imageUrl = imageUrl;
+        this.status = status;
+        this.fiesta = fiesta;
     }
 
     @Builder
