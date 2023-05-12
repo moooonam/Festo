@@ -16,6 +16,16 @@ public class BoothResponse {
         private String name;
         private String description;
     }
+    @Getter
+    @Builder
+    public static class BoothsByOwner{
+        private Long boothId;
+        private String imageUrl;
+        private String name;
+        private String description;
+        private String festivalName;
+        private String festivalImageUrl;
+    }
 
     @Getter
     @Builder
