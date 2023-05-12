@@ -10,6 +10,7 @@ import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.LoginRes
 import com.example.festo.data.res.TestGetUserDataRes
+import com.example.festo.data.res.UserInfoRes
 import com.example.festo.data.res.UserNotificationListRes
 import com.example.festo.data.res.UserOrderListRes
 import com.google.gson.Gson
@@ -85,5 +86,10 @@ interface UserAPI {
     // 주문 내역 조회
     @GET("orders")
     fun getOrderList(@Header("Authorization") token: String): Call<List<UserOrderListRes>>
+
+
+    // 유저 정보 조회
+    @GET("api/v1/members/me")
+    fun getUserInfo(@Header("Authorization") token: String): Call<UserInfoRes>
 
 }

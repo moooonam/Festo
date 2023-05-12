@@ -25,6 +25,7 @@ import java.util.Locale
 
 class BoothDetailActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
+    private var putBoothName : String = "dd"
     private var menuList = emptyList<BoothMenuListRes>()
 
     // 주문할 메뉴를 담을 리스트
@@ -65,8 +66,9 @@ class BoothDetailActivity : AppCompatActivity() {
 
                     // 데이터 xml에 입력
                     boothName.text = response.body()?.name
-                    boothLocation.text = response.body()?.boothDescription
-                    boothExplanation.text = response.body()?.locationDescription
+                    boothLocation.text = response.body()?.locationDescription
+                    boothExplanation.text = response.body()?.boothDescription
+                    putBoothName = response.body()?.name.toString()
                 }
             }
 
@@ -126,6 +128,7 @@ class BoothDetailActivity : AppCompatActivity() {
                 val intent = Intent(this, PaymentActivity::class.java)
                 intent.putExtra("myOrderList", myOrderList)
                 intent.putExtra("boothId", boothId)
+                intent.putExtra("boothName", putBoothName)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "메뉴를 담아주세요!", Toast.LENGTH_SHORT).show()
