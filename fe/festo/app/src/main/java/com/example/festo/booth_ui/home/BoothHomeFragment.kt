@@ -48,6 +48,7 @@ import java.io.File
 //    var price: Int? = null,
 //)
 
+@Suppress("DEPRECATION")
 class BoothHomeFragment : Fragment() {
     private var retrofit = RetrofitClient.client
     private var menuList = emptyList<BoothMenuListRes>()
@@ -87,6 +88,9 @@ class BoothHomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        var boothId = arguments?.getString("boothId")
+        Log.d("제발나와!!12222222222222222222222!!!!11", boothId.toString())
+
         var binding = FragmentBoothHomeBinding.inflate(inflater, container, false)
         mBinding = binding
         mBinding!!.btnAddmenu.setOnClickListener {
@@ -181,6 +185,8 @@ class BoothHomeFragment : Fragment() {
 //            MenuListData(R.drawable.logo3, "까사꼬치", 87),
 //        )
 
+        var boothId = arguments?.getString("boothId")
+        Log.d("제발나와!!!!!!!!!!11", boothId.toString())
 
         // 부스 상세정보 retrofit. 일단 1로 고정해놨음
         val postApi = retrofit?.create(UserAPI::class.java)
@@ -189,7 +195,7 @@ class BoothHomeFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
-        postApi!!.getBoothDetail(token,"1").enqueue(object : Callback<BoothDetailRes> {
+        postApi!!.getBoothDetail(token, boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
             override fun onResponse(
                 call: Call<BoothDetailRes>,
                 response: Response<BoothDetailRes>
@@ -233,7 +239,7 @@ class BoothHomeFragment : Fragment() {
 
 
         // 부스 메뉴 리스트 retrofit
-        postApi!!.getBoothMenuList(token, "1").enqueue(object : Callback<List<BoothMenuListRes>> {
+        postApi!!.getBoothMenuList(token, boothId.toString()).enqueue(object : Callback<List<BoothMenuListRes>> {
             override fun onResponse(
                 call: Call<List<BoothMenuListRes>>,
                 response: Response<List<BoothMenuListRes>>
@@ -241,7 +247,7 @@ class BoothHomeFragment : Fragment() {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body())
-                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
+                    Log.d(" 테스트", "${response.body()}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
                     listAdapter = MenuListAdapter(menuList)
@@ -262,12 +268,12 @@ class BoothHomeFragment : Fragment() {
         changeStatusBtn.setOnClickListener {
             // 부스 영업 상태 변경 retrofit
             val postApiStatus = retrofit?.create(BoothAPI::class.java)
-            postApiStatus!!.changeBoothStatus(token, "1", BoothStatusReq(change))
+            postApiStatus!!.changeBoothStatus(token, boothId.toString(), BoothStatusReq(change))
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
                             println("상태변경성공!!!!!!!!!!!!!!!!!!!")
-                            postApi!!.getBoothDetail(token,"1").enqueue(object : Callback<BoothDetailRes> {
+                            postApi!!.getBoothDetail(token,boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
                                 override fun onResponse(
                                     call: Call<BoothDetailRes>,
                                     response: Response<BoothDetailRes>
@@ -298,9 +304,21 @@ class BoothHomeFragment : Fragment() {
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         println("상태변경실패!!!!!!!!!!!!!!!!!!!")
+                        println(boothId)
                         t.printStackTrace()
                     }
                 })
+        }
+    }
+
+    companion object {
+        fun newInstance(boothId: Long): BoothHomeFragment {
+            val args = Bundle().apply {
+                putLong("boothId", boothId)
+            }
+            return BoothHomeFragment().apply {
+                arguments = args
+            }
         }
     }
 

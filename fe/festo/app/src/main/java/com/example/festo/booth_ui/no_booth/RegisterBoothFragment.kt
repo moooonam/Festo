@@ -134,6 +134,10 @@ class RegisterBoothFragment : Fragment() {
                                     "부스테스트트",
                                     "${response.isSuccessful()}, ${response.code()}, ${response}"
                                 )
+                                //메인페이지 이동
+                                val intent = Intent(requireContext(), BoothMainActivity::class.java)
+                                intent.putExtra("boothId", response.body()?.BoothId)
+                                startActivity(intent)
                             }
 
                             override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
@@ -143,9 +147,6 @@ class RegisterBoothFragment : Fragment() {
                         })
                 }
                 postRegisterBooth()
-                //메인페이지 이동
-                val intent = Intent(requireContext(), BoothMainActivity::class.java)
-                startActivity(intent)
             }
         }
 

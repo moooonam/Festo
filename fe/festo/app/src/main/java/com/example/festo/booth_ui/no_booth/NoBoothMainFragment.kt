@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.BoothAPI
+import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.FestivalIdRes
+import com.example.festo.data.res.MyBoothListRes
 import com.example.festo.databinding.FragmentNoBoothMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,6 +26,7 @@ class NoBoothMainFragment : Fragment() {
     private var mBinding: FragmentNoBoothMainBinding? = null
     private var retrofit = RetrofitClient.client
     private lateinit var listAdapter: RegisteredFestivalListAdapter
+    private var myBoothList = emptyList<MyBoothListRes>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,21 +35,6 @@ class NoBoothMainFragment : Fragment() {
     ): View? {
         var binding = FragmentNoBoothMainBinding.inflate(inflater, container, false)
         mBinding = binding
-
-        var RegisteredFestivalList: ArrayList<RegisteredFestivalList> = arrayListOf(
-            RegisteredFestivalList(R.drawable.festival1, "a유등축제"),
-            RegisteredFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
-            RegisteredFestivalList(R.drawable.festival1, "c유등축제"),
-            RegisteredFestivalList(R.drawable.festival2, "d광양 전통숯불구이 축제"),
-            RegisteredFestivalList(R.drawable.festival1, "e유등축제"),
-            RegisteredFestivalList(R.drawable.festival2, "f광양 전통숯불구이 축제"),
-            RegisteredFestivalList(R.drawable.festival1, "g유등축제"),
-            RegisteredFestivalList(R.drawable.festival2, "h광양 전통숯불구이 축제"),
-        )
-        listAdapter = RegisteredFestivalListAdapter(RegisteredFestivalList)
-        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.festivalRecyclerView?.adapter = listAdapter
-
 
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
@@ -86,6 +74,57 @@ class NoBoothMainFragment : Fragment() {
             startActivity(intent)
         }
         return mBinding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 나의 부스 리스트 연결
+//        var RegisteredFestivalList: ArrayList<RegisteredFestivalList> = arrayListOf(
+//            RegisteredFestivalList(R.drawable.festival1, "a유등축제"),
+//            RegisteredFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
+//            RegisteredFestivalList(R.drawable.festival1, "c유등축제"),
+//            RegisteredFestivalList(R.drawable.festival2, "d광양 전통숯불구이 축제"),
+//            RegisteredFestivalList(R.drawable.festival1, "e유등축제"),
+//            RegisteredFestivalList(R.drawable.festival2, "f광양 전통숯불구이 축제"),
+//            RegisteredFestivalList(R.drawable.festival1, "g유등축제"),
+//            RegisteredFestivalList(R.drawable.festival2, "h광양 전통숯불구이 축제"),
+//        )
+//        listAdapter = RegisteredFestivalListAdapter(RegisteredFestivalList)
+//        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+//        mBinding?.festivalRecyclerView?.adapter = listAdapter
+
+        // 나의 부스 리스트 연결
+        val userpostApi = retrofit?.create(UserAPI::class.java)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myToken = sharedPreferences.getString("myToken", "")
+        val memberId  = sharedPreferences.getString("memberId","")
+        val token= "$myToken"
+        val myId = "$memberId"
+        userpostApi!!.getMyBoothList(token, myId).enqueue(object : Callback<List<MyBoothListRes>> {
+            override fun onResponse(
+                call: Call<List<MyBoothListRes>>,
+                response: Response<List<MyBoothListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
+                    myBoothList = response.body() ?: emptyList()
+                    listAdapter = RegisteredFestivalListAdapter(myBoothList)
+                    mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                    mBinding?.festivalRecyclerView?.adapter = listAdapter
+                } else {
+                    Log.d("나의 부스 리스트 조회 실패", "${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<MyBoothListRes>>, t: Throwable) {
+                println("나의 부스 리스트 조회 실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
     }
 
     override fun onDestroyView() {

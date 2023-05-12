@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.customer_ui.home.NotificationFragment
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.API.OnBoothOrderListCompleteListener
@@ -55,6 +56,10 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 전달받은 부스 아이디
+        val boothId = arguments?.getLong("boothId")
+        Log.d("주문내역에서 부스아이디출력", "$boothId")
+
         fun getBoothOrderList() {
             Log.d(" 실행타이밍", "지금")
             val sharedPreferences =
@@ -83,6 +88,17 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
             })
         }
         getBoothOrderList()
+    }
+
+    companion object {
+        fun newInstance(boothId: Long): BoothOrderListFragment {
+            val args = Bundle().apply {
+                putLong("boothId", boothId)
+            }
+            return BoothOrderListFragment().apply {
+                arguments = args
+            }
+        }
     }
 
     override fun onDestroyView() {
