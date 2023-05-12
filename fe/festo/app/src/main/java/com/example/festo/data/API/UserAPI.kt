@@ -8,6 +8,7 @@ import com.example.festo.data.res.BoothMenuListRes
 import com.example.festo.data.res.BoothWaitingRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
+import com.example.festo.data.res.IsHaveFestivalRes
 import com.example.festo.data.res.LoginRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserInfoRes
@@ -92,4 +93,7 @@ interface UserAPI {
     @GET("api/v1/members/me")
     fun getUserInfo(@Header("Authorization") token: String): Call<UserInfoRes>
 
+    // 축제 여부 조회
+    @GET("festival/{member_id}/manager")
+    fun getIsHaveFestival(@Header("Authorization")token: String, @Path("member_id") member_id: String): Call<IsHaveFestivalRes>
 }
