@@ -9,9 +9,19 @@ from pydantic import BaseModel
 from surprise import Dataset, Reader
 from surprise import SVD
 from surprise.model_selection import train_test_split
+from starlette.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ----------API 정의------------
 def get_db():
     db = SessionLocal()
     try:
@@ -162,7 +172,7 @@ def training_model(booth_data,user_data):
     return (df, model)
 
 
-@app.get("/ai/recommend_booth/{festival_id}/{user_number}/")
+@app.get("/ai/recommend_booth/{festival_id}/{user_number}")
 def get_all_data(festival_id: str, user_number:int, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
@@ -212,7 +222,7 @@ class Order(BaseModel):
 
 
 # 같은 가게 메뉴 추천
-@app.post("/ai/order/recommend/{festival_id}/")
+@app.post("/ai/recommend_order/{festival_id}")
 def recommend_order(festival_id: str, order:Order, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
