@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 public class OrderSummaryForBoothOwnerResponse {
 
+    private final Long orderId;
+
     private final OrderNo orderNo;
 
     private final OrderStatus orderStatus;
@@ -24,6 +26,7 @@ public class OrderSummaryForBoothOwnerResponse {
     private final int etcCount;
 
     public OrderSummaryForBoothOwnerResponse(Order order, Menu firstMenu, int count) {
+        this.orderId = order.getOrderId();
         this.orderNo = order.getOrderNo();
         this.orderStatus = order.getOrderStatus();
         this.time = order.getOrderTime();
