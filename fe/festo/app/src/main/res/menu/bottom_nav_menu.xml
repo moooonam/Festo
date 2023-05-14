@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/homeFragment"
         android:title="홈"
@@ -9,12 +10,7 @@
         android:id="@+id/searchFragment"
         android:title="검색"
         android:icon="@drawable/ic_search"
-        />
-    <item
-        android:id="@+id/recentFragment"
-        android:title="최근"
-        android:icon="@drawable/ic_recent"
-        />
+       />
     <item
         android:id="@+id/orderlistFragment"
         android:title="주문목록"
@@ -25,5 +21,4 @@
         android:title="마이페이지"
         android:icon="@drawable/ic_mypage"
         />
-
 </menu>
