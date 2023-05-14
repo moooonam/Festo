@@ -26,7 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.booth_ui.orderlist.BoothOrderListFragment
 import com.example.festo.data.API.BoothAPI
+import com.example.festo.data.API.RegisterMenuListener
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.req.BoothStatusReq
 import com.example.festo.data.req.RegiMenuReq
@@ -55,6 +57,9 @@ class BoothHomeFragment : Fragment() {
     private lateinit var imagePart: MultipartBody.Part
     private lateinit var listAdapter: MenuListAdapter
     private var mBinding: FragmentBoothHomeBinding? = null
+
+
+
     private var alertDialog: AlertDialog? = null
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -126,16 +131,21 @@ class BoothHomeFragment : Fragment() {
                     val myValue = sharedPreferences.getString("myToken", "")
                     val token = "$myValue"
                     fun postRegisterMenu() {
+                        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                        val boothId = sharedPreferences.getString("boothId", "")
                         Log.d("이미지파트", "${imagePart}")
                         val postApi = retrofit?.create(BoothAPI::class.java)
                         postApi!!.registerMenu(
-                            token,"4", request, imagePart
+                            token,"${boothId}", request, imagePart
                         )
                             .enqueue(object : Callback<Long> {
                                 override fun onResponse(
                                     call: Call<Long>,
                                     response: Response<Long>
                                 ) {
+                                    val transaction = fragmentManager?.beginTransaction()
+                                    transaction?.replace(R.id.booth_layout_nav_bottom, BoothHomeFragment())
+                                    transaction?.commit()
                                     Log.d(
                                         "부스메뉴테스트트",
                                         "${response.isSuccessful()}, ${response.code()}, ${response}"

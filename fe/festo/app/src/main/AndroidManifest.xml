@@ -61,9 +61,7 @@
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
-        <activity
-            android:name=".customer_ui.recent.RecentActivity"
-            android:exported="false" />
+
         <activity
             android:name=".customer_ui.orderlist.OrderlistActivity"
             android:exported="false" />

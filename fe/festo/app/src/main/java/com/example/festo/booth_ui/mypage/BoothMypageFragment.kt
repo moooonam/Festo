@@ -15,6 +15,7 @@ import com.example.festo.booth_ui.home.BoothHomeFragment
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.IsHaveFestivalRes
+import com.example.festo.data.res.UserInfoRes
 import com.example.festo.databinding.FragmentBoothMypageBinding
 import com.example.festo.host_ui.HostMainActivity
 import com.example.festo.host_ui.no_festival.NoFeativalMainActivity
@@ -33,7 +34,30 @@ class BoothMypageFragment : Fragment() {
         var binding = FragmentBoothMypageBinding.inflate(inflater, container, false)
 
         mBinding = binding
+        fun getUserData() {
+            val sharedPreferences =
+                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+            val myToken = sharedPreferences.getString("myToken", "")
+            val token = "$myToken"
+            val postApi = retrofit?.create(UserAPI::class.java)
+            postApi!!.getUserInfo(token).enqueue(object : Callback<UserInfoRes> {
+                override fun onResponse(
+                    call: Call<UserInfoRes>, response: Response<UserInfoRes>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(" 유저정보부르기", "${response},  ${response.body()?.nickname}")
+                        mBinding?.tvGreating2!!.text = "${response.body()?.nickname}님 안녕하세요"
+                    }
 
+                }
+
+                override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
+                    Log.d(" 부스 주문내역 실패", "응")
+                    t.printStackTrace()
+                }
+            })
+        }
+        getUserData()
         mBinding!!.ivProfile1.setOnClickListener{
             val intent = Intent(getActivity(), HomeActivity::class.java)
             startActivity(intent)
