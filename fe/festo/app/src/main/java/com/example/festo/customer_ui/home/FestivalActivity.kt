@@ -14,6 +14,7 @@ import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.FestivalInfoRes
+import com.example.festo.data.res.UserInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,11 +32,6 @@ class FestivalActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_festival)
         val festival_id = intent.getStringExtra("festivalId")
-
-        // 하나의 축제에 대한 부스 리스트 어댑터 연결
-//        val Adapter = BoothAdapter(this, BoothList)
-//        val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
-//        list_view.adapter = Adapter
 
         val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
         notificationBtn.setOnClickListener {
@@ -109,6 +105,30 @@ class FestivalActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
                 println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+        // 나의 정보 불러오기
+        postApi!!.getUserInfo(token).enqueue(object :
+            Callback<UserInfoRes> {
+            override fun onResponse(
+                call: Call<UserInfoRes>,
+                response: Response<UserInfoRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("유저정보", "${response.body()}")
+                    val userNickname = findViewById<TextView>(R.id.userNickname)
+
+                    // 데이터 xml에 입력
+                    userNickname.text = "${response.body()?.nickname}"
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
+                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

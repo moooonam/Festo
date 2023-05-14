@@ -186,7 +186,7 @@ class BoothHomeFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val boothId = sharedPreferences.getString("boothId", "")
 
-        // 부스 상세정보 retrofit. 일단 1로 고정해놨음
+        // 부스 상세정보 retrofit.
         val postApi = retrofit?.create(UserAPI::class.java)
         var boothStatus: String // 부스 현재 상태
         var change = "CLOSE"// 부스 상태 바꿀때 보낼 req

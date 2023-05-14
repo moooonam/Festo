@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_marginLeft="18.3dp"
         android:layout_marginRight="18.7dp"
         android:clickable="true"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="10dp"
-        >
+        app:cardCornerRadius="10dp">
 
         <RelativeLayout
             android:id="@+id/firstLin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="#FDFDFD"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <RelativeLayout
@@ -40,70 +39,28 @@
                     android:src="@mipmap/ic_launcher" />
 
                 <LinearLayout
-                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/boothImage"
-                    android:orientation="vertical"
-                    android:gravity="start">
+                    android:gravity="start"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="4dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/boothName"
-                            android:text="이름"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:textSize="13sp"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:id="@+id/boothCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/booth_category"
-                            android:text="카테고리"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:textColor="#fff"
-                            android:textSize="9sp" />
-
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/boothName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="이름"
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/boothExplanation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
                         android:text="hello world!!"
-                        android:textSize="10sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="4dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="금일 누적 주문량"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/totalOrder"
-                            android:text="00"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:background="@drawable/booth_waitinfo"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 

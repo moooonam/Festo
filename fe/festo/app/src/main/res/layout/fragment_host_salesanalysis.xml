@@ -39,6 +39,7 @@
                 <!--        제일 상단-->
 
                 <TextView
+                    android:id="@+id/festivalName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="축제이름 매출 분석"

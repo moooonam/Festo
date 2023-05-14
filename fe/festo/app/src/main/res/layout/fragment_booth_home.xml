@@ -53,21 +53,10 @@
                         android:id="@+id/boothNameTop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="부스이름"
                         android:textSize="25dp"
                         android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/booth_category"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:text="카테고리"
-                        android:textColor="#fff"
-                        android:textSize="15sp" />
 
                     <View
                         android:layout_width="0dp"
