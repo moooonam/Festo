@@ -75,30 +75,30 @@ def get_all_data(festival_id: str, user_id: str, db: SessionLocal = Depends(get_
     return user_list
 
 # festival에 속한 가게 목록
-@app.get("/db/store_data/{festival_id}/")
-def get_all_data(festival_id: str, db: SessionLocal = Depends(get_db)):
-    store_data = []
-    Booths = db.query(BoothTable).filter(BoothTable.festival_id == festival_id).all()
-    Products = db.query(ProductTable).all()
+# @app.get("/db/store_data/{festival_id}/")
+# def get_all_data(festival_id: str, db: SessionLocal = Depends(get_db)):
+#     store_data = []
+#     Booths = db.query(BoothTable).filter(BoothTable.festival_id == festival_id).all()
+#     Products = db.query(ProductTable).all()
     
-    for booth in Booths:
-        store_data.append({
-            'booth_id': booth.booth_id,
-            'booth_name':booth.name,
-            'booth_image_url':booth.image_url,
-            'menu':[]
-        })
+#     for booth in Booths:
+#         store_data.append({
+#             'booth_id': booth.booth_id,
+#             'booth_name':booth.name,
+#             'booth_image_url':booth.image_url,
+#             'menu':[]
+#         })
 
-    for product in Products:
-        for booth in store_data:
-            if product.booth_id == booth['booth_id']:
-                booth['menu'].append({
-                    'menu_id': product.product_id,
-                    'name': product.name,
-                    'image_url':product.image_url,
-                    'price':product.price
-                })
-    return store_data
+#     for product in Products:
+#         for booth in store_data:
+#             if product.booth_id == booth['booth_id']:
+#                 booth['menu'].append({
+#                     'menu_id': product.product_id,
+#                     'name': product.name,
+#                     'image_url':product.image_url,
+#                     'price':product.price
+#                 })
+#     return store_data
 
 # festival에 속한 가게 목록
 @app.get("/db/store_data_Number/{festival_id}/")
@@ -171,9 +171,10 @@ def training_model(booth_data,user_data):
     model.fit(trainset)
     return (df, model)
 
+# 부스 추천
 
 @app.get("/ai/recommend_booth/{festival_id}/{user_number}")
-def get_all_data(festival_id: str, user_number:int, db: SessionLocal = Depends(get_db)):
+def recommend_booth(festival_id: str, user_number:int, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
 
@@ -265,78 +266,112 @@ def recommend_order(festival_id: str, order:Order, db: SessionLocal = Depends(ge
 
     return sorted_list
 
+# festival에 속한 가게 목록
+
+def get_store_data(booth_id: str, db: SessionLocal = Depends(get_db)):
+    store_data = []
+    Booths = db.query(BoothTable).filter(BoothTable.booth_id==booth_id).all()
+    Products = db.query(ProductTable).all()
+    
+    for booth in Booths:
+        store_data.append({
+            'booth_id': booth.booth_id,
+            'booth_name':booth.name,
+            'booth_image_url':booth.image_url,
+            "popular_menu":"",
+            'menu':[]
+        })
+
+    for product in Products:
+        for booth in store_data:
+            if product.booth_id == booth['booth_id']:
+                booth['menu'].append({
+                    'menu_id': product.product_id,
+                    'name': product.name,
+                    'image_url':product.image_url,
+                    'price':product.price,
+                    'count':0,
+                    'log':[]
+                })
+    return store_data[0]
+
+
+
+class BoothDataRequired(BaseModel):
+    boothId : int
+    festivalId : int
+
+# 부스 데이터 제공
+@app.post("/ai/booth_data")
+def recommend_order(boothdata: BoothDataRequired, db: SessionLocal = Depends(get_db)):
+
+    # festivalId 축제의 boothId 부스 orders
+    Orders = db.query(OrdersTable).filter(OrdersTable.booth_id==boothdata.boothId).all()
+    
+    # orders_list => booth 주문 내역
+    orders_list = [] 
+    for order in Orders:
+        order_dic = {
+            "order_number": order.order_number,
+            "status": order.status,
+            "total_amounts": order.total_amounts,
+            "order_id": order.order_id,
+            "order_time": order.order_time,
+            "order_menu":[]
+        }
+
+        order_list = []
+        for line in db.query(OrderLineTable).filter(OrderLineTable.order_number == order.order_id).all():
+            order_list.append(line)
+            
+            order_dic["order_menu"].append(
+                    {
+                    "menu_id": line.menu_id,
+                    "quantity": line.quantity,
+                    "price": line.price,
+                    "amounts": line.amounts,
+                    "line_idx": line.line_idx
+                }
+            )
+        orders_list.append(order_dic)
+
+    # 메뉴별 데이터
+    required_data = get_store_data(booth_id=boothdata.boothId, db=db)
+    required_data_menu = required_data["menu"]
+    for order in orders_list:
+        for menu_dic in order["order_menu"]:
+            for menu in required_data_menu:
+                if menu["menu_id"] == menu_dic["menu_id"]:
+                    menu["count"] += menu_dic["quantity"]
+                    menu["log"].append({
+                        "order_number": order["order_number"],
+                        "status":order["status"],
+                        "order_id":order["order_id"],
+                        "order_time":order["order_time"],
+                        "quantity":menu_dic["quantity"]
+                    })
+    required_data["menu"] = required_data_menu
+
+    # 인기메뉴 추가
+    popular_menu = (sorted(required_data["menu"],key=lambda x: x["count"], reverse=True)[0])
+    popular_menu = {
+        "menu_id":popular_menu["menu_id"],
+        "name":popular_menu["name"],
+        "image_url":popular_menu["image_url"],
+        "price":popular_menu["price"],
+    }
+    required_data["popular_menu"] = popular_menu
+
+
+    # 추천
+    # booth_data = BoothData(festival_id=boothdata.festivalId, db=db)
+    # user_data = UserData(festival_id=boothdata.festivalId, db=db)
+
+    # df, model = training_model(booth_data,user_data)
+    # print(df)
+
+    return required_data
 
 
 
 
-# class Store(BaseModel):
-#     storeName : str
-
-# @app.post("/ai/store/analysis/")
-# def dataOfBooth(store: Store):
-#     print(store.storeName)
-
-#     sales_data = {}
-#     for user, stores in user_data.items():
-#         for store_name, items in stores.items():
-#             if store_name in store_data:
-#                 if store_name not in sales_data:
-#                     sales_data[store_name] = {}
-#                 for item in items:
-#                     if item in store_data[store_name]['menu']:
-#                         if item not in sales_data[store_name]:
-#                             sales_data[store_name][item] = 0
-#                         sales_data[store_name][item] += 1
-
-#     df = pd.DataFrame(sales_data).fillna(0)
-
-#     booth_name = store.storeName
-
-#     series = df.loc[store_data[booth_name]["menu"].keys(), booth_name]
-#     sales_menu = {}
-#     total_sales = 0
-#     sales_menu[booth_name] = {}
-
-#     for idx, value in series.items():
-#         sales_menu[booth_name][idx] = {}
-#         sales_menu[booth_name][idx]['count'] = value
-#         sales_menu[booth_name][idx]['sales'] = int(value)*int(store_data[booth_name]["menu"][idx]["price"])
-#         total_sales += sales_menu[booth_name][idx]['sales']
-
-#     sales_menu[booth_name]['total_sales'] = total_sales
-#     return sales_menu
-
-# @app.get('/ai/data/festival/')
-# def dataOfFestival():
-#     # 가게별, 메뉴별 판매 수 계산
-#     menu_sales = {}
-#     for user, stores in user_data.items():
-#         for store_name, items in stores.items():
-#             if store_name in store_data.keys():
-#                 for item in items:
-#                     if item in store_data[store_name]['menu'].keys():
-#                         if store_name not in menu_sales:
-#                             menu_sales[store_name] = {}
-#                         if item not in menu_sales[store_name]:
-#                             menu_sales[store_name][item] = 0
-#                         menu_sales[store_name][item] += 1
-
-#     # 가장 많이 팔린 메뉴 출력
-#     max_sales = 0
-#     max_sales_store = None
-#     max_sales_menu = None
-
-#     for store, sales in menu_sales.items():
-#         for menu, count in sales.items():
-#             if count > max_sales:
-#                 max_sales = count
-#                 max_sales_store = store
-#                 max_sales_menu = menu
-
-#     print("가장 많이 팔린 메뉴는 {}의 {}입니다. ({}개 판매)".format(max_sales_store, max_sales_menu, max_sales))
-#     dic = {
-#         "best menu of store": max_sales_store,
-#         "best menu": max_sales_menu,
-#         "count of best menu": max_sales
-#     }
-#     return dic
