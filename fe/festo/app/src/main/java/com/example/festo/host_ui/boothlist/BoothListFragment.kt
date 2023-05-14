@@ -43,14 +43,6 @@ class BoothListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        var BoothListDataList : ArrayList <BoothListData> = arrayListOf(
-//            BoothListData(R.drawable.logo1,"까사꼬치","카테고리1", "설명1",87),
-//            BoothListData(R.drawable.logo2,"까사꼬치","카테고리2", "설명2",87),
-//            BoothListData(R.drawable.logo3,"까사꼬치","카테고리3", "설명3",87)
-//        )
-//        listAdapter = BoothlistAdapter(BoothListDataList)
-//        mBinding?.boothlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mBinding?.boothlistFragmentListView?.adapter = listAdapter
 
         // 부스 리스트 조회
         val postApi = retrofit?.create(UserAPI::class.java)

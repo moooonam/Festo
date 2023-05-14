@@ -58,17 +58,6 @@
                             android:textSize="13sp"
                             android:layout_height="wrap_content"/>
 
-                        <TextView
-                            android:id="@+id/boothCategory"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/booth_category"
-                            android:text="카테고리"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:textColor="#fff"
-                            android:textSize="9sp" />
-
                     </LinearLayout>
 
                     <TextView
@@ -92,42 +81,6 @@
 
                         <TextView
                             android:id="@+id/boothWaitCount"
-                            android:text="00"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:background="@drawable/booth_waitinfo"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="예상 대기 시간"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/boothWaitTime"
-                            android:text="00"
-                            android:paddingLeft="5dp"
-                            android:paddingRight="5dp"
-                            android:background="@drawable/booth_waitinfo"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content"/>
-
-                        <TextView
-                            android:text="금일 누적 주문량"
-                            android:layout_width="wrap_content"
-                            android:layout_marginRight="3dp"
-                            android:textSize="10sp"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/boothAccumulation"
                             android:text="00"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"

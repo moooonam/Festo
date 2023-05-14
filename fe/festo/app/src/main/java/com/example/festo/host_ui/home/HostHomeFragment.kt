@@ -16,6 +16,7 @@ import com.example.festo.data.API.HostAPI
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.FestivalCodeRes
 import com.example.festo.data.res.FestivalInfoRes
+import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.databinding.FragmentHostHomeBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,74 +46,92 @@ class HostHomeFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
-        val postApi = retrofit?.create(UserAPI::class.java)
-        postApi!!.getFestivalDetail(token, "1").enqueue(object : Callback<FestivalInfoRes> {
+        val hostApi = retrofit?.create(HostAPI::class.java)
+        hostApi!!.getMyFestival(token).enqueue(object : Callback<List<MyFestivalRes>> {
             override fun onResponse(
-                call: Call<FestivalInfoRes>,
-                response: Response<FestivalInfoRes>
+                call: Call<List<MyFestivalRes>>,
+                response: Response<List<MyFestivalRes>>
             ) {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.startDate)
-                    Log.d(" 테스트", "${response.body()}")
-                    val festivalName = view.findViewById<TextView>(R.id.festivalName)
-                    val festivalAddress = view.findViewById<TextView>(R.id.festivalAddress)
-                    val festivalPeriod = view.findViewById<TextView>(R.id.festivalPeriod)
-                    val festivalImage = view.findViewById<ImageView>(R.id.festivalImage)
+                    Log.d("내가 등록한 축제 아이디 가져오기", "${response.body()?.get(0)?.festivalId}")
+                    val postApi = retrofit?.create(UserAPI::class.java)
 
-                    // 날짜 형식 변환
-                    val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-                    val outputFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+                    // 나의 축제 아이디를 가져왔다면, 해당 아이디를 통해 축제 상세정보 불러오기
+                    postApi!!.getFestivalDetail(token, response.body()?.get(0)?.festivalId.toString()).enqueue(object : Callback<FestivalInfoRes> {
+                        override fun onResponse(
+                            call: Call<FestivalInfoRes>,
+                            response: Response<FestivalInfoRes>
+                        ) {
+                            if (response.isSuccessful) {
+                                println("성공!!!!!!!!!!!!!!!!!!!")
+                                println(response.body()?.startDate)
+                                Log.d(" 테스트", "${response.body()}")
+                                val festivalName = view.findViewById<TextView>(R.id.festivalName)
+                                val festivalAddress = view.findViewById<TextView>(R.id.festivalAddress)
+                                val festivalPeriod = view.findViewById<TextView>(R.id.festivalPeriod)
+                                val festivalImage = view.findViewById<ImageView>(R.id.festivalImage)
 
-                    val startDateString = response.body()?.startDate
-                    val startDate = inputFormat.parse(startDateString.toString())
-                    val formattedStartDate = outputFormat.format(startDate)
+                                // 날짜 형식 변환
+                                val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                                val outputFormat = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
 
-                    val endDateString = response.body()?.endDate
-                    val endDate = inputFormat.parse(endDateString.toString())
-                    val formattedEndDate = outputFormat.format(endDate)
+                                val startDateString = response.body()?.startDate
+                                val startDate = inputFormat.parse(startDateString.toString())
+                                val formattedStartDate = outputFormat.format(startDate)
 
-                    // 데이터 xml에 입력
-                    festivalName.text = response.body()?.name
-                    festivalAddress.text = response.body()?.address
-                    festivalPeriod.text = "${formattedStartDate} ~ ${formattedEndDate}"
+                                val endDateString = response.body()?.endDate
+                                val endDate = inputFormat.parse(endDateString.toString())
+                                val formattedEndDate = outputFormat.format(endDate)
 
-                    // 이미지 설정
-                    Glide.with(context!!)
-                        .load(response.body()?.imageUrl)
-                        .into(festivalImage)
+                                // 데이터 xml에 입력
+                                festivalName.text = response.body()?.name
+                                festivalAddress.text = response.body()?.address
+                                festivalPeriod.text = "${formattedStartDate} ~ ${formattedEndDate}"
+
+                                // 이미지 설정
+                                Glide.with(context!!)
+                                    .load(response.body()?.imageUrl)
+                                    .into(festivalImage)
+                            }
+                        }
+
+                        override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
+                            println("실패!!!!!!!!!!!!!!!!!!!")
+                            t.printStackTrace()
+                        }
+                    })
+
+                    // 축제 코드 조회
+                    val hostpostApi = retrofit?.create(HostAPI::class.java)
+                    hostpostApi!!.getFestivalCode(token, response.body()?.get(0)?.festivalId.toString()).enqueue(object : Callback<FestivalCodeRes> {
+                        override fun onResponse(
+                            call: Call<FestivalCodeRes>,
+                            response: Response<FestivalCodeRes>
+                        ) {
+                            if (response.isSuccessful) {
+                                println("성공!!!!!!!!!!!!!!!!!!!")
+                                println(response.body())
+                                Log.d("축제코드", "${response.body()?.inviteCode}")
+                                val code = view.findViewById<TextView>(R.id.festivalCode)
+                                code.text = "축제코드 ${response.body()?.inviteCode}"
+                            }
+                        }
+
+                        override fun onFailure(call: Call<FestivalCodeRes>, t: Throwable) {
+                            Log.d("축제코드", "실패!!!!!!!!!!!!!!!!!")
+                            t.printStackTrace()
+                        }
+                    })
+
                 }
             }
 
-            override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
+            override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
                 println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
-
-
-        // 축제 코드 조회
-        val hostpostApi = retrofit?.create(HostAPI::class.java)
-        hostpostApi!!.getFestivalCode(token, "1").enqueue(object : Callback<FestivalCodeRes> {
-            override fun onResponse(
-                call: Call<FestivalCodeRes>,
-                response: Response<FestivalCodeRes>
-            ) {
-                if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("축제코드", "${response.body()?.inviteCode}")
-                    val code = view.findViewById<TextView>(R.id.festivalCode)
-                    code.text = "축제코드 ${response.body()?.inviteCode}"
-                }
-            }
-
-            override fun onFailure(call: Call<FestivalCodeRes>, t: Throwable) {
-                Log.d("축제코드", "실패!!!!!!!!!!!!!!!!!")
-                t.printStackTrace()
-            }
-        })
-
     }
 
     override fun onDestroyView() {
@@ -120,4 +139,3 @@ class HostHomeFragment : Fragment() {
         super.onDestroyView()
     }
 }
-

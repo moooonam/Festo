@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.salesanalysis
 
+import RetrofitClient
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -7,29 +8,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
-import com.example.festo.booth_ui.home.BoothHomeFragment
+import com.example.festo.data.API.UserAPI
+import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.databinding.FragmentBoothSalesanalysisBinding
-import com.example.festo.host_ui.boothlist.BoothListData
-import com.example.festo.host_ui.boothlist.BoothlistAdapter
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class NewMenuData(
     var image: Int? = null,
     var name: String? = null,
 )
 class SalesAnalysisFragment : Fragment() {
+    private var retrofit = RetrofitClient.client
     private lateinit var listAdapter: NewMenuListAdapter
     private var mBinding : FragmentBoothSalesanalysisBinding? = null
     override fun onCreateView(
@@ -154,8 +156,7 @@ class SalesAnalysisFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 전달받은 부스 아이디
-        // 전달받은 부스 아이디
+        // 부스 아이디
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val boothId = sharedPreferences.getString("boothId", "")
 
@@ -168,6 +169,35 @@ class SalesAnalysisFragment : Fragment() {
         listAdapter = NewMenuListAdapter(NewMenuDataList)
         mBinding?.newMenuListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.newMenuListView?.adapter = listAdapter
+
+        // 부스 상세정보 retrofit.
+        val postApi = retrofit?.create(UserAPI::class.java)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        postApi!!.getBoothDetail(token, boothId.toString()).enqueue(object :
+            Callback<BoothDetailRes> {
+            override fun onResponse(
+                call: Call<BoothDetailRes>,
+                response: Response<BoothDetailRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("부스이름만 가져오기", "${response.body()?.name}")
+                    val boothName = view.findViewById<TextView>(R.id.boothName)
+
+                    // 데이터 xml에 입력
+                    boothName.text = "${response.body()?.name} 매출분석"
+
+                }
+            }
+
+            override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
+                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
     }
 
     override fun onDestroyView() {
