@@ -1,9 +1,11 @@
 package com.example.festo.data.res
 
-import java.util.Date
-
 data class UserNotificationListRes(
-    val dateTime: Date, //import 유틸인지 맞는지 확인 해야해
+    val notificationId: Long,
+    val content: String,
+    val festivalId: Long,
+    val festivalName: String,
+    val boothId: Long,
     val boothName: String,
-    val content: String
+    val time: String,
 )
