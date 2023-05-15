@@ -88,7 +88,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
                                                         .get(0)
                                                         .getMenuId());
 
-            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu));
+            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu, order.getOrderTime()));
         }
 
         return orderSummaries;
