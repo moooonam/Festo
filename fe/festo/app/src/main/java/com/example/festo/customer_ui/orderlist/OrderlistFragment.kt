@@ -78,7 +78,7 @@ class OrderlistFragment : Fragment() {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body()?.size)
-                    Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
+                    // Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
                     orderlist = response.body() ?: emptyList()
                     listAdapter = OrderlistAdapter(orderlist)
                     mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
