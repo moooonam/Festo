@@ -27,9 +27,9 @@ class MessagingService : FirebaseMessagingService() {
     // 수신 메세지 처리
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        Log.i("dddddddd", message.notification?.imageUrl.toString())
+        Log.i("dddddddd", message.notification?.title.toString())
         if (message.notification != null)
-            showNotification(message.notification?.title, message.notification!!.body, message.notification?.imageUrl)
+            showNotification(message.notification?.title, message.notification!!.body)
     }
 
     // token 처리
@@ -67,20 +67,11 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun showNotification(title: String?, body: String?, imageUrl: Uri?) {
+    private fun showNotification(title: String?, body: String?) {
         /*val intent = Intent(this, SearchActivity::class.java)
         intent.putExtra("FRAGMENT_NAME", "OrderlistFragment")
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)*/
-        // 펼쳤을때 보여주는 매장 이미지
-        val festiUrl = imageUrl
-        val target: FutureTarget<Bitmap> = Glide.with(this)
-            .asBitmap()
-            .load(festiUrl)
-            .submit()
-        val festivalBitmap: Bitmap = target.get()
-
         // fest'O 기본 로고 보여주기
-        Log.i("이미지 오나", festiUrl.toString())
         val futureTarget: FutureTarget<Bitmap> = Glide.with(this)
             .asBitmap()
             .load(R.drawable.festologo)
@@ -94,9 +85,6 @@ class MessagingService : FirebaseMessagingService() {
             /*.setStyle(NotificationCompat.BigPictureStyle()
                 .bigPicture(bitmap))*/
             .setLargeIcon(bitmap)
-            .setStyle(NotificationCompat.BigPictureStyle()
-                .bigPicture(festivalBitmap)
-                .bigLargeIcon(null))
             .setContentTitle(title)
             .setContentText(body)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
