@@ -26,13 +26,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewMenuData(
+class MenuRankData(
     var image: Int? = null,
     var name: String? = null,
+    var totalSales: Int? = null,
 )
 class SalesAnalysisFragment : Fragment() {
     private var retrofit = RetrofitClient.client
-    private lateinit var listAdapter: NewMenuListAdapter
+    private lateinit var listAdapter: MenuRankListAdapter
     private var mBinding : FragmentBoothSalesanalysisBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -161,12 +162,12 @@ class SalesAnalysisFragment : Fragment() {
         val boothId = sharedPreferences.getString("boothId", "")
 
 
-        var NewMenuDataList : ArrayList <NewMenuData> = arrayListOf(
-            NewMenuData(R.drawable.logo1,"까사꼬치"),
-            NewMenuData(R.drawable.logo2,"까사꼬치"),
-            NewMenuData(R.drawable.logo3,"까사꼬치")
+        var MenuRankDataList : ArrayList <MenuRankData> = arrayListOf(
+            MenuRankData(R.drawable.logo1,"데리야끼꼬치", 50000000),
+            MenuRankData(R.drawable.logo2,"불닭꼬치", 20000000),
+            MenuRankData(R.drawable.logo3,"갈릭꼬치", 10000000)
         )
-        listAdapter = NewMenuListAdapter(NewMenuDataList)
+        listAdapter = MenuRankListAdapter(MenuRankDataList)
         mBinding?.newMenuListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.newMenuListView?.adapter = listAdapter
 

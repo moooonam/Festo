@@ -127,14 +127,6 @@
                 android:textStyle="bold" />
             />
 
-            <TextView
-                android:layout_width="141dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="원"
-                android:textColor="@color/white"
-                android:textSize="19dp"
-                android:textStyle="bold" />
             />
 
             <TextView
