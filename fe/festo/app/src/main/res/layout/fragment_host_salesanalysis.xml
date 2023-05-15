@@ -218,9 +218,22 @@
                     android:textSize="15dp"
                     android:textStyle="bold" />
 
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp" />
+
 
 
                 <!--        부스 매출 순위-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="부스별 매출 순위"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/boothRank_listView"

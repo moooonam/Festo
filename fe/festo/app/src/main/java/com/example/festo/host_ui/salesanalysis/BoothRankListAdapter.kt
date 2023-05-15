@@ -1,5 +1,6 @@
 package com.example.festo.host_ui.salesanalysis
 
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import java.util.Locale
 
 class BoothRankListAdapter(private var list: ArrayList<BoothRankData>): RecyclerView.Adapter<BoothRankListAdapter.ListItemViewHolder> () {
 
@@ -14,19 +16,15 @@ class BoothRankListAdapter(private var list: ArrayList<BoothRankData>): Recycler
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var image: ImageView = itemView!!.findViewById(R.id.boothImage)
         var name: TextView = itemView!!.findViewById(R.id.boothName)
-        var category: TextView = itemView!!.findViewById(R.id.boothCategory)
-        var boothNum: TextView = itemView!!.findViewById(R.id.boothNum)
-        var totalOrder: TextView = itemView!!.findViewById(R.id.totalOrder)
         var totalSales : TextView = itemView!!.findViewById(R.id.totalSales)
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: BoothRankData, position: Int) {
             image.setImageResource(data.image!!)
             name.text = data.name
-            category.text = data.category
-            boothNum.text = data.boothNum.toString()
-            totalOrder.text = data.totalOrder.toString()
-            totalSales.text = "총 매출액: ${data.totalSales}원"
+            val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+            val formattedString = formatter.format(data.totalSales)
+            totalSales.text = "총 ${formattedString}원"
         }
     }
 

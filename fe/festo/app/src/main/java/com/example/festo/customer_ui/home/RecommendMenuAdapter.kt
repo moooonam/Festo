@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.festo.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.util.Locale
 
 class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayList<RecommendMenu>, val myOrderList: ArrayList<MyOrderList>) : BaseAdapter() {
     override fun getCount(): Int {
@@ -45,7 +47,9 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
 
         // 데이터 연결. 이미지는 아직 안넣어줬음
         name.text = recommendMenu.name
-        price.text = recommendMenu.price.toString()
+        val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val formattedString = formatter.format(recommendMenu.price)
+        price.text = "${formattedString}원"
 
         // 추천메뉴 담기 클릭
         val addBtn = view.findViewById<TextView>(R.id.addBtn)

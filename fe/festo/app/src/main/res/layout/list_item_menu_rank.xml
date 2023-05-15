@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/boothImage"
+                    android:id="@+id/menuImage"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:layout_marginStart="10dp"
@@ -42,25 +42,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@id/boothImage"
+                    android:layout_toRightOf="@id/menuImage"
                     android:gravity="start"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/boothName"
+                        android:id="@+id/menuName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:text="이름"
                         android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/totalSales"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:paddingTop="15dp"
-                            android:text="총 매출 : xxxxxxx원" />
+                    <TextView
+                        android:id="@+id/totalSales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:paddingTop="15dp"
+                        android:text="총 매출 : xxxxxxx원" />
 
                 </LinearLayout>
 

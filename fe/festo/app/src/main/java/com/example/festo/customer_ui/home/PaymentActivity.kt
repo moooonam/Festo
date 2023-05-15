@@ -3,6 +3,7 @@ package com.example.festo.customer_ui.home
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -18,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 @Suppress("DEPRECATION")
 class PaymentActivity : AppCompatActivity() {
@@ -98,7 +100,9 @@ class PaymentActivity : AppCompatActivity() {
             totalPrice += order.price * order.cnt
         }
         val total = findViewById<TextView>(com.example.festo.R.id.totalPrice)
-        total.text = "${totalPrice.toString()}원"
+        val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val formattedString = formatter.format(totalPrice)
+        total.text = "${formattedString}원"
 
         // 토스페이먼츠 연결
         val payBtn = findViewById<TextView>(R.id.payBtn)

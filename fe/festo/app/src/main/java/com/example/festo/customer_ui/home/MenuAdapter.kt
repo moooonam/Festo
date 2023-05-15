@@ -1,5 +1,6 @@
 import android.annotation.SuppressLint
 import android.content.Context
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.res.BoothMenuListRes
+import java.util.Locale
 
 class MenuAdapter(val context: Context, val MenuList: List<BoothMenuListRes>) : BaseAdapter() {
     var total = 0 // 합계를 저장할 변수
@@ -38,9 +40,10 @@ class MenuAdapter(val context: Context, val MenuList: List<BoothMenuListRes>) : 
 
         var menu = MenuList[position]
 
-//        image.setImageResource(menu.imageUrl)
         name.text = menu.name
-        price.text = menu.price.toString()
+        val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+        val formattedString = formatter.format(menu.price)
+        price.text = "${formattedString}원"
         cnt.text = menu.cnt.toString()
         Glide.with(view.getContext())
             .load(menu.imageUrl)
@@ -55,7 +58,9 @@ class MenuAdapter(val context: Context, val MenuList: List<BoothMenuListRes>) : 
             menu.cnt += 1
             menu.check = true
             total += menu.price
-            totalTextView.text = total.toString()
+            val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+            val formattedString = formatter.format(total)
+            totalTextView.text = "${formattedString}원"
             notifyDataSetChanged()
         }
 
