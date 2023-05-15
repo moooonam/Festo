@@ -113,6 +113,7 @@ class RegisterBoothFragment : Fragment() {
                     binding.tvEndTime.text.toString()
 
                 )
+                val festivalId = arguments?.getString("festivalId")
                 val sharedPreferences =
                     requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                 val myValue = sharedPreferences.getString("myToken", "")
@@ -123,7 +124,7 @@ class RegisterBoothFragment : Fragment() {
                     Log.d("이미지파트", "${imagePart.body}")
                     val postApi = retrofit?.create(BoothAPI::class.java)
                     postApi!!.registerBooth( token,
-                        "1", request, imagePart
+                        festivalId.toString(), request, imagePart
                     )
                         .enqueue(object : Callback<RegisterBoothRes> {
                             override fun onResponse(
@@ -136,7 +137,14 @@ class RegisterBoothFragment : Fragment() {
                                 )
                                 //메인페이지 이동
                                 val intent = Intent(requireContext(), BoothMainActivity::class.java)
-                                intent.putExtra("boothId", response.body()?.BoothId)
+                                // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
+                                val editor = sharedPreferences.edit()
+                                Log.d(
+                                    "부스아이디저장",
+                                    "${response.body()?.boothId}"
+                                )
+                                editor.putString("boothId", response.body()?.boothId.toString())
+                                editor.apply() // 또는 editor.commit() 사용 가능
                                 startActivity(intent)
                             }
 
