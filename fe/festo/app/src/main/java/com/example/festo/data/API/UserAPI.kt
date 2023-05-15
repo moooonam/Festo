@@ -31,7 +31,7 @@ interface UserAPI {
     @POST("api/v1/login")
     fun login(@Body request: LoginReq): Call<LoginRes>
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
-        private const val BASE_URL = "http://k8c106.p.ssafy.io:8080/" // 주소
+        private const val BASE_URL = "https://k8c106.p.ssafy.io/api/" // 주소
         fun create(): UserAPI {
             val gson : Gson =   GsonBuilder().setLenient().create();
             return Retrofit.Builder()
@@ -99,7 +99,7 @@ interface UserAPI {
 
 
     // 내가 등록한 부스 리스트 조회
-    @GET("/booths/{owner_id}/owner")
+    @GET("booths/{owner_id}/owner")
     fun getMyBoothList(@Header("Authorization") token: String,  @Path("owner_id") owner_id: String): Call<List<MyBoothListRes>>
 
 }
