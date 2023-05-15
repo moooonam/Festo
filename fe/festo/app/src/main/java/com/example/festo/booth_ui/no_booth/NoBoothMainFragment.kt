@@ -100,7 +100,7 @@ class NoBoothMainFragment : Fragment() {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body())
-                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
+//                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
                     myBoothList = response.body() ?: emptyList()
                     listAdapter = RegisteredFestivalListAdapter(myBoothList)
                     mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)

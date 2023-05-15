@@ -54,7 +54,7 @@ class HostHomeFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
-                    Log.d("내가 등록한 축제 아이디 가져오기", "${response.body()?.get(0)?.festivalId}")
+//                    Log.d("내가 등록한 축제 아이디 가져오기", "${response.body()?.get(0)?.festivalId}")
                     val postApi = retrofit?.create(UserAPI::class.java)
 
                     // 나의 축제 아이디를 가져왔다면, 해당 아이디를 통해 축제 상세정보 불러오기

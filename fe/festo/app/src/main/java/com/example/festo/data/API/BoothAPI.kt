@@ -14,7 +14,6 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -67,7 +66,7 @@ interface BoothAPI {
     ) : Call<BoothOrderDetailRes>
 
     // 주문상태변경
-    @PATCH("/orders/{order_id}/status")
+    @PATCH("orders/{order_id}/status")
     fun changeOrderStatus(
         @Header("Authorization") token: String,
         @Path("order_id") order_id: String,
@@ -79,6 +78,6 @@ interface BoothAPI {
     fun getFestivalCodeCheck(@Header("Authorization") token: String, @Query("inviteCode") code: String): Call<FestivalIdRes>
 
     // 부스 영업 상태 변경
-     @PATCH("/booths/{booth_id}/status")
+     @PATCH("booths/{booth_id}/status")
     fun changeBoothStatus(@Header("Authorization") token: String, @Path("booth_id") booth_id: String, @Body data: BoothStatusReq): Call<Void>
 }
