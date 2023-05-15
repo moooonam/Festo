@@ -16,7 +16,7 @@ class OrderlistAdapter(private var list: List<UserOrderListRes>) :
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
         var festival: TextView = itemView!!.findViewById(R.id.tv_festivaltitle)
-        var date: TextView = itemView!!.findViewById(R.id.tv_orderdate)
+        var time: TextView = itemView!!.findViewById(R.id.tv_orderdate)
         var booth: TextView = itemView!!.findViewById(R.id.tv_boothtitle)
         var menusummary: TextView = itemView!!.findViewById(R.id.tv_menu_summary)
         var ordernumber: TextView = itemView!!.findViewById(R.id.tv_ordernumber)
@@ -42,6 +42,10 @@ class OrderlistAdapter(private var list: List<UserOrderListRes>) :
             } else if (data.orderStatus ==  "CANCELED") {
                 orderstate.text = "주문 취소"
             }
+
+            var orderDate = data.time.substring(0 until 10)
+            var orderTime = data.time.substring(11)
+            time.text = orderDate + "\n" + "     " + orderTime
 
             Glide.with(itemView.context)
                 .load(data.imageUrl)

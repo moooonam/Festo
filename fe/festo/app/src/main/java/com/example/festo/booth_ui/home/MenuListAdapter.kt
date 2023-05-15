@@ -1,5 +1,6 @@
 package com.example.festo.booth_ui.home
 
+import android.icu.text.NumberFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.festo.R
 import com.example.festo.data.res.BoothMenuListRes
+import java.util.Locale
 
 class MenuListAdapter(private var list: List<BoothMenuListRes>): RecyclerView.Adapter<MenuListAdapter.ListItemViewHolder> () {
 
@@ -24,7 +26,9 @@ class MenuListAdapter(private var list: List<BoothMenuListRes>): RecyclerView.Ad
                 .load(data.imageUrl)
                 .into(image)
             name.text = data.name
-            price.text = data.price.toString()
+            val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+            val formattedString = formatter.format( data.price)
+            price.text = "${formattedString}원"
         }
     }
 
