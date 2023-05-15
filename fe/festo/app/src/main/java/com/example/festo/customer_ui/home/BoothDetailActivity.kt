@@ -27,9 +27,9 @@ class BoothDetailActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var putBoothName : String = "dd"
     private var menuList = emptyList<BoothMenuListRes>()
-
     // 주문할 메뉴를 담을 리스트
     var myOrderList = arrayListOf<MyOrderList>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_booth_detail)
@@ -105,15 +105,6 @@ class BoothDetailActivity : AppCompatActivity() {
             }
         })
 
-        // 메뉴 리스트 연결
-//        val adapter = MenuAdapter(this, arrayListOf())
-//        adapter.totalTextView = findViewById(R.id.totalTextView)
-//        val list_view = findViewById<ListView>(com.example.festo.R.id.menu_list_view)
-//        list_view.adapter = adapter
-
-        // 합계 출력 id 연결
-//        adapter.totalTextView = findViewById(R.id.totalTextView)
-
         // 결제 페이지로 이동
         val payBtn = findViewById<TextView>(R.id.payBtn)
         payBtn.setOnClickListener {
@@ -165,6 +156,12 @@ class BoothDetailActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 이전 페이지로 돌아왔을 때 myOrderList를 비워줌
+        myOrderList.clear()
     }
 
 }

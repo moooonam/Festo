@@ -53,7 +53,12 @@ class NoBoothMainFragment : Fragment() {
                         Log.d(" 테스트", "${response.body()?.festivalId}")
                         Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
                         val transaction = fragmentManager?.beginTransaction()
-                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
+                        val bundle = Bundle().apply { putString("festivalId", response.body()?.festivalId.toString()) }
+                        val fragment = RegisterBoothFragment().apply { arguments = bundle }
+                        transaction?.replace(
+                            R.id.no_booth_layout_nav_bottom,
+                            fragment
+                        )
 //                        transaction?.replace(R.id.no_booth_layout_nav_bottom, BoothHomeFragment())
                         transaction?.commit()
                     } else {
@@ -78,21 +83,6 @@ class NoBoothMainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // 나의 부스 리스트 연결
-//        var RegisteredFestivalList: ArrayList<RegisteredFestivalList> = arrayListOf(
-//            RegisteredFestivalList(R.drawable.festival1, "a유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "c유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "d광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "e유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "f광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "g유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "h광양 전통숯불구이 축제"),
-//        )
-//        listAdapter = RegisteredFestivalListAdapter(RegisteredFestivalList)
-//        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mBinding?.festivalRecyclerView?.adapter = listAdapter
 
         // 나의 부스 리스트 연결
         val userpostApi = retrofit?.create(UserAPI::class.java)
