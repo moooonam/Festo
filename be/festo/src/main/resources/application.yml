@@ -11,6 +11,11 @@ spring:
     show-sql: true
     generate-ddl: true
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
 jwt:
   secret: 6riw64uk66a87JeG64qU7LaV7KCc66W87JyE7ZWc7Iqk66eI7Yq47Jik642U
 
@@ -26,8 +31,6 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: 'false'
-
-
 
 server:
   error:
