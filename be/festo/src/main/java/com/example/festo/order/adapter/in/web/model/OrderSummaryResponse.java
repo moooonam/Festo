@@ -1,7 +1,10 @@
 package com.example.festo.order.adapter.in.web.model;
 
 import com.example.festo.order.domain.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 public class OrderSummaryResponse {
@@ -25,7 +28,10 @@ public class OrderSummaryResponse {
 
     private final int etcCount;
 
-    public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Menu firstMenu) {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd/HH:mm", timezone = "Asia/Seoul")
+    private final LocalDateTime time;
+
+    public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Menu firstMenu, LocalDateTime time) {
         this.festivalName = festivalInfo.getFestivalName();
         this.orderNo = order.getOrderNo();
         this.boothId = order.getBoothInfo().getBoothId();
@@ -35,5 +41,6 @@ public class OrderSummaryResponse {
         this.orderId = order.getOrderId();
         this.productName = firstMenu.getName();
         this.etcCount = order.getOrderLines().size() - 1;
+        this.time = time;
     }
 }
