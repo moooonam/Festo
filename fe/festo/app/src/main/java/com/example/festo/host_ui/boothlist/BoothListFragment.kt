@@ -10,20 +10,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.festo.data.API.HostAPI
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.res.BoothListRes
+import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.databinding.FragmentHostBoothlistBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-class BoothListData(
-    var image: Int? = null,
-    var name: String? = null,
-    var category: String? = null,
-    var explanation: String? = null,
-    var totalOrder: Int? = null,
-)
 
 class BoothListFragment : Fragment() {
     private lateinit var listAdapter: BoothlistAdapter
@@ -46,34 +40,53 @@ class BoothListFragment : Fragment() {
 
         // 부스 리스트 조회
         val postApi = retrofit?.create(UserAPI::class.java)
-        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
-        postApi!!.getBoothList(token, "1").enqueue(object : Callback<List<BoothListRes>> {
+        val hostApi = retrofit?.create(HostAPI::class.java)
+        hostApi!!.getMyFestival(token).enqueue(object : Callback<List<MyFestivalRes>> {
             override fun onResponse(
-                call: Call<List<BoothListRes>>,
-                response: Response<List<BoothListRes>>
+                call: Call<List<MyFestivalRes>>,
+                response: Response<List<MyFestivalRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.size)
-                    Log.d(" 테스트", "${response.body()}")
-                    boothList = response.body() ?: emptyList()
+                    postApi!!.getBoothList(token, response.body()?.get(0)?.festivalId.toString())
+                        .enqueue(object : Callback<List<BoothListRes>> {
+                            override fun onResponse(
+                                call: Call<List<BoothListRes>>,
+                                response: Response<List<BoothListRes>>
+                            ) {
+                                if (response.isSuccessful) {
+                                    println("성공!!!!!!!!!!!!!!!!!!!")
+                                    println(response.body()?.size)
+                                    Log.d(" 테스트", "${response.body()}")
+                                    boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
-                    listAdapter = BoothlistAdapter(boothList)
-                    mBinding?.boothlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                    mBinding?.boothlistFragmentListView?.adapter = listAdapter
+                                    listAdapter = BoothlistAdapter(boothList)
+                                    mBinding?.boothlistFragmentListView?.layoutManager =
+                                        LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                                    mBinding?.boothlistFragmentListView?.adapter = listAdapter
+
+                                }
+                            }
+
+                            override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
+                                println("실패!!!!!!!!!!!!!!!!!!!")
+                                t.printStackTrace()
+                            }
+                        })
 
                 }
             }
 
-            override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
+            override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
                 println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
-
     }
+
     override fun onDestroyView() {
         mBinding = null
         super.onDestroyView()
