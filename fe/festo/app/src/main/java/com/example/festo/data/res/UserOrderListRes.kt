@@ -1,5 +1,7 @@
 package com.example.festo.data.res
 
+import java.sql.Time
+
 class UserOrderListRes (
     val festivalName: String,
     val orderNo: orderNo,
@@ -7,6 +9,7 @@ class UserOrderListRes (
     val imageUrl: String,
     val boothName: String,
     val orderId: Int,
+    val time: String,
     val orderStatus: String,
     val productName: String,
     val etcCount: Int
