@@ -24,6 +24,7 @@ public class FcmService implements SaveFcmDeviceTokenUseCase {
         FcmDeviceToken fcmDeviceToken = loadFcmDeviceTokenPort.loadFcmDeviceTokenByMemberId(memberId);
         if (fcmDeviceToken == null) {
             saveFcmDeviceTokenPort.save(new FcmDeviceToken(null, memberId, token));
+            return;
         }
 
         if (fcmDeviceToken.getToken().equals(token)) {
