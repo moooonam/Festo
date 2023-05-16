@@ -22,7 +22,6 @@ class BoothTable(Base):
     booth_id = Column(Integer, primary_key=True, autoincrement=True)
     booth_description = Column(String(255), nullable=True)
     status = Column(String(255))
-    category = Column(String(255))
     open_time = Column(String(255))
     close_time = Column(String(255))
     image_url = Column(String(255))
