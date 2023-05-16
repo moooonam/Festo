@@ -45,6 +45,7 @@ class BoothDetailActivity : AppCompatActivity() {
         // 전달받은 부스 정보
         val intent = intent //전달할 데이터를 받을 Intent
         val boothId = intent.getStringExtra("boothId")
+        val festivalId = intent.getStringExtra("festivalId")
 
         // 부스 상세정보 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
@@ -116,9 +117,11 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             if (myOrderList.size != 0) {
+
                 val intent = Intent(this, PaymentActivity::class.java)
                 intent.putExtra("myOrderList", myOrderList)
                 intent.putExtra("boothId", boothId)
+                intent.putExtra("festivalId", festivalId)
                 intent.putExtra("boothName", putBoothName)
                 startActivity(intent)
             } else {

@@ -96,7 +96,9 @@ class FestivalActivity : AppCompatActivity() {
                     Log.d(" 테스트", "${response.body()}")
                     boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
-                    val Adapter = BoothAdapter(this@FestivalActivity, boothList, token)
+                    val Adapter = BoothAdapter(this@FestivalActivity, boothList, token,
+                        festival_id.toString()
+                    )
                     val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
                     list_view.adapter = Adapter
 

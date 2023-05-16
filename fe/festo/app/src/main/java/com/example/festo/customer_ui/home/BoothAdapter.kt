@@ -19,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.security.AccessController.getContext
 
-class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListRes>, private val token: String) : BaseAdapter() {
+class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListRes>, private val token: String, val festivalId:String) : BaseAdapter() {
     private var retrofit = RetrofitClient.client
     override fun getCount(): Int {
         return BoothList.size
@@ -40,7 +40,7 @@ class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListR
         val explanation = view.findViewById<TextView>(R.id.boothExplanation)
         val waitCount = view.findViewById<TextView>(R.id.boothWaitCount)
         var cardView = view.findViewById<CardView>(R.id.cardView)
-
+//        var festivalId = festivalId
         val booth = BoothList[position]
 
         val postApi = retrofit?.create(UserAPI::class.java)
@@ -77,12 +77,16 @@ class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListR
         view.setOnClickListener {
             val intent = Intent(context, BoothDetailActivity::class.java)
             intent.putExtra("boothId", booth.boothId)
+            Log.d("축제아이디보낸다?",festivalId)
+            intent.putExtra("festivalId", festivalId)
             context.startActivity(intent)
         }
 
         // 카드뷰 클릭시 detail 페이지로 이동
         cardView.setOnClickListener {
             val intent = Intent(context, BoothDetailActivity::class.java)
+            Log.d("축제아이디보낸다?!!",festivalId)
+            intent.putExtra("festivalId", festivalId)
             intent.putExtra("boothId", booth.boothId)
             context.startActivity(intent)
         }
