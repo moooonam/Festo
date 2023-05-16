@@ -14,7 +14,6 @@ import com.example.festo.data.res.IsHaveFestivalRes
 import com.example.festo.data.res.LoginRes
 import com.example.festo.data.res.MenuRecommendRes
 import com.example.festo.data.res.MyBoothListRes
-import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserInfoRes
 import com.example.festo.data.res.UserNotificationListRes
 import com.example.festo.data.res.UserOrderListRes
@@ -105,7 +104,7 @@ interface UserAPI {
 
     // 사용자 주문 기록 기반으로 부스 추천
     @GET("recommend_booth/{festival_id}/{user_id}")
-    fun getBoothRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String,  @Path("user_id") user_id: String): Call<List<BoothRecommendRes>>
+    fun getBoothRecommend(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?, @Path("user_id") user_id: String): Call<List<BoothRecommendRes>>
 
 
     // 주문할 메뉴 기반으로 메뉴 추천
