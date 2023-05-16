@@ -4,6 +4,5 @@ import com.example.festo.alert.domain.FcmDeviceToken;
 
 public interface LoadFcmDeviceTokenPort {
 
-    FcmDeviceToken loadFcmDeviceTokenByToken(String token);
     FcmDeviceToken loadFcmDeviceTokenByMemberId(Long memberId);
 }
