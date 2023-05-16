@@ -109,12 +109,11 @@ def training_model(booth_data,user_data):
 
 # 부스 추천
 @app.get("/data/recommend_booth/{festival_id}/{user_number}")
-def recommend_booth(festival_id: str, user_number:int, db: SessionLocal = Depends(get_db)):
+def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
 
     df, model = training_model(booth_data,user_data)
-
     # 상위 3개 추천
     top_n = {}
     for user_id in set(df['user_id']):
@@ -154,7 +153,7 @@ def recommend_booth(festival_id: str, user_number:int, db: SessionLocal = Depend
 
 class Order(BaseModel):
     boothId : int
-    orderList : dict
+    orderList : list
 
 
 # 같은 가게 메뉴 추천
@@ -164,7 +163,7 @@ def recommend_order(festival_id: str, order:Order, db: SessionLocal = Depends(ge
     user_data = UserData(festival_id=festival_id, db=db)
 
     df, model = training_model(booth_data,user_data)
-
+  
     sorted_list = []
     try:
         # 같은 부스에 있는 메뉴
@@ -172,14 +171,18 @@ def recommend_order(festival_id: str, order:Order, db: SessionLocal = Depends(ge
         booth_menu_ids = [p.product_id for p in booth_products]
 
         # 같은 부스에 있는 메뉴만 candidate_list에 추가
-        candidate_list = [idx for idx in booth_menu_ids if str(idx) not in list(order.orderList.keys())]
-        
+        candidate_list = [menu_id for menu_id in booth_menu_ids if menu_id not in [item["product_id"] for item in order.orderList]]
+
         # 각 메뉴에 대한 예측 평점 계산
-        totalCnt = sum(order.orderList.values())
+        totalCnt = sum(item["cnt"] for item in order.orderList)
         predictions = {}
-        for uid, menuCnt in order.orderList.items():
+
+
+        for item in order.orderList:
+            uid = str(item["product_id"])
+            menuCnt = item["cnt"]
             for menu in candidate_list:
-                if predictions.get(menu):
+                if menu in predictions:
                     predictions[menu] += model.predict(uid, menu).est * menuCnt
                 else:
                     predictions[menu] = model.predict(uid, menu).est * menuCnt
