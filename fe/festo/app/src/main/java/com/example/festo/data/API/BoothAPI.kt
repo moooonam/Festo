@@ -104,5 +104,5 @@ interface BoothAPI {
 
     // 부스 매출 분석
     @GET("booths/{booth_id}/sales")
-    fun getBoothSalesAnalysis(@Header("Authorization") token: String, @Query("booth_id") booth_id: String): Call<BoothAnalysisRes>
+    fun getBoothSalesAnalysis(@Header("Authorization") token: String, @Path("booth_id") booth_id: String): Call<BoothAnalysisRes>
 }

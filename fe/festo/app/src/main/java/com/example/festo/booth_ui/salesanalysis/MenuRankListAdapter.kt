@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.data.res.MenuAnalysis
 import java.util.Locale
 
-class MenuRankListAdapter(private var list: ArrayList<MenuRankData>): RecyclerView.Adapter<MenuRankListAdapter.ListItemViewHolder> () {
+class MenuRankListAdapter(private var list: List<MenuAnalysis>): RecyclerView.Adapter<MenuRankListAdapter.ListItemViewHolder> () {
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
@@ -19,11 +21,13 @@ class MenuRankListAdapter(private var list: ArrayList<MenuRankData>): RecyclerVi
         val total: TextView = itemView!!.findViewById(R.id.totalSales)
 
         // onBindViewHolder의 역할을 대신한다.
-        fun bind(data: MenuRankData, position: Int) {
-            image.setImageResource(data.image!!)
+        fun bind(data: MenuAnalysis, position: Int) {
+            Glide.with(itemView.context)
+                .load(data.image_url)
+                .into(image)
             name.text = data.name
             val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
-            val formattedString = formatter.format(data.totalSales)
+            val formattedString = formatter.format(data.amount)
             total.text = "총 ${formattedString}원"
 
         }
