@@ -36,6 +36,7 @@ public class BoothService implements RegisterBoothUseCase, GetFiestaListUseCase,
         if(!registerBoothCommand.getImg().isEmpty()){
             imgUrl = saveImgPort.saveBoothImg(registerBoothCommand.getImg(),saveBoothId);
         }
+        else imgUrl="https://festo-s3.s3.ap-northeast-2.amazonaws.com/boothDefault.png";
 
         saveBoothId = saveBoothPort.updateSetImg(saveBoothId,imgUrl);
 

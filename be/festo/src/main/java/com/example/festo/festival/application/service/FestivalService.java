@@ -42,6 +42,7 @@ public class FestivalService implements RegisterFestivalUseCase, GetFestivalsUse
         if(!registerFestivalCommand.getImg().isEmpty()){
             imgUrl = saveImgPort.saveFestivalImg(registerFestivalCommand.getImg(),saveFestivalId);
         }
+        else imgUrl = "https://festo-s3.s3.ap-northeast-2.amazonaws.com/festivalDefault.png";
 
         saveFestivalId = saveFestivalPort.updateSetImg(saveFestivalId,imgUrl);
         return saveFestivalId;
