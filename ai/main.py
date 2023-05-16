@@ -234,10 +234,36 @@ def get_store_data(booth_id: str, db: SessionLocal = Depends(get_db)):
                 })
     return store_data[0]
 
+# 유사한 부스 제공
+def CF_booth(target_booth_id, df, model):
+
+    # 특정 부스를 이용한 사용자들의 활동 가져오기
+    users_with_target_booth = df[df['booth_id'] == int(target_booth_id)]['user_id'].unique()
+    
+    # 추천할 부스를 모든 부스 중에서 선택하기
+    all_booths = df['booth_id'].unique()
+    recommendation_candidates = [booth_id for booth_id in all_booths if booth_id != int(target_booth_id)]
+
+    # 추천할 부스를 예측하기
+    predictions = []
+    for user_id in users_with_target_booth:
+        for booth_id in recommendation_candidates:
+        # for booth_id in list(all_booths):
+            prediction = model.predict(user_id, booth_id)
+            predictions.append((booth_id, prediction.est))
+
+    # 추천할 부스를 평점 기준으로 정렬
+    predictions.sort(key=lambda x: x[1], reverse=True)
+
+    # 상위 N개의 추천 부스 출력
+    top_n = 5
+    recommended_booths = [booth_id for booth_id, _ in predictions[:top_n]]
+    return list(set(recommended_booths))
+    
+
 
 
 # 부스 데이터 제공
-
 @app.get("/booths/{booth_id}/sales")
 def booth_sales(booth_id:str, db: SessionLocal = Depends(get_db)):
 
@@ -308,18 +334,45 @@ def booth_sales(booth_id:str, db: SessionLocal = Depends(get_db)):
             })
     required_data["daily_sales"] = daily_sales
 
-    # 인기메뉴 추가
-    # try:
-    #     popular_menu = (sorted(required_data["menu"],key=lambda x: x["count"], reverse=True)[0])
-    #     popular_menu = {
-    #         "menu_id":popular_menu["menu_id"],
-    #         "name":popular_menu["name"],
-    #         "image_url":popular_menu["image_url"],
-    #         "price":popular_menu["price"],
-    #     }
-    #     required_data["popular_menu"] = popular_menu
-    # except:
-    #     pass
+    # 부스 이용자들에게 추천하는 부스의 인기메뉴 제공
+    try:
+        festivalId = db.query(BoothTable).filter(BoothTable.booth_id==booth_id).first().festival_id
+
+        booth_data = BoothData(festival_id=festivalId, db=db)
+        user_data = UserData(festival_id=festivalId, db=db)
+
+        df, model = training_model(booth_data,user_data)
+        CF_booths = CF_booth(booth_id, df, model)
+
+        food_idxs = []
+        for boothId in CF_booths:
+            foods = db.query(ProductTable).filter(ProductTable.booth_id == boothId).all()
+            for food in foods:
+                food_idxs.append(food.product_id)
+
+
+        food_dic = {}
+        for food_idx in food_idxs:
+            cnt = 0
+            food_orders = db.query(OrderLineTable).filter(OrderLineTable.menu_id == food_idx).all()
+            for order in food_orders:
+                cnt += order.quantity
+
+            food_dic[f'{food_idx}'] = cnt
+        
+        sorted_menu = sorted(food_dic, key=lambda x: int(x[0]), reverse=True)
+        if len(sorted_menu) > 3:
+            sorted_menu = sorted_menu[:3]
+        
+        required_data['insight_data'] = []
+        for idx in sorted_menu:
+            product = db.query(ProductTable).filter(ProductTable.product_id == idx).first()
+            required_data['insight_data'].append({
+                'name' : product.name,
+                'image_url': product.image_url
+            })
+    except:
+        required_data['insight_data'] = []
 
     return required_data
 
