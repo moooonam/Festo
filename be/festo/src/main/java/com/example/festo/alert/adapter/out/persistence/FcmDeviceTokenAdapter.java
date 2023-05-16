@@ -6,8 +6,6 @@ import com.example.festo.member.application.port.out.SaveFcmDeviceTokenPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -22,18 +20,6 @@ public class FcmDeviceTokenAdapter implements SaveFcmDeviceTokenPort, LoadFcmDev
     }
 
     @Override
-    public FcmDeviceToken loadFcmDeviceTokenByToken(String token) {
-        Optional<FcmDeviceTokenEntity> fcmDeviceTokenEntity = fcmDeviceTokenRepository.findByToken(token);
-
-        if (fcmDeviceTokenEntity.isPresent()) {
-            FcmDeviceTokenEntity fcmDeviceToken = fcmDeviceTokenEntity.get();
-            return new FcmDeviceToken(fcmDeviceToken.getMemberId(), fcmDeviceToken.getToken());
-        }
-
-        return null;
-    }
-
-    @Override
     public FcmDeviceToken loadFcmDeviceTokenByMemberId(Long memberId) {
         FcmDeviceTokenEntity fcmDeviceTokenEntity = fcmDeviceTokenRepository.findByMemberId(memberId).orElse(null);
 
@@ -41,6 +27,6 @@ public class FcmDeviceTokenAdapter implements SaveFcmDeviceTokenPort, LoadFcmDev
             return null;
         }
 
-        return new FcmDeviceToken(memberId, fcmDeviceTokenEntity.getToken());
+        return new FcmDeviceToken(fcmDeviceTokenEntity.getId(), memberId, fcmDeviceTokenEntity.getToken());
     }
 }
