@@ -34,13 +34,13 @@ public class FcmDeviceTokenAdapter implements SaveFcmDeviceTokenPort, LoadFcmDev
     }
 
     @Override
-    public List<FcmDeviceToken> loadFcmDeviceTokenByMemberId(Long memberId) {
-        List<FcmDeviceTokenEntity> fcmDeviceTokenEntityList = fcmDeviceTokenRepository.findAllByMemberId(memberId);
-        List<FcmDeviceToken> domainList = new ArrayList<>();
-        for(FcmDeviceTokenEntity entity : fcmDeviceTokenEntityList){
-            FcmDeviceToken domain = new FcmDeviceToken(memberId, entity.getToken());
-            domainList.add(domain);
+    public FcmDeviceToken loadFcmDeviceTokenByMemberId(Long memberId) {
+        FcmDeviceTokenEntity fcmDeviceTokenEntity = fcmDeviceTokenRepository.findByMemberId(memberId).orElse(null);
+
+        if (fcmDeviceTokenEntity == null) {
+            return null;
         }
-        return domainList;
+
+        return new FcmDeviceToken(memberId, fcmDeviceTokenEntity.getToken());
     }
 }

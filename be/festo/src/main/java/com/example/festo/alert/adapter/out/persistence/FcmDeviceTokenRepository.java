@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface FcmDeviceTokenRepository extends JpaRepository<FcmDeviceTokenEntity, Long> {
     Optional<FcmDeviceTokenEntity> findByToken(String token);
     List<FcmDeviceTokenEntity> findAllByMemberId(Long memberId);
+
+    Optional<FcmDeviceTokenEntity> findByMemberId(Long memberId);
 }

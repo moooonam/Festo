@@ -17,7 +17,16 @@ public class FcmService implements SaveFcmDeviceTokenUseCase {
 
     @Override
     public void save(Long memberId, String token) {
-        if (loadFcmDeviceTokenPort.loadFcmDeviceTokenByToken(token) != null) {
+        if (token == null) {
+            return;
+        }
+
+        FcmDeviceToken fcmDeviceToken = loadFcmDeviceTokenPort.loadFcmDeviceTokenByMemberId(memberId);
+        if (fcmDeviceToken == null) {
+            saveFcmDeviceTokenPort.save(new FcmDeviceToken(memberId, token));
+        }
+
+        if (fcmDeviceToken.getToken().equals(token)) {
             return;
         }
 
