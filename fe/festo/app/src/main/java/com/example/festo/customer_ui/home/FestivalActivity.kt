@@ -5,14 +5,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.booth_ui.salesanalysis.MenuRankListAdapter
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.UserAPI
+import com.example.festo.data.DataRetrofitClient
 import com.example.festo.data.res.BoothListRes
+import com.example.festo.data.res.BoothRecommendRes
+import com.example.festo.data.res.FestivalDailySales
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.UserInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,6 +36,9 @@ import java.util.Locale
 class FestivalActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var boothList = emptyList<BoothListRes>()
+    private var dataRetrofit = DataRetrofitClient.client
+    private var recommendBoothList = emptyList<BoothRecommendRes>()
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,6 +142,77 @@ class FestivalActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
                 println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+        // 추천 부스 가져오기
+        val dataPostApi = dataRetrofit?.create(UserAPI::class.java)
+        val memberId = sharedPreferences.getString("memberId", "")
+        val myId = "$memberId"
+        dataPostApi!!.getBoothRecommend(token, festival_id, myId).enqueue(object :
+            Callback<List<BoothRecommendRes>> {
+            override fun onResponse(
+                call: Call<List<BoothRecommendRes>>,
+                response: Response<List<BoothRecommendRes>>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
+                    recommendBoothList = response.body() ?: emptyList()
+
+                    // 추천 부스 연결
+                    var recommend1Name = findViewById<TextView>(R.id.recommend1Name)
+                    var recommend1Explanation = findViewById<TextView>(R.id.recommend1Explanation)
+                    var recommend1Wait = findViewById<TextView>(R.id.recommend1Wait)
+                    var recommend1Image = findViewById<ImageView>(R.id.recommend1Image)
+                    var recommend2Name = findViewById<TextView>(R.id.recommend2Name)
+                    var recommend2Explanation = findViewById<TextView>(R.id.recommend2Explanation)
+                    var recommend2Wait = findViewById<TextView>(R.id.recommend2Wait)
+                    var recommend2Image = findViewById<ImageView>(R.id.recommend2Image)
+
+                    var recommendText = findViewById<LinearLayout>(R.id.recommendText)
+                    var recommend1 = findViewById<CardView>(R.id.recommend1)
+                    var recommend2 = findViewById<CardView>(R.id.recommend2)
+
+                    if (recommendBoothList.size  == 0) {
+                        recommendText.visibility = View.GONE
+                        recommend1.visibility = View.GONE
+                        recommend2.visibility = View.GONE
+                    } else if (recommendBoothList.size == 1) {
+                        recommendText.visibility = View.VISIBLE
+                        recommend1.visibility = View.VISIBLE
+                        recommend2.visibility = View.GONE
+
+                        recommend1Name.text = response.body()?.get(0)?.name
+                        recommend1Explanation.text = response.body()?.get(0)?.booth_description
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(0)?.image_url)
+                            .into(recommend1Image)
+
+                    } else if (recommendBoothList.size >= 2) {
+                        recommendText.visibility = View.VISIBLE
+                        recommend1.visibility = View.VISIBLE
+                        recommend2.visibility = View.VISIBLE
+
+                        recommend1Name.text = response.body()?.get(0)?.name
+                        recommend1Explanation.text = response.body()?.get(0)?.booth_description
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(0)?.image_url)
+                            .into(recommend1Image)
+
+                        recommend2Name.text = response.body()?.get(1)?.name
+                        recommend2Explanation.text = response.body()?.get(1)?.booth_description
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(1)?.image_url)
+                            .into(recommend2Image)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<BoothRecommendRes>>, t: Throwable) {
+                println("추천 부스 받아오기 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
