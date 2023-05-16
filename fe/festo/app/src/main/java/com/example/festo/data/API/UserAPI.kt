@@ -107,12 +107,12 @@ interface UserAPI {
 
 
     // 사용자 주문 기록 기반으로 부스 추천
-    @GET("data/recommend_booth/{festival_id}/{user_id}")
+    @GET("recommend_booth/{festival_id}/{user_id}")
     fun getBoothRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String,  @Path("user_id") user_id: String): Call<List<BoothRecommendRes>>
 
 
     // 주문할 메뉴 기반으로 메뉴 추천
-    @POST("data/recommend_order/{festival_id}")
+    @POST("recommend_order/{festival_id}")
     fun getMenuRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String, @Body data: MenuRecommendReq): Call<List<MenuRecommendRes>>
 
 }
