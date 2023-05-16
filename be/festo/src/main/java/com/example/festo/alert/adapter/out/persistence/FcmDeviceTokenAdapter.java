@@ -16,7 +16,7 @@ public class FcmDeviceTokenAdapter implements SaveFcmDeviceTokenPort, LoadFcmDev
 
     @Override
     public void save(FcmDeviceToken fcmDeviceToken) {
-        fcmDeviceTokenRepository.save(new FcmDeviceTokenEntity(fcmDeviceToken.getMemberId(), fcmDeviceToken.getToken()));
+        fcmDeviceTokenRepository.save(new FcmDeviceTokenEntity(fcmDeviceToken.getId(), fcmDeviceToken.getMemberId(), fcmDeviceToken.getToken()));
     }
 
     @Override
