@@ -4,20 +4,26 @@ import RetrofitClient
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.API.UserAPI
+import com.example.festo.data.DataRetrofitClient
+import com.example.festo.data.res.BoothAnalysisRes
 import com.example.festo.data.res.BoothDailySales
 import com.example.festo.data.res.BoothDetailRes
+import com.example.festo.data.res.MenuAnalysis
 import com.example.festo.databinding.FragmentBoothSalesanalysisBinding
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -26,7 +32,6 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -42,12 +47,14 @@ class MenuRankData(
 
 class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     private var retrofit = RetrofitClient.client
+    private var dataRetrofit = DataRetrofitClient.client
     private lateinit var listAdapter: MenuRankListAdapter
     private var mBinding: FragmentBoothSalesanalysisBinding? = null
     private var boothDailySalesList: ArrayList<BoothDailySales> = ArrayList()
     private lateinit var chart: BarChart
     private val colorList = ArrayList<Int>()
-
+    private var menuRankList = emptyList<MenuAnalysis>()
+    private var boothDailyList = emptyList<BoothDailySales>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,122 +73,116 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
         // 차트 생성 코드
         chart = binding.barChart
 
-        fun basicSetting() {
-            chart.apply {
-                description.isEnabled = false
-                setMaxVisibleValueCount(5) // 최대로 보여지는 데이터의 수
-                setPinchZoom(false)
-                setDrawBarShadow(false)
-                setDrawGridBackground(false)
-                setDrawBorders(false)
-                legend.isEnabled = false
-                setTouchEnabled(true)
-                isDoubleTapToZoomEnabled = false
-                animateY(3000) // 애니메이션 효과 적용 시간
-            }
+//        createBarChart()
+
+        return mBinding?.root
+    }
+
+    fun createBarChart() {
+        val values = ArrayList<BarEntry>()
+        val type = ArrayList<String>()
+        val set: BarDataSet
+
+
+        // 차트에 amount 데이터 입력
+        val lastValues = boothDailyList.takeLast(boothDailyList.size).mapIndexed { index, boothDailySales ->
+            BarEntry((index + 1).toFloat(), boothDailySales.amount.toFloat())
         }
+        values.addAll(lastValues)
 
-        fun setXAxis() {
-            val xAxis = chart.xAxis
-            xAxis.apply {
-                setDrawGridLines(false)
-                isEnabled = true
-                position = XAxis.XAxisPosition.BOTTOM
-                disableGridDashedLine()
-                setDrawAxisLine(false)
-            }
-        }
-
-        fun setLeftYAxis() {
-            val leftYAxis = chart.axisLeft
-            leftYAxis.apply {
-                setDrawGridLines(false)
-                setDrawAxisLine(false)
-                // y축 레이블 표시
-                isEnabled = false
-                setDrawLabels(false)
-                val maxValue = boothDailySalesList.maxByOrNull { it.amount }?.amount?.toFloat() ?: 0f
-                axisMaximum = maxValue + 1000000F
-            }
-        }
-
-
-        fun setRightYAxis() {
-            val rightYAxis = chart.axisRight
-            rightYAxis.apply {
-                setDrawGridLines(false)
-                setDrawAxisLine(false)
-                isEnabled = false
-                setDrawLabels(false)
-            }
-        }
-
-        fun createBarChart() {
-            val values = ArrayList<BarEntry>()
-            val type = ArrayList<String>()
-            val set: BarDataSet
-
-            // 기본값 세팅
-            values.add(BarEntry(1.0f, 320.0f))
-            values.add(BarEntry(2.0f, 430.0f))
-            values.add(BarEntry(3.0f, 440.0f))
-            values.add(BarEntry(4.0f, 300.0f))
-            values.add(BarEntry(5.0f, 520.0f))
-
-            // 리스트 값 돌면서 x값은 1만큼 증가시켜 막대마다 거리를 두고, y값은 리스트의 amount값을 가져와서 표현
-            val lastValues = boothDailySalesList.takeLast(values.size).mapIndexed { index, boothDailySales ->
-                BarEntry((index + 1).toFloat(), boothDailySales.amount.toFloat())
-            }
-            values.addAll(lastValues)
-
-            type.add(" ")
-            boothDailySalesList.forEach { boothDailySales ->
-                val date = boothDailySales.date
-                val day = date.substring(date.lastIndexOf("-") + 1) // 일(day) 추출
-                type.add(day + "일")
-            }
-
-            colorList.clear()
-            colorList.add(Color.parseColor("#F24E1E"))
-
-            if (chart.data != null && chart.data.dataSetCount > 1) {
-                val chartData = chart.data
-                set = chartData?.getDataSetByIndex(0) as BarDataSet
-                set.values = values
-                chartData.notifyDataChanged()
-                chart.notifyDataSetChanged()
-            } else {
-                set = BarDataSet(values, " ")
-                set.colors = colorList
-                set.setDrawValues(true)
-
-                val dataSets = ArrayList<IBarDataSet>()
-                dataSets.add(set)
-
-                val data = BarData(dataSets)
-                chart.data = data
-                chart.setVisibleXRange(1.0f, 5.0f)
-                chart.setFitBars(true)
-
-                val xAxis = chart.xAxis
-                xAxis.apply {
-                    granularity = 1f
-                    isGranularityEnabled = true
-                    valueFormatter = IndexAxisValueFormatter(type)
-                }
-                chart.invalidate()
-            }
-
-            chart.setOnChartValueSelectedListener(this)
+        // 차트에 날짜 데이터 입력
+        type.add(" ")
+        boothDailyList.forEach { boothDailySales ->
+            val date = boothDailySales.date
+            val day = date.substring(date.lastIndexOf("-") + 1) // 일(day) 추출
+            type.add(day + "일")
         }
 
         basicSetting()
         setXAxis()
         setLeftYAxis()
         setRightYAxis()
-        createBarChart()
 
-        return mBinding?.root
+//        colorList.clear()
+//        colorList.add(Color.parseColor("#F24E1E"))
+
+        if (chart.data != null && chart.data.dataSetCount > 1) {
+            val chartData = chart.data
+            set = chartData?.getDataSetByIndex(0) as BarDataSet
+            set.values = values
+            chartData.notifyDataChanged()
+            chart.notifyDataSetChanged()
+        } else {
+            set = BarDataSet(values, " ")
+            set.color = Color.parseColor("#F24E1E")
+            set.setDrawValues(true)
+
+            val dataSets = ArrayList<IBarDataSet>()
+            dataSets.add(set)
+
+            val data = BarData(dataSets)
+            chart.data = data
+            chart.setVisibleXRange(1.0f, 5.0f)
+            chart.setFitBars(true)
+
+            val xAxis = chart.xAxis
+            xAxis.apply {
+                granularity = 1f
+                isGranularityEnabled = true
+                valueFormatter = IndexAxisValueFormatter(type)
+            }
+            chart.invalidate()
+        }
+
+        chart.setOnChartValueSelectedListener(this)
+    }
+
+    fun basicSetting() {
+        chart.apply {
+            description.isEnabled = false
+            setMaxVisibleValueCount(boothDailyList.size ) // 최대로 보여지는 데이터의 수
+            setPinchZoom(false)
+            setDrawBarShadow(false)
+            setDrawGridBackground(false)
+            setDrawBorders(false)
+            legend.isEnabled = false
+            setTouchEnabled(true)
+            isDoubleTapToZoomEnabled = false
+//            animateY(3000) // 애니메이션 효과 적용 시간
+        }
+    }
+
+    fun setXAxis() {
+        val xAxis = chart.xAxis
+        xAxis.apply {
+            setDrawGridLines(false)
+            isEnabled = true
+            position = XAxis.XAxisPosition.BOTTOM
+            disableGridDashedLine()
+            setDrawAxisLine(false)
+        }
+    }
+
+    fun setLeftYAxis() {
+        val leftYAxis = chart.axisLeft
+        leftYAxis.apply {
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+            isEnabled = true
+            setDrawLabels(true)
+            axisMaximum = 200000f
+        }
+    }
+
+
+    fun setRightYAxis() {
+        val rightYAxis = chart.axisRight
+        rightYAxis.apply {
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+            isEnabled = false
+            setDrawLabels(false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -190,15 +191,6 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
         // 부스 아이디
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val boothId = sharedPreferences.getString("boothId", "")
-
-        var menuRankDataList: ArrayList<MenuRankData> = arrayListOf(
-            MenuRankData(R.drawable.logo1, "데리야끼꼬치", 50000000),
-            MenuRankData(R.drawable.logo2, "불닭꼬치", 20000000),
-            MenuRankData(R.drawable.logo3, "갈릭꼬치", 10000000)
-        )
-        listAdapter = MenuRankListAdapter(menuRankDataList)
-        mBinding?.newMenuListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.newMenuListView?.adapter = listAdapter
 
         // 부스 상세정보 retrofit.
         val postApi = retrofit?.create(UserAPI::class.java)
@@ -227,6 +219,73 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                 t.printStackTrace()
             }
         })
+
+        // 부스 매출 데이터 불러오기
+        val dataPostApi = dataRetrofit?.create(BoothAPI::class.java)
+        dataPostApi!!.getBoothSalesAnalysis(token, boothId.toString()).enqueue(object :
+            Callback<BoothAnalysisRes> {
+            override fun onResponse(
+                call: Call<BoothAnalysisRes>,
+                response: Response<BoothAnalysisRes>
+            ) {
+                if (response.isSuccessful) {
+                    println("성공!!!!!!!!!!!!!!!!!!!")
+                    println(response.body())
+                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
+                    menuRankList = response.body()?.menu ?: emptyList()
+                    boothDailyList = response.body()?.daily_sales ?: emptyList()
+
+                    val textView = view.findViewById<TextView>(R.id.nodata)
+
+                    if (boothDailyList.size < 2) {
+                        // boothDailyList의 개수가 2개 미만인 경우에는 TextView를 추가하고 Bar 차트를 숨깁니다.
+                        textView.visibility = View.VISIBLE
+                        chart.visibility = View.GONE
+                    } else {
+                        textView.visibility = View.GONE
+                        chart.visibility = View.VISIBLE
+
+                        createBarChart()
+                    }
+
+                    // 메뉴 리스트 연결
+                    listAdapter = MenuRankListAdapter(menuRankList)
+                    mBinding?.newMenuListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                    mBinding?.newMenuListView?.adapter = listAdapter
+
+                    // 인기메뉴 연결
+                    var topName1 = view.findViewById<TextView>(R.id.topMenuName1)
+                    var topName2 = view.findViewById<TextView>(R.id.topMenuName2)
+                    var topName3 = view.findViewById<TextView>(R.id.topMenuName3)
+                    var topImg1 = view.findViewById<ImageView>(R.id.topMenuImg1)
+                    var topImg2 = view.findViewById<ImageView>(R.id.topMenuImg2)
+                    var topImg3 = view.findViewById<ImageView>(R.id.topMenuImg3)
+
+                    topName1.text = response.body()?.menu?.get(0)?.name.toString()
+                    topName2.text = response.body()?.menu?.get(1)?.name.toString()
+                    topName3.text = response.body()?.menu?.get(2)?.name.toString()
+                    Glide.with(requireContext())
+                        .load(response.body()?.menu?.get(0)?.image_url)
+                        .into(topImg1)
+                    Glide.with(requireContext())
+                        .load(response.body()?.menu?.get(1)?.image_url)
+                        .into(topImg2)
+                    Glide.with(requireContext())
+                        .load(response.body()?.menu?.get(2)?.image_url)
+                        .into(topImg3)
+
+                } else {
+                    Log.d("부스매출분석 실패다!!!", "${response.body()}")
+                    println(boothId)
+
+                }
+            }
+
+            override fun onFailure(call: Call<BoothAnalysisRes>, t: Throwable) {
+                println("부스매출분석 실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
     }
 
     override fun onDestroyView() {
@@ -239,25 +298,8 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             // 막대의 인덱스는 1부터 시작하므로 1을 빼줍니다.
             val selectedIndex = e.x.toInt() - 1
 
-            if (selectedIndex >= 0 && selectedIndex < boothDailySalesList.size) {
-                val selectedData = boothDailySalesList[selectedIndex]
-
-//                // 선택한 막대의 색상을 변경하기 위해 데이터셋을 가져옵니다.
-//                val dataSet = chart.data.getDataSetByIndex(0) as BarDataSet
-//
-//
-//                // 모든 막대의 색상을 원래 색으로 초기화합니다.
-//                dataSet.colors = colorList.toMutableList()
-//
-//                // 선택한 막대의 색상을 변경합니다.
-//                if (selectedIndex < colorList.size) {
-//                    val modifiedColors = colorList.toMutableList()
-//                    modifiedColors[selectedIndex] = Color.GREEN
-//                    dataSet.colors = modifiedColors
-//                }
-//
-//                // 차트를 갱신합니다.
-//                chart.invalidate()
+            if (selectedIndex >= 0 && selectedIndex < boothDailyList.size) {
+                val selectedData = boothDailyList[selectedIndex]
 
                 // 다이얼로그에 선택된 데이터를 표시하는 로직을 작성하면 됩니다.
                 val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
@@ -266,7 +308,6 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                     .setPositiveButton("OK", null)
                     .create()
                 dialog.show()
-
             }
         }
     }
