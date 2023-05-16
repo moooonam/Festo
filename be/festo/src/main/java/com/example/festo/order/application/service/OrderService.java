@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,10 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         Order order = new Order(orderNo, boothInfo, orderer, orderLines);
 
         Long orderId = placeOrderPort.placeOrder(order);
-        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo().getNumber(), orderer.getMemberId(), order.getBoothInfo().getOwnerId(), order.getOrderStatus().name()));
+        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo()
+                                                               .getNumber(), orderer.getMemberId(), order.getBoothInfo()
+                                                                                                         .getOwnerId(), order.getOrderStatus()
+                                                                                                                             .name()));
     }
 
     @Transactional
@@ -58,7 +62,11 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
         order.updateStatus(orderStatusChangeRequest);
 
         updateOrderPort.updateOrderStatus(order);
-        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo().getNumber(), order.getOrderer().getMemberId(), order.getBoothInfo().getOwnerId(), order.getOrderStatus().name()));
+        Events.raise(new OrderStatusChangedEvent(orderId, order.getOrderNo()
+                                                               .getNumber(), order.getOrderer()
+                                                                                  .getMemberId(), order.getBoothInfo()
+                                                                                                       .getOwnerId(), order.getOrderStatus()
+                                                                                                                           .name()));
     }
 
     @Override
@@ -88,7 +96,9 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
                                                         .get(0)
                                                         .getMenuId());
 
-            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu, order.getOrderTime()));
+            orderSummaries.add(new OrderSummaryResponse(order, festivalInfo, firstMenu, order.getOrderTime()
+                                                                                             .atZone(ZoneId.of("Asia/Seoul"))
+                                                                                             .toLocalDateTime()));
         }
 
         return orderSummaries;
