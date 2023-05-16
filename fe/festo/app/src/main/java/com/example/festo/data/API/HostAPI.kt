@@ -23,6 +23,15 @@ interface HostAPI {
         @Part("request") request: RegiFestivalRequest,
         @Part festivalImg: MultipartBody.Part
     ): Call<RegisterFestivalRes>
+
+    //이미지 없이 축제등록
+    @Multipart
+    @POST("festivals")
+    fun registerNoImageFestival(
+        @Header("Authorization") token: String,
+        @Part("request") request: RegiFestivalRequest,
+        @Part festivalImg: MultipartBody.Part
+    ): Call<RegisterFestivalRes>
     //
     @GET("festivals/manager")
     fun getMyFestival(

@@ -54,7 +54,7 @@ import java.io.File
 class BoothHomeFragment : Fragment() {
     private var retrofit = RetrofitClient.client
     private var menuList = emptyList<BoothMenuListRes>()
-    private lateinit var imagePart: MultipartBody.Part
+    private var imagePart: MultipartBody.Part? = null
     private lateinit var listAdapter: MenuListAdapter
     private var mBinding: FragmentBoothHomeBinding? = null
 
@@ -124,8 +124,6 @@ class BoothHomeFragment : Fragment() {
 
                     // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
                     val request = RegiMenuReq(meueName, Price)
-                    val data = RegisterMenuReq(request, imagePart)
-                    Log.d("잘들어감?", "${data}")
                     val sharedPreferences =
                         requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                     val myValue = sharedPreferences.getString("myToken", "")
@@ -136,7 +134,7 @@ class BoothHomeFragment : Fragment() {
                         Log.d("이미지파트", "${imagePart}")
                         val postApi = retrofit?.create(BoothAPI::class.java)
                         postApi!!.registerMenu(
-                            token,"${boothId}", request, imagePart
+                            token, boothId!!.toLong(), request, imagePart!!
                         )
                             .enqueue(object : Callback<Long> {
                                 override fun onResponse(
@@ -158,8 +156,49 @@ class BoothHomeFragment : Fragment() {
                                 }
                             })
                     }
+                    fun postRegisterNoImageMenu() {
+                        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                        val boothId = sharedPreferences.getString("boothId", "")
+                        val emptyByteArray: ByteArray = byteArrayOf()  // 빈 바이트 배열 생성
+
+                        val requestBody: RequestBody = RequestBody.create(
+                            "multipart/form-data".toMediaTypeOrNull(),
+                            emptyByteArray
+                        )
+                        val part: MultipartBody.Part =
+                            MultipartBody.Part.createFormData("productImage", "", requestBody)
+                        val postApi = retrofit?.create(BoothAPI::class.java)
+                        postApi!!.registerNoImageMenu(
+                            token, boothId!!.toLong(), request, part
+                        )
+                            .enqueue(object : Callback<Long> {
+                                override fun onResponse(
+                                    call: Call<Long>,
+                                    response: Response<Long>
+                                ) {
+                                    val transaction = fragmentManager?.beginTransaction()
+                                    transaction?.replace(R.id.booth_layout_nav_bottom, BoothHomeFragment())
+                                    transaction?.commit()
+                                    Log.d(
+                                        "부스메뉴테스트트",
+                                        "${response.isSuccessful()}, ${response.code()}, ${response}"
+                                    )
+                                }
+
+                                override fun onFailure(call: Call<Long>, t: Throwable) {
+                                    t.printStackTrace()
+                                    Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+                                }
+                            })
+                    }
+                    if (imagePart !== null )
+                    {
                     postRegisterMenu()
                     dialogInterface.dismiss()
+                    } else {
+                        postRegisterNoImageMenu()
+                        dialogInterface.dismiss()
+                    }
                 }
             }
             .setNegativeButton("닫기") { dialogInterface, _ ->
