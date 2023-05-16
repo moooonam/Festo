@@ -16,6 +16,9 @@ spring:
       max-file-size: 50MB
       max-request-size: 50MB
 
+  jackson:
+    time-zone: Asia/Seoul
+
 jwt:
   secret: 6riw64uk66a87JeG64qU7LaV7KCc66W87JyE7ZWc7Iqk66eI7Yq47Jik642U
 
