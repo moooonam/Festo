@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -261,18 +262,51 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                     var topImg2 = view.findViewById<ImageView>(R.id.topMenuImg2)
                     var topImg3 = view.findViewById<ImageView>(R.id.topMenuImg3)
 
-                    topName1.text = response.body()?.menu?.get(0)?.name.toString()
-                    topName2.text = response.body()?.menu?.get(1)?.name.toString()
-                    topName3.text = response.body()?.menu?.get(2)?.name.toString()
-                    Glide.with(requireContext())
-                        .load(response.body()?.menu?.get(0)?.image_url)
-                        .into(topImg1)
-                    Glide.with(requireContext())
-                        .load(response.body()?.menu?.get(1)?.image_url)
-                        .into(topImg2)
-                    Glide.with(requireContext())
-                        .load(response.body()?.menu?.get(2)?.image_url)
-                        .into(topImg3)
+                    if (menuRankList.size >= 3) {
+                        topName1.text = menuRankList[0].name
+                        topName2.text = menuRankList[1].name
+                        topName3.text = menuRankList[2].name
+                        Glide.with(requireContext())
+                            .load(menuRankList[0].image_url)
+                            .into(topImg1)
+                        Glide.with(requireContext())
+                            .load(menuRankList[1].image_url)
+                            .into(topImg2)
+                        Glide.with(requireContext())
+                            .load(menuRankList[2].image_url)
+                            .into(topImg3)
+                    } else if (menuRankList.size == 2) {
+                        topName1.text = menuRankList[0].name
+                        topName2.text = menuRankList[1].name
+                        topName3.text = null
+                        Glide.with(requireContext())
+                            .load(menuRankList[0].image_url)
+                            .into(topImg1)
+                        Glide.with(requireContext())
+                            .load(menuRankList[1].image_url)
+                            .into(topImg2)
+                        val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                        topImg3.setImageDrawable(placeholderImage)
+                    } else if (menuRankList.size == 1) {
+                        topName1.text = menuRankList[0].name
+                        topName2.text = null
+                        topName3.text = null
+                        Glide.with(requireContext())
+                            .load(menuRankList[0].image_url)
+                            .into(topImg1)
+                        val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                        topImg2.setImageDrawable(placeholderImage)
+                        topImg3.setImageDrawable(placeholderImage)
+                    } else {
+                        topName1.text = null
+                        topName2.text = null
+                        topName3.text = null
+                        val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                        topImg1.setImageDrawable(placeholderImage)
+                        topImg2.setImageDrawable(placeholderImage)
+                        topImg3.setImageDrawable(placeholderImage)
+                    }
+
 
                 } else {
                     Log.d("부스매출분석 실패다!!!", "${response.body()}")
