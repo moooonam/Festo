@@ -41,7 +41,7 @@ import retrofit2.Response
 
 class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     private lateinit var listAdapter: BoothRankListAdapter
-    private var mBinding : FragmentHostSalesanalysisBinding? = null
+    private var mBinding: FragmentHostSalesanalysisBinding? = null
     private var retrofit = RetrofitClient.client
     private var dataRetrofit = DataRetrofitClient.client
     private var recommendList = emptyList<BoothData>()
@@ -60,20 +60,21 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
         // 차트 생성 코드
         chart = binding.barChart
 
-        return  mBinding?.root
+        return mBinding?.root
     }
 
     fun createBarChart() {
 //        val values = ArrayList<BarEntry>()
         val type = ArrayList<String>()
         val colorList = ArrayList<Int>()
-        val set : BarDataSet
+        val set: BarDataSet
 
 
         // 차트에 amount 데이터 입력
-        val lastValues = festivalDailyList.takeLast(festivalDailyList.size).mapIndexed { index, festivalDailySales ->
-            BarEntry((index + 1).toFloat(), festivalDailySales.amount.toFloat())
-        }
+        val lastValues = festivalDailyList.takeLast(festivalDailyList.size)
+            .mapIndexed { index, festivalDailySales ->
+                BarEntry((index + 1).toFloat(), festivalDailySales.amount.toFloat())
+            }
         values.addAll(lastValues)
 
         // 차트에 날짜 데이터 입력
@@ -106,7 +107,7 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
 
             val data = BarData(dataSets)
             chart.data = data
-            chart.setVisibleXRange(1.0f,5.0f)
+            chart.setVisibleXRange(1.0f, 5.0f)
             chart.setFitBars(true)
 
             val xAxis = chart.xAxis
@@ -178,7 +179,8 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // data 와 api에 보낼 토큰 선언
-        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
         // hostApi 선언
@@ -191,7 +193,10 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             ) {
                 if (response.isSuccessful) {
                     val dataHostApi = dataRetrofit?.create(HostAPI::class.java)
-                    dataHostApi!!.getFestivalSalesAnalysis(token, response.body()?.get(0)?.festivalId.toString()).enqueue(object : Callback<FestivalAnalysisRes> {
+                    dataHostApi!!.getFestivalSalesAnalysis(
+                        token,
+                        response.body()?.get(0)?.festivalId.toString()
+                    ).enqueue(object : Callback<FestivalAnalysisRes> {
                         @SuppressLint("NotifyDataSetChanged")
                         override fun onResponse(
                             call: Call<FestivalAnalysisRes>,
@@ -227,50 +232,77 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                                 val rank3Image = view.findViewById<ImageView>(R.id.rank_3_Image)
 
                                 // 리스폰스 받은 부스가 3개 이하 일 때 수에 맞게 출력
-                                if (recommendList.size >= 1) {
+                                if (recommendList.size >= 3) {
                                     rank1Name.text = recommendList[0].booth_name
+                                    rank2Name.text = recommendList[1].booth_name
+                                    rank3Name.text = recommendList[2].booth_name
                                     Glide.with(requireContext())
                                         .load(recommendList[0].image_url)
                                         .into(rank1Image)
-                                } else {
-                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
-                                    rank1Image.setImageDrawable(placeholderImage)
-                                }
-
-                                if (recommendList.size >= 2) {
-                                    rank2Name.text = recommendList[1].booth_name
                                     Glide.with(requireContext())
                                         .load(recommendList[1].image_url)
                                         .into(rank2Image)
-                                } else {
-                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
-                                    rank1Image.setImageDrawable(placeholderImage)
-                                }
-
-                                if (recommendList.size >= 3) {
-                                    rank3Name.text = recommendList[2].booth_name
                                     Glide.with(requireContext())
                                         .load(recommendList[2].image_url)
                                         .into(rank3Image)
+                                } else if (recommendList.size == 2) {
+                                    rank1Name.text = recommendList[0].booth_name
+                                    rank2Name.text = recommendList[1].booth_name
+                                    rank3Name.text = null
+                                    Glide.with(requireContext())
+                                        .load(recommendList[0].image_url)
+                                        .into(rank1Image)
+                                    Glide.with(requireContext())
+                                        .load(recommendList[1].image_url)
+                                        .into(rank2Image)
+                                    val placeholderImage = ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.mipmap.ic_launcher
+                                    )
+                                    rank3Image.setImageDrawable(placeholderImage)
+                                } else if (recommendList.size == 1) {
+                                    rank1Name.text = recommendList[0].booth_name
+                                    rank2Name.text = null
+                                    rank3Name.text = null
+                                    Glide.with(requireContext())
+                                        .load(recommendList[0].image_url)
+                                        .into(rank1Image)
+                                    val placeholderImage = ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.mipmap.ic_launcher
+                                    )
+                                    rank2Image.setImageDrawable(placeholderImage)
+                                    rank3Image.setImageDrawable(placeholderImage)
                                 } else {
-                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                                    rank1Name.text = null
+                                    rank2Name.text = null
+                                    rank3Name.text = null
+                                    val placeholderImage = ContextCompat.getDrawable(
+                                        requireContext(),
+                                        R.mipmap.ic_launcher
+                                    )
                                     rank1Image.setImageDrawable(placeholderImage)
+                                    rank2Image.setImageDrawable(placeholderImage)
+                                    rank3Image.setImageDrawable(placeholderImage)
                                 }
                             }
                         }
+
                         override fun onFailure(call: Call<FestivalAnalysisRes>, t: Throwable) {
                             TODO("Not yet implemented")
                         }
                     })
                 }
             }
+
             override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
                 TODO("Not yet implemented")
             }
         })
 
         listAdapter = BoothRankListAdapter(recommendList)
-        mBinding?.boothRankListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mBinding?.boothRankListView?.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mBinding?.boothRankListView?.adapter = listAdapter
 
 
@@ -302,7 +334,7 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
         super.onDestroyView()
     }
 
-     override fun onValueSelected(e: Entry?, h: Highlight?) {
+    override fun onValueSelected(e: Entry?, h: Highlight?) {
         if (e != null) {
             // 막대의 인덱스는 1부터 시작하므로 1을 빼줍니다.
             val selectedIndex = e.x.toInt() - 1
@@ -320,6 +352,7 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             }
         }
     }
+
     override fun onNothingSelected() {
         // 아무 막대도 선택하지 않았을 때의 동작을 정의
     }
