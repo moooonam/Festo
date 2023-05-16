@@ -1,5 +1,6 @@
 package com.example.festo.host_ui.salesanalysis
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -9,16 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.festo.R
-import com.example.festo.R.drawable
 import com.example.festo.data.API.HostAPI
-import com.example.festo.data.API.UserAPI
-import com.example.festo.data.res.FestivalCodeRes
-import com.example.festo.data.res.FestivalInfoRes
+import com.example.festo.data.DataRetrofitClient
+import com.example.festo.data.res.BoothData
+import com.example.festo.data.res.FestivalAnalysisRes
 import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.databinding.FragmentHostSalesanalysisBinding
 import com.github.mikephil.charting.components.XAxis
@@ -30,18 +31,14 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Locale
 
-class BoothRankData(
-    var image: Int? = null,
-    var name: String? = null,
-    var totalSales: Int? = null,
-)
 class HostSalesAnalysisFragment : Fragment() {
     private lateinit var listAdapter: BoothRankListAdapter
     private var mBinding : FragmentHostSalesanalysisBinding? = null
     private var retrofit = RetrofitClient.client
+    private var dataRetrofit = DataRetrofitClient.client
+    private var recommendList = emptyList<BoothData>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -161,24 +158,90 @@ class HostSalesAnalysisFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var BoothRankDataList : ArrayList <BoothRankData> = arrayListOf(
-            BoothRankData(drawable.logo1,"까사꼬치", 5000000),
-            BoothRankData(drawable.logo2,"까사꼬치", 4000000),
-            BoothRankData(drawable.logo3,"까사꼬치", 3000000),
-            BoothRankData(drawable.logo2,"까사꼬치", 2000000),
-            BoothRankData(drawable.logo3,"까사꼬치", 1000000),
-            BoothRankData(drawable.logo2,"까사꼬치", 1000000),
-            BoothRankData(drawable.logo3,"까사꼬치", 1000000),
-        )
-        listAdapter = BoothRankListAdapter(BoothRankDataList)
-        mBinding?.boothRankListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.boothRankListView?.adapter = listAdapter
-
-        // 축제 상세정보 조회
+        // data 와 api에 보낼 토큰 선언
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
+        // hostApi 선언
         val hostApi = retrofit?.create(HostAPI::class.java)
+
+        hostApi!!.getMyFestival(token).enqueue(object : Callback<List<MyFestivalRes>> {
+            override fun onResponse(
+                call: Call<List<MyFestivalRes>>,
+                response: Response<List<MyFestivalRes>>
+            ) {
+                if (response.isSuccessful) {
+                    val dataHostApi = dataRetrofit?.create(HostAPI::class.java)
+                    dataHostApi!!.getFestivalSalesAnalysis(token, response.body()?.get(0)?.festivalId.toString()).enqueue(object : Callback<FestivalAnalysisRes> {
+                        @SuppressLint("NotifyDataSetChanged")
+                        override fun onResponse(
+                            call: Call<FestivalAnalysisRes>,
+                            response: Response<FestivalAnalysisRes>
+                        ) {
+                            if (response.isSuccessful) {
+                                Log.i("창민추천", response.body()?.booth_data?.get(1)?.booth_name.toString())
+                                Log.i("창민추천", response.body()?.booth_data?.get(0)?.image_url.toString())
+                                recommendList = response.body()?.booth_data ?: emptyList()
+                                listAdapter.updateList(recommendList)
+
+                                // 1등 ~ 3등 이름
+                                val rank1Name = view.findViewById<TextView>(R.id.rank_1_Name)
+                                val rank2Name = view.findViewById<TextView>(R.id.rank_2_Name)
+                                val rank3Name = view.findViewById<TextView>(R.id.rank_3_Name)
+                                // 1등 ~ 3등 부스 이미지
+                                val rank1Image = view.findViewById<ImageView>(R.id.rank_1_Image)
+                                val rank2Image = view.findViewById<ImageView>(R.id.rank_2_Image)
+                                val rank3Image = view.findViewById<ImageView>(R.id.rank_3_Image)
+
+                                // 리스폰스 받은 부스가 3개 이하 일 때 수에 맞게 출력
+                                if (recommendList.size >= 1) {
+                                    rank1Name.text = recommendList[0].booth_name
+                                    Glide.with(requireContext())
+                                        .load(recommendList[0].image_url)
+                                        .into(rank1Image)
+                                } else {
+                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                                    rank1Image.setImageDrawable(placeholderImage)
+                                }
+
+                                if (recommendList.size >= 2) {
+                                    rank2Name.text = recommendList[1].booth_name
+                                    Glide.with(requireContext())
+                                        .load(recommendList[1].image_url)
+                                        .into(rank2Image)
+                                } else {
+                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                                    rank1Image.setImageDrawable(placeholderImage)
+                                }
+
+                                if (recommendList.size >= 3) {
+                                    rank3Name.text = recommendList[2].booth_name
+                                    Glide.with(requireContext())
+                                        .load(recommendList[2].image_url)
+                                        .into(rank3Image)
+                                } else {
+                                    val placeholderImage = ContextCompat.getDrawable(requireContext(),R.mipmap.ic_launcher)
+                                    rank1Image.setImageDrawable(placeholderImage)
+                                }
+                            }
+                        }
+                        override fun onFailure(call: Call<FestivalAnalysisRes>, t: Throwable) {
+                            TODO("Not yet implemented")
+                        }
+                    })
+                }
+            }
+            override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+        })
+
+        listAdapter = BoothRankListAdapter(recommendList)
+        mBinding?.boothRankListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mBinding?.boothRankListView?.adapter = listAdapter
+
+
+        // 축제 상세정보 조회
         hostApi!!.getMyFestival(token).enqueue(object : Callback<List<MyFestivalRes>> {
             override fun onResponse(
                 call: Call<List<MyFestivalRes>>,
