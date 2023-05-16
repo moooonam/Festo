@@ -89,17 +89,17 @@ class MessagingService : FirebaseMessagingService() {
             .setContentText(body)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            //.setFullScreenIntent(pendingIntent, true)
-            // .setContentIntent(pendingIntent)
-            /*.apply {
-                if (body != null) {
-                    setContentText(body)
-                }
-            }*/
-
-
-        /*with(NotificationManagerCompat.from(this)) {
-            notify(1, notificationBuilder.build())
+        //.setFullScreenIntent(pendingIntent, true)
+        // .setContentIntent(pendingIntent)
+        /*.apply {
+            if (body != null) {
+                setContentText(body)
+            }
         }*/
+
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(1, notificationBuilder.build())
+        }
     }
 }
