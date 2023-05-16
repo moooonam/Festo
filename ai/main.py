@@ -131,11 +131,11 @@ def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depend
 
         # 예측 평점이 높은 순으로 상위 3개 가게 추천
         top_n[user_id] = sorted(predictions, key=lambda x: x[1], reverse=True)[:3]
-    print(top_n)
+
     booths = []
     try:
         booth_idxs = list(map(lambda x: x[0],top_n[user_number]))
-        print(booth_idxs)
+
         for idx in booth_idxs:
             Booth = db.query(BoothTable).filter(BoothTable.booth_id == idx).all()[0]
             booths.append({
@@ -210,29 +210,31 @@ def get_store_data(booth_id: str, db: SessionLocal = Depends(get_db)):
     store_data = []
     Booths = db.query(BoothTable).filter(BoothTable.booth_id==booth_id).all()
     Products = db.query(ProductTable).all()
-    
-    for booth in Booths:
-        store_data.append({
-            'booth_id': booth.booth_id,
-            'booth_name':booth.name,
-            'booth_image_url':booth.image_url,
-            # "popular_menu":"",
-            'menu':[],
-            "daily_sales":[]
-        })
+    try:
+        for booth in Booths:
+            store_data.append({
+                'booth_id': booth.booth_id,
+                'booth_name':booth.name,
+                'booth_image_url':booth.image_url,
+                # "popular_menu":"",
+                'menu':[],
+                "daily_sales":[]
+            })
 
-    for product in Products:
-        for booth in store_data:
-            if product.booth_id == booth['booth_id']:
-                booth['menu'].append({
-                    'menu_id': product.product_id,
-                    'name': product.name,
-                    'image_url':product.image_url,
-                    'price':product.price,
-                    'count':0,
-                    "amount":0
-                })
-    return store_data[0]
+        for product in Products:
+            for booth in store_data:
+                if product.booth_id == booth['booth_id']:
+                    booth['menu'].append({
+                        'menu_id': product.product_id,
+                        'name': product.name,
+                        'image_url':product.image_url,
+                        'price':product.price,
+                        'count':0,
+                        "amount":0
+                    })
+        return store_data[0]
+    except:
+        return store_data
 
 # 유사한 부스 제공
 def CF_booth(target_booth_id, df, model):
@@ -300,40 +302,42 @@ def booth_sales(booth_id:str, db: SessionLocal = Depends(get_db)):
 
     # 메뉴별 데이터
     required_data = get_store_data(booth_id=booth_id, db=db)
-    required_data_menu = required_data["menu"]
-    for order in orders_list:
-        for menu_dic in order["order_menu"]:
-            for menu in required_data_menu:
-                if menu["menu_id"] == menu_dic["menu_id"]:
-                    menu["count"] += menu_dic["quantity"]
-                    
-    # 매출 많은순 정렬
-    for menu in required_data_menu:
-        menu["amount"] = menu["price"]*menu["count"]
-    required_data_menu = sorted(required_data_menu,key=lambda x: x["amount"], reverse=True)
-    
-    required_data["menu"] = required_data_menu
-
-    # 일별 매출
-    daily_sales = []
-    for order in Orders:
-        write = True
-        date = f"{order.order_time.year}-{order.order_time.month}-{order.order_time.day}"
-        for sales in daily_sales:
-            if sales["date"] == date:
-                sales["count"] += 1
-                sales["amount"] += order.total_amounts
-                write = False
-                break
+    try:
+        required_data_menu = required_data["menu"]
+        for order in orders_list:
+            for menu_dic in order["order_menu"]:
+                for menu in required_data_menu:
+                    if menu["menu_id"] == menu_dic["menu_id"]:
+                        menu["count"] += menu_dic["quantity"]
+                        
+        # 매출 많은순 정렬
+        for menu in required_data_menu:
+            menu["amount"] = menu["price"]*menu["count"]
+        required_data_menu = sorted(required_data_menu,key=lambda x: x["amount"], reverse=True)
         
-        if write:
-            daily_sales.append({
-                "date":date,
-                "count":1,
-                "amount": order.total_amounts
-            })
-    required_data["daily_sales"] = daily_sales
+        required_data["menu"] = required_data_menu
 
+        # 일별 매출
+        daily_sales = []
+        for order in Orders:
+            write = True
+            date = f"{order.order_time.year}-{order.order_time.month}-{order.order_time.day}"
+            for sales in daily_sales:
+                if sales["date"] == date:
+                    sales["count"] += 1
+                    sales["amount"] += order.total_amounts
+                    write = False
+                    break
+            
+            if write:
+                daily_sales.append({
+                    "date":date,
+                    "count":1,
+                    "amount": order.total_amounts
+                })
+        required_data["daily_sales"] = daily_sales
+    except:
+        return "없는 부스입니다."
     # 부스 이용자들에게 추천하는 부스의 인기메뉴 제공
     try:
         festivalId = db.query(BoothTable).filter(BoothTable.booth_id==booth_id).first().festival_id
