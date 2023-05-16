@@ -115,7 +115,10 @@ class MypageFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d(" 유저정보부르기", "${response},  ${response.body()?.nickname}")
+                        if (!response.body()?.nickname.isNullOrEmpty())
+                        {
                         mBinding?.tvGreating!!.text = "${response.body()?.nickname}님 안녕하세요"
+                        }
                     }
 
                 }
