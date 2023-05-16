@@ -1,6 +1,8 @@
 package com.example.festo.host_ui.salesanalysis
 
+import RetrofitClient
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -20,24 +22,32 @@ import com.example.festo.data.API.HostAPI
 import com.example.festo.data.DataRetrofitClient
 import com.example.festo.data.res.BoothData
 import com.example.festo.data.res.FestivalAnalysisRes
+import com.example.festo.data.res.FestivalDailySales
 import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.databinding.FragmentHostSalesanalysisBinding
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HostSalesAnalysisFragment : Fragment() {
+class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     private lateinit var listAdapter: BoothRankListAdapter
     private var mBinding : FragmentHostSalesanalysisBinding? = null
     private var retrofit = RetrofitClient.client
     private var dataRetrofit = DataRetrofitClient.client
     private var recommendList = emptyList<BoothData>()
+    private lateinit var chart: BarChart
+    private var values = ArrayList<BarEntry>()
+    private var festivalDailyList = emptyList<FestivalDailySales>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,112 +58,121 @@ class HostSalesAnalysisFragment : Fragment() {
         mBinding = binding
 
         // 차트 생성 코드
-        val chart = binding.barChart
+        chart = binding.barChart
 
-        fun basicSetting() {
-            chart.apply {
-                description.isEnabled = false
-                setMaxVisibleValueCount(5) // 최대로 보여지는 데이터의 수
-                setPinchZoom(false)
-                setDrawBarShadow(false)
-                setDrawGridBackground(false)
-                setDrawBorders(false)
-                legend.isEnabled = false
-                setTouchEnabled(false)
-                isDoubleTapToZoomEnabled = false
-                animateY(5000) // 애니메이션 효과 적용 시간
-            }
+        return  mBinding?.root
+    }
+
+    fun createBarChart() {
+//        val values = ArrayList<BarEntry>()
+        val type = ArrayList<String>()
+        val colorList = ArrayList<Int>()
+        val set : BarDataSet
+
+
+        // 차트에 amount 데이터 입력
+        val lastValues = festivalDailyList.takeLast(festivalDailyList.size).mapIndexed { index, festivalDailySales ->
+            BarEntry((index + 1).toFloat(), festivalDailySales.amount.toFloat())
         }
+        values.addAll(lastValues)
 
-        fun setxAxis() {
-            val xAxis = chart.xAxis
-            xAxis.apply {
-                setDrawGridLines(false)
-                isEnabled = true
-                position = XAxis.XAxisPosition.BOTTOM
-                disableGridDashedLine()
-                setDrawAxisLine(false)
-            }
+        // 차트에 날짜 데이터 입력
+        type.add(" ")
+        festivalDailyList.forEach { festivalDailySales ->
+            val date = festivalDailySales.date
+            val day = date.substring(date.lastIndexOf("-") + 1) // 일(day) 추출
+            type.add(day + "일")
         }
-
-        fun setLeftXaxis() {
-            val leftXaxis = chart.axisLeft
-            leftXaxis.apply {
-                setDrawGridLines(false)
-                setDrawAxisLine(false)
-                isEnabled = false
-                setDrawLabels(false)
-                axisMaximum = 600f
-            }
-        }
-
-        fun setRightXaxis() {
-            val rightXaxis = chart.axisRight
-            rightXaxis.apply {
-                setDrawGridLines(false)
-                setDrawAxisLine(false)
-                isEnabled = false
-                setDrawLabels(false)
-            }
-        }
-
-        fun createBarChart() {
-            val values = ArrayList<BarEntry>()
-            val type = ArrayList<String>()
-            val colorList = ArrayList<Int>()
-            val set : BarDataSet
-
-            values.add(BarEntry(1.0f, 320.0f))
-            values.add(BarEntry(2.0f, 430.0f))
-            values.add(BarEntry(3.0f, 440.0f))
-            values.add(BarEntry(4.0f, 300.0f))
-            values.add(BarEntry(5.0f, 520.0f))
-
-            type.add(" ")
-            type.add("26일")
-            type.add("27일")
-            type.add("28일")
-            type.add("29일")
-            type.add("30일")
-
-            colorList.add(Color.parseColor("#F24E1E"))
-
-            if (chart.data != null && chart.data.dataSetCount > 1) {
-                val chartData = chart.data
-                set = chartData?.getDataSetByIndex(0) as BarDataSet
-                set.values = values
-                chartData.notifyDataChanged()
-                chart.notifyDataSetChanged()
-            } else {
-                set = BarDataSet(values, " ")
-                set.colors = colorList
-                set.setDrawValues(true)
-
-                val dataSets = ArrayList<IBarDataSet>()
-                dataSets.add(set)
-
-                val data = BarData(dataSets)
-                chart.data = data
-                chart.setVisibleXRange(1.0f,5.0f)
-                chart.setFitBars(true)
-
-                val xAxis = chart.xAxis
-                xAxis.apply {
-                    granularity = 1f
-                    isGranularityEnabled = true
-                    valueFormatter = IndexAxisValueFormatter(type)
-                }
-                chart.invalidate()
-            }
-        }
-
         basicSetting()
         setxAxis()
         setLeftXaxis()
         setRightXaxis()
-        createBarChart()
 
-        return  mBinding?.root
+        colorList.add(Color.parseColor("#F24E1E"))
+
+        if (chart.data != null && chart.data.dataSetCount > 1) {
+            val chartData = chart.data
+            set = chartData?.getDataSetByIndex(0) as BarDataSet
+            set.values = values
+            chartData.notifyDataChanged()
+            chart.notifyDataSetChanged()
+        } else {
+            set = BarDataSet(values, " ")
+            set.colors = colorList
+            set.setDrawValues(true)
+
+            val dataSets = ArrayList<IBarDataSet>()
+            dataSets.add(set)
+
+            val data = BarData(dataSets)
+            chart.data = data
+            chart.setVisibleXRange(1.0f,5.0f)
+            chart.setFitBars(true)
+
+            val xAxis = chart.xAxis
+            xAxis.apply {
+                granularity = 1f
+                isGranularityEnabled = true
+                valueFormatter = IndexAxisValueFormatter(type)
+            }
+            chart.invalidate()
+        }
+        chart.setOnChartValueSelectedListener(this)
+    }
+
+    fun basicSetting() {
+        chart.apply {
+            description.isEnabled = false
+            setMaxVisibleValueCount(festivalDailyList.size) // 최대로 보여지는 데이터의 수
+            setPinchZoom(false)
+            setDrawBarShadow(false)
+            setDrawGridBackground(false)
+            setDrawBorders(false)
+            legend.isEnabled = false
+            setTouchEnabled(false)
+            isDoubleTapToZoomEnabled = false
+            animateY(3000) // 애니메이션 효과 적용 시간
+        }
+    }
+
+    fun setxAxis() {
+        val xAxis = chart.xAxis
+        xAxis.apply {
+            setDrawGridLines(false)
+            isEnabled = true
+            position = XAxis.XAxisPosition.BOTTOM
+            disableGridDashedLine()
+            setDrawAxisLine(false)
+        }
+    }
+
+    fun setLeftXaxis() {
+        val leftXaxis = chart.axisLeft
+        leftXaxis.apply {
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+            isEnabled = true
+            setDrawLabels(true)
+//            axisMaximum = 60000f
+            var maxYValue = Float.MIN_VALUE
+            for (entry in values) {
+                if (entry.y > maxYValue) {
+                    maxYValue = entry.y
+                }
+            }
+            val newAxisMaximum = maxYValue + 10000f
+            axisMaximum = newAxisMaximum
+        }
+    }
+
+    fun setRightXaxis() {
+        val rightXaxis = chart.axisRight
+        rightXaxis.apply {
+            setDrawGridLines(false)
+            setDrawAxisLine(false)
+            isEnabled = false
+            setDrawLabels(false)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -179,9 +198,23 @@ class HostSalesAnalysisFragment : Fragment() {
                             response: Response<FestivalAnalysisRes>
                         ) {
                             if (response.isSuccessful) {
-                                Log.i("창민추천", response.body()?.booth_data?.get(1)?.booth_name.toString())
-                                Log.i("창민추천", response.body()?.booth_data?.get(0)?.image_url.toString())
+//                                Log.i("창민추천", response.body()?.booth_data?.get(1)?.booth_name.toString())
+//                                Log.i("창민추천", response.body()?.booth_data?.get(0)?.image_url.toString())
                                 recommendList = response.body()?.booth_data ?: emptyList()
+                                festivalDailyList = response.body()?.daily_sales ?: emptyList()
+
+                                val textView = view.findViewById<TextView>(R.id.nodata)
+
+                                if (festivalDailyList.size < 2) {
+                                    textView.visibility = View.VISIBLE
+                                    chart.visibility = View.GONE
+                                } else {
+                                    textView.visibility = View.GONE
+                                    chart.visibility = View.VISIBLE
+
+                                    createBarChart()
+                                }
+
                                 listAdapter.updateList(recommendList)
 
                                 // 1등 ~ 3등 이름
@@ -268,4 +301,27 @@ class HostSalesAnalysisFragment : Fragment() {
         mBinding = null
         super.onDestroyView()
     }
+
+     override fun onValueSelected(e: Entry?, h: Highlight?) {
+        if (e != null) {
+            // 막대의 인덱스는 1부터 시작하므로 1을 빼줍니다.
+            val selectedIndex = e.x.toInt() - 1
+
+            if (selectedIndex >= 0 && selectedIndex < festivalDailyList.size) {
+                val selectedData = festivalDailyList[selectedIndex]
+
+                // 다이얼로그에 선택된 데이터를 표시하는 로직을 작성하면 됩니다.
+                val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+                    .setTitle("매출 상세정보")
+                    .setMessage("날짜: ${selectedData.date}\n누적 주문건수: ${selectedData.count}\n누적 매출: ${selectedData.amount}")
+                    .setPositiveButton("OK", null)
+                    .create()
+                dialog.show()
+            }
+        }
+    }
+    override fun onNothingSelected() {
+        // 아무 막대도 선택하지 않았을 때의 동작을 정의
+    }
+
 }
