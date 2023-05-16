@@ -108,7 +108,7 @@ def training_model(booth_data,user_data):
 
 
 # 부스 추천
-@app.get("/data/recommend_booth/{festival_id}/{user_number}")
+@app.get("/recommend_booth/{festival_id}/{user_number}")
 def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
@@ -131,16 +131,16 @@ def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depend
 
         # 예측 평점이 높은 순으로 상위 3개 가게 추천
         top_n[user_id] = sorted(predictions, key=lambda x: x[1], reverse=True)[:3]
-
+    print(top_n)
     booths = []
     try:
         booth_idxs = list(map(lambda x: x[0],top_n[user_number]))
+        print(booth_idxs)
         for idx in booth_idxs:
             Booth = db.query(BoothTable).filter(BoothTable.booth_id == idx).all()[0]
             booths.append({
                 "booth_id" : Booth.booth_id,
                 "booth_description":Booth.booth_description,
-                "category":Booth.category,
                 "image_url":Booth.image_url,
                 "location_description":Booth.location_description,
                 'name':Booth.name,
@@ -157,7 +157,7 @@ class Order(BaseModel):
 
 
 # 같은 가게 메뉴 추천
-@app.post("/data/recommend_order/{festival_id}")
+@app.post("/recommend_order/{festival_id}")
 def recommend_order(festival_id: str, order:Order, db: SessionLocal = Depends(get_db)):
     booth_data = BoothData(festival_id=festival_id, db=db)
     user_data = UserData(festival_id=festival_id, db=db)
@@ -238,7 +238,7 @@ def get_store_data(booth_id: str, db: SessionLocal = Depends(get_db)):
 
 # 부스 데이터 제공
 
-@app.get("/data/booths/{booth_id}/sales")
+@app.get("/booths/{booth_id}/sales")
 def booth_sales(booth_id:str, db: SessionLocal = Depends(get_db)):
 
     # festivalId 축제의 boothId 부스 orders
@@ -326,7 +326,7 @@ def booth_sales(booth_id:str, db: SessionLocal = Depends(get_db)):
 
 
 # 축제 데이터 분석
-@app.get("/data/festivals/{festival_id}/sales")
+@app.get("/festivals/{festival_id}/sales")
 def festival_data(festival_id:str, db: SessionLocal = Depends(get_db)):
 
     Booths = db.query(BoothTable).filter(BoothTable.festival_id == festival_id).all()
