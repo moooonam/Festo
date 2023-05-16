@@ -28,7 +28,16 @@ interface BoothAPI {
     @POST("festivals/{festival_id}/booths")
     fun registerBooth(
         @Header("Authorization") token: String,
-        @Path("festival_id") festival_id: String,
+        @Path("festival_id") festival_id: Long,
+        @Part("request") request: RegiBoothRequest,
+        @Part boothImg: MultipartBody.Part
+    ): Call<RegisterBoothRes>
+    // 이미지 없이 부스 등록하기
+    @Multipart
+    @POST("festivals/{festival_id}/booths")
+    fun registerNoImageBooth(
+        @Header("Authorization") token: String,
+        @Path("festival_id") festival_id: Long,
         @Part("request") request: RegiBoothRequest,
         @Part boothImg: MultipartBody.Part
     ): Call<RegisterBoothRes>
@@ -38,7 +47,17 @@ interface BoothAPI {
     @POST("booths/{booth_id}/menu")
     fun registerMenu(
         @Header("Authorization") token: String,
-        @Path("booth_id") booth_id: String,
+        @Path("booth_id") booth_id: Long,
+        @Part("request") request: RegiMenuReq,
+        @Part productImage: MultipartBody.Part
+    ): Call<Long>
+
+    //
+    @Multipart
+    @POST("booths/{booth_id}/menu")
+    fun registerNoImageMenu(
+        @Header("Authorization") token: String,
+        @Path("booth_id") booth_id: Long,
         @Part("request") request: RegiMenuReq,
         @Part productImage: MultipartBody.Part
     ): Call<Long>
