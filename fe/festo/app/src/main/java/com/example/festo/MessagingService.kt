@@ -98,8 +98,8 @@ class MessagingService : FirebaseMessagingService() {
             }*/
 
 
-        /*with(NotificationManagerCompat.from(this)) {
+        with(NotificationManagerCompat.from(this)) {
             notify(1, notificationBuilder.build())
-        }*/
+        }
     }
 }
