@@ -46,7 +46,14 @@ public class ProductService implements RegisterProductUseCase, LoadProductUseCas
                                  .build();
 
         product = saveProductPort.saveProduct(product);
-        String imageUrl = saveImgPort.saveProductImg(registerProductCommand.getProductImage(), product.getProductId());
+        String imageUrl=null;
+        if(!registerProductCommand.getProductImage().isEmpty()){
+            imageUrl = saveImgPort.saveProductImg(registerProductCommand.getProductImage(), product.getProductId());
+        }
+        else imageUrl="https://festo-s3.s3.ap-northeast-2.amazonaws.com/productDefault.png";
+
+
+
 
         return saveProductPort.updateSetImg(product.getProductId(), imageUrl);
     }
