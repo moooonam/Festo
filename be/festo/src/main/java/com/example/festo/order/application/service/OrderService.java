@@ -9,6 +9,7 @@ import com.example.festo.order.application.port.in.PlaceOrderUseCase;
 import com.example.festo.order.application.port.out.*;
 import com.example.festo.order.domain.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase, LoadOrderUseCase {
@@ -90,6 +92,7 @@ public class OrderService implements PlaceOrderUseCase, OrderStatusChangeUseCase
 
         List<OrderSummaryResponse> orderSummaries = new ArrayList<>();
         for (Order order : orders) {
+            log.info("order Domain: {} / {}", order.getOrderId(), order.getOrderTime());
             FestivalInfo festivalInfo = loadFestivalInfoPort.loadFestivalInfoByBoothId(order.getBoothInfo()
                                                                                             .getBoothId());
             Menu firstMenu = loadMenuPort.loadMenu(order.getOrderLines()

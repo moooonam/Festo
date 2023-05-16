@@ -12,6 +12,7 @@ import com.example.festo.order.domain.Order;
 import com.example.festo.order.domain.OrderStatus;
 import com.example.festo.order.domain.Orderer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, UpdateOrderStatusPort {
@@ -122,6 +124,8 @@ public class OrderPersistenceAdapter implements PlaceOrderPort, LoadOrderPort, U
 
         Orderer orderer = new Orderer(member.getId(), member.getNickname());
         BoothInfo boothInfo = new BoothInfo(booth.getBoothId(), booth.getOwner().getId(), booth.getName());
+
+        log.info("orderEntity: {} / {}", orderEntity.getOrderId(), orderEntity.getOrderTime());
 
         return Order.builder()
                     .orderId(orderEntity.getOrderId())
