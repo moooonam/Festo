@@ -2,7 +2,7 @@ package com.example.festo.data.res
 
 class MenuRecommendRes (
     val product_id : Int,
-    val image_url : Int,
-    val name : Int,
+    val image_url : String,
+    val name : String,
     val price : Int
 )

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.icu.text.NumberFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,14 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.data.res.BoothData
+import com.example.festo.data.res.MenuRecommendRes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.Locale
 
-class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayList<RecommendMenu>, val myOrderList: ArrayList<MyOrderList>) : BaseAdapter() {
+class RecommendMenuAdapter(val context: Context, var RecommendMenuList: List<MenuRecommendRes>, val myOrderList: ArrayList<MyOrderList>, var boothId:String, var festivalId:String) : BaseAdapter() {
     override fun getCount(): Int {
         return RecommendMenuList.size
     }
@@ -31,7 +35,7 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
     // 추천 메뉴를 myorderlist에 추가
     fun addMenuToOrderList(position: Int, count: Int) {
         val recommendMenu = RecommendMenuList[position]
-        val myOrder = MyOrderList(recommendMenu.productId, recommendMenu.image, recommendMenu.name, recommendMenu.price, count)
+        val myOrder = MyOrderList(recommendMenu.product_id.toString(), recommendMenu.image_url, recommendMenu.name, recommendMenu.price, count)
         myOrderList.add(myOrder)
         notifyDataSetChanged()
     }
@@ -44,12 +48,15 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
         val price = view.findViewById<TextView>(R.id.menuPrice)
 
         val recommendMenu = RecommendMenuList[position]
-
+        Log.d("추천된메뉴뉴뉴뉴뉴뉸", recommendMenu.toString())
         // 데이터 연결. 이미지는 아직 안넣어줬음
         name.text = recommendMenu.name
         val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
         val formattedString = formatter.format(recommendMenu.price)
         price.text = "${formattedString}원"
+        Glide.with(view.getContext())
+            .load(recommendMenu.image_url)
+            .into(image)
 
         // 추천메뉴 담기 클릭
         val addBtn = view.findViewById<TextView>(R.id.addBtn)
@@ -86,6 +93,8 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
                     notifyDataSetChanged()
                     val intent = Intent(context, PaymentActivity::class.java)
                     intent.putExtra("myOrderList", myOrderList)
+                    intent.putExtra("boothId", boothId)
+                    intent.putExtra("festivalId",festivalId)
                     context.startActivity(intent)
                 }
                 .show()
@@ -93,6 +102,10 @@ class RecommendMenuAdapter(val context: Context, val RecommendMenuList: ArrayLis
 
         return view
         //연결이 완료된 뷰를 돌려준다.
+    }
+    fun updateList(newList: List<MenuRecommendRes>) {
+        RecommendMenuList = newList
+        notifyDataSetChanged()
     }
 
 }

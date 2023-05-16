@@ -54,7 +54,7 @@ class PaymentResultActivity : AppCompatActivity() {
 
         // 부스 아이디 전달받아야함
         val orderInfos = myOrderList.map {
-            OrderInfo(menuId = it.productId.toLong(), quantity = it.cnt)
+            OrderInfo(menuId = it.product_id.toLong(), quantity = it.cnt)
         }
         val orderReq = OrderReq(
             boothId = boothId!!.toLong(),

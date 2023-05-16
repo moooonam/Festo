@@ -1,7 +1,7 @@
 package com.example.festo.data.req
 
 class MenuRecommendReq (
-    val booth_id : Int,
+    val boothId : Int,
     val orderList : List<OrderList>
 )
 
