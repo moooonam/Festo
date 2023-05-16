@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/hostHomeFragment"
+        android:title="홈"
+        android:icon="@drawable/ic_home"
+        />
+    <item
+        android:id="@+id/boothListFragment"
+        android:title="부스목록"
+        android:icon="@drawable/ic_boothlist"
+        />
+    <item
+        android:id="@+id/hostSalesAnalysisFragment"
+        android:title="매출분석"
+        android:icon="@drawable/ic_chart"
+        />
+    <item
+        android:id="@+id/hostMypageFragment"
+        android:title="마이페이지"
+        android:icon="@drawable/ic_mypage"
+        />
+</menu>

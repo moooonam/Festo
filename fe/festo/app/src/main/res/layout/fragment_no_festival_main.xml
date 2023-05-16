@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/festO"
+    tools:context=".host_ui.no_festival.NoFestivalMainFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="150dp"
+            android:text="fest'O"
+            android:textColor="@color/white"
+            android:textSize="90dp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/goRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/booth_register"
+            android:text="축제 등록"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/festO" />
+
+        <TextView
+            android:id="@+id/goCustomer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일반 사용자로 돌아가기"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"/>
+
+        <View
+            android:layout_width="145dp"
+            android:layout_height="1dp"
+            android:layout_gravity="center"
+            android:background="@color/white" />
+
+
+    </LinearLayout>
+</FrameLayout>
