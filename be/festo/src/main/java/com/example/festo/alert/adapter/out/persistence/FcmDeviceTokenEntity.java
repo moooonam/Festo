@@ -20,7 +20,7 @@ public class FcmDeviceTokenEntity {
 
     private String token;
 
-    public FcmDeviceTokenEntity(Long memberId, String token) {
+    public FcmDeviceTokenEntity(Long memberId, Long id, String token) {
         this.memberId = memberId;
         this.token = token;
     }
