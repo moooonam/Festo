@@ -33,7 +33,6 @@ class HomeFragment : Fragment() {
     private var mBinding: FragmentHomeBinding? = null
     private var listAdapter: FestivalItemListAdapter? = null
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,33 +41,7 @@ class HomeFragment : Fragment() {
         var binding = FragmentHomeBinding.inflate(inflater, container, false)
         mBinding = binding
 
-
-        listAdapter = FestivalItemListAdapter(festivalList)
-        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mBinding?.festivalRecyclerView?.adapter = listAdapter
-
-        val api = retrofit?.create(UserAPI::class.java)
-        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-        val myValue = sharedPreferences.getString("myToken", "")
-        val token = "$myValue"
-        api!!.getFestivalList(token).enqueue(object:retrofit2.Callback<List<FestivalListRes>> {
-            override fun onResponse(
-                call: Call<List<FestivalListRes>>,
-                response: Response<List<FestivalListRes>>
-            ) {
-                if (response.isSuccessful) {
-                    Log.i("성공다", "${response.body()}")
-                    festivalList = response.body()?: emptyList()
-                    // 리사이클러뷰 업데이트
-                    listAdapter?.updateList(festivalList)
-                }
-            }
-            override fun onFailure(call: Call<List<FestivalListRes>>, t: Throwable) {
-                Log.i("실패다", "$t")
-            }
-        })
-
-        mBinding!!.notificationBtn.setOnClickListener{
+        mBinding!!.notificationBtn.setOnClickListener {
             val transaction = fragmentManager?.beginTransaction()
             transaction?.replace(R.id.layout_nav_bottom, NotificationFragment())
             transaction?.commit()
@@ -86,8 +59,33 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*listAdapter = FestivalItemListAdapter(festivalList)
-        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)*/
+        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+
+
+        val api = retrofit?.create(UserAPI::class.java)
+        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+        val myValue = sharedPreferences.getString("myToken", "")
+        val token = "$myValue"
+        api!!.getFestivalList(token).enqueue(object : retrofit2.Callback<List<FestivalListRes>> {
+            override fun onResponse(
+                call: Call<List<FestivalListRes>>,
+                response: Response<List<FestivalListRes>>
+            ) {
+                if (response.isSuccessful) {
+                    Log.i("성공다", "${response.body()}")
+                    festivalList = response.body() ?: emptyList()
+                    listAdapter?.updateList(festivalList)
+                }
+            }
+
+            override fun onFailure(call: Call<List<FestivalListRes>>, t: Throwable) {
+                Log.i("실패다", "$t")
+            }
+        })
+
+        listAdapter = FestivalItemListAdapter(festivalList)
+        mBinding?.festivalRecyclerView?.adapter = listAdapter
+
     }
 
     override fun onDestroyView() {
