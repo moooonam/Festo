@@ -1,15 +1,18 @@
 package com.example.festo.data.API
 
 import com.example.festo.data.req.LoginReq
+import com.example.festo.data.req.MenuRecommendReq
 import com.example.festo.data.req.OrderReq
 import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.BoothRecommendRes
 import com.example.festo.data.res.BoothWaitingRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.IsHaveFestivalRes
 import com.example.festo.data.res.LoginRes
+import com.example.festo.data.res.MenuRecommendRes
 import com.example.festo.data.res.MyBoothListRes
 import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserInfoRes
@@ -101,5 +104,15 @@ interface UserAPI {
     // 내가 등록한 부스 리스트 조회
     @GET("booths/{owner_id}/owner")
     fun getMyBoothList(@Header("Authorization") token: String,  @Path("owner_id") owner_id: String): Call<List<MyBoothListRes>>
+
+
+    // 사용자 주문 기록 기반으로 부스 추천
+    @GET("data/recommend_booth/{festival_id}/{user_id}")
+    fun getBoothRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String,  @Path("user_id") user_id: String): Call<List<BoothRecommendRes>>
+
+
+    // 주문할 메뉴 기반으로 메뉴 추천
+    @POST("data/recommend_order/{festival_id}")
+    fun getMenuRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String, @Body data: MenuRecommendReq): Call<List<MenuRecommendRes>>
 
 }

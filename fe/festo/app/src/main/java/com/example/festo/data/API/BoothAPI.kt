@@ -4,6 +4,7 @@ import com.example.festo.data.req.BoothStatusReq
 import com.example.festo.data.req.ChangeOrderStateReq
 import com.example.festo.data.req.RegiBoothRequest
 import com.example.festo.data.req.RegiMenuReq
+import com.example.festo.data.res.BoothAnalysisRes
 import com.example.festo.data.res.BoothOrderDetailRes
 import com.example.festo.data.res.BoothOrderListCompleteRes
 import com.example.festo.data.res.BoothOrderListRes
@@ -99,4 +100,9 @@ interface BoothAPI {
     // 부스 영업 상태 변경
      @PATCH("booths/{booth_id}/status")
     fun changeBoothStatus(@Header("Authorization") token: String, @Path("booth_id") booth_id: String, @Body data: BoothStatusReq): Call<Void>
+
+
+    // 부스 매출 분석
+    @GET("data/booths/{booth_id}/sales")
+    fun getBoothSalesAnalysis(@Header("Authorization") token: String, @Query("booth_id") booth_id: String): Call<BoothAnalysisRes>
 }
