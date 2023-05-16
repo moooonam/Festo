@@ -1,6 +1,7 @@
 package com.example.festo.data.API
 
 import com.example.festo.data.req.RegiFestivalRequest
+import com.example.festo.data.res.FestivalAnalysisRes
 import com.example.festo.data.res.FestivalCodeRes
 import com.example.festo.data.res.MyFestivalRes
 import com.example.festo.data.res.RegisterFestivalRes
@@ -12,6 +13,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface HostAPI {
 
@@ -32,5 +34,10 @@ interface HostAPI {
     //  축제 코드 조회
     @GET("festivals/{festival_id}/invitecode")
     fun getFestivalCode(@Header("Authorization") token: String, @Path("festival_id") festival_id : String): Call<FestivalCodeRes>
+
+
+    // 축제 매출 분석
+    @GET("data/festivals/{festival_id}/sales")
+    fun getFestivalSalesAnalysis(@Header("Authorization") token: String, @Query("festival_id") festival_id: String): Call<FestivalAnalysisRes>
 
 }
