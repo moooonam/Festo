@@ -228,6 +228,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="180dp" />
 
+                <TextView
+                    android:id="@+id/nodata"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/festO"
+                    android:gravity="center"
+                    android:text="축제를 2일 이상 운영해야 일별 분석을 확인할 수 있어요!" />
+
 
 
                 <!--        부스 매출 순위-->
