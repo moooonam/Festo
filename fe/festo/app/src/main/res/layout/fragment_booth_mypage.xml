@@ -19,13 +19,6 @@
             android:textColor="#F24E1E"
             android:textSize="22sp" />
 
-        <ImageView
-            android:id="@+id/booth_notification_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_notification" />
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
