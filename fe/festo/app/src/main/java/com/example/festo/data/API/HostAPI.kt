@@ -47,6 +47,6 @@ interface HostAPI {
 
     // 축제 매출 분석
     @GET("festivals/{festival_id}/sales")
-    fun getFestivalSalesAnalysis(@Header("Authorization") token: String, @Query("festival_id") festival_id: String): Call<FestivalAnalysisRes>
+    fun getFestivalSalesAnalysis(@Header("Authorization") token: String, @Path("festival_id") festival_id: String): Call<FestivalAnalysisRes>
 
 }
