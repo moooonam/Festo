@@ -6,6 +6,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.TimeZone;
 
 @Getter
@@ -33,6 +34,6 @@ public class NotificationResponse {
         this.festivalName = notification.getFestivalInfo().getFestivalName();
         this.boothId = notification.getBoothInfo().getBoothId();
         this.boothName = notification.getBoothInfo().getBoothName();
-        this.time = LocalDateTime.ofInstant(Instant.ofEpochMilli(notification.getTimeStamp()), TimeZone.getDefault().toZoneId());
+        this.time = LocalDateTime.ofInstant(Instant.ofEpochMilli(notification.getTimeStamp()), ZoneId.of("Asia/Seoul"));
     }
 }

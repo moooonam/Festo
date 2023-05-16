@@ -28,7 +28,7 @@ public class OrderSummaryResponse {
 
     private final int etcCount;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd/HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd/HH:mm")
     private final LocalDateTime time;
 
     public OrderSummaryResponse(Order order, FestivalInfo festivalInfo, Menu firstMenu, LocalDateTime time) {
