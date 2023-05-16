@@ -15,6 +15,7 @@ class NotificationAdapter (private var list: MutableList<UserNotificationListRes
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
 
         var coment: TextView = itemView!!.findViewById(R.id.tv_coment)
+        var festivalName: TextView = itemView!!.findViewById(R.id.tv_festivalname)
         var booth: TextView = itemView!!.findViewById(R.id.tv_booth)
         var date: TextView = itemView!!.findViewById(R.id.tv_date)
         var time: TextView = itemView!!.findViewById(R.id.tv_time)
@@ -22,7 +23,8 @@ class NotificationAdapter (private var list: MutableList<UserNotificationListRes
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: UserNotificationListRes, position: Int) {
             coment.text = data.content
-            booth.text = "축제: ${data.festivalName}  부스: ${data.boothName}"
+            festivalName.text = "축제: ${data.festivalName}"
+            booth.text = "부스: ${data.boothName}"
             date.text = data.time.substring(0,10)
             time.text = data.time.substring(11)
         }
