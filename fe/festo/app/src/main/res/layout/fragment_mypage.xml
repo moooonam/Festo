@@ -5,7 +5,7 @@
     android:background="#000000"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.festo.customer_ui.mypage.MypageFragment">
+    tools:context="com.nowusee.festo.customer_ui.mypage.MypageFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

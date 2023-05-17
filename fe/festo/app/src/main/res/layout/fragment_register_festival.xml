@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="7dp"
-    tools:context="com.example.festo.host_ui.no_festival.RegisterFestivalFragment">
+    tools:context="com.nowusee.festo.host_ui.no_festival.RegisterFestivalFragment">
 
     <LinearLayout
         android:id="@+id/goCustomer"
