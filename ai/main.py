@@ -151,7 +151,6 @@ def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depend
     # 추천해줄 부스가 없는 경우
     if len(booths) == 0:
         Booths_idxs = list(map(lambda x: x.booth_id,db.query(BoothTable).filter(BoothTable.festival_id == festival_id).all()))
-        print(Booths_idxs)
 
         Orders_boothIdxs = list(map(lambda x: x.booth_id,db.query(OrdersTable).all()))
         set_idxs = list(set(Orders_boothIdxs))
