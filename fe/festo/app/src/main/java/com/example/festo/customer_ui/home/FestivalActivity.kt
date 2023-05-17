@@ -22,6 +22,7 @@ import com.example.festo.data.API.UserAPI
 import com.example.festo.data.DataRetrofitClient
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.BoothRecommendRes
+import com.example.festo.data.res.BoothWaitingRes
 import com.example.festo.data.res.FestivalDailySales
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.UserInfoRes
@@ -161,6 +162,7 @@ class FestivalActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body())
+                    println(festival_id)
                     Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
                     recommendBoothList = response.body() ?: emptyList()
 
@@ -169,6 +171,7 @@ class FestivalActivity : AppCompatActivity() {
                     var recommend1Explanation = findViewById<TextView>(R.id.recommend1Explanation)
                     var recommend1Wait = findViewById<TextView>(R.id.recommend1Wait)
                     var recommend1Image = findViewById<ImageView>(R.id.recommend1Image)
+
                     var recommend2Name = findViewById<TextView>(R.id.recommend2Name)
                     var recommend2Explanation = findViewById<TextView>(R.id.recommend2Explanation)
                     var recommend2Wait = findViewById<TextView>(R.id.recommend2Wait)
@@ -178,22 +181,93 @@ class FestivalActivity : AppCompatActivity() {
                     var recommend1 = findViewById<CardView>(R.id.recommend1)
                     var recommend2 = findViewById<CardView>(R.id.recommend2)
 
+
                     if (recommendBoothList.size  == 0) {
                         recommendText.visibility = View.GONE
                         recommend1.visibility = View.GONE
                         recommend2.visibility = View.GONE
                     } else if (recommendBoothList.size == 1) {
+                        postApi!!.getBoothWaiting(token, response.body()?.get(0)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+                                    println(response.body()?.waiting)
+                                    recommend1Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
                         recommendText.visibility = View.VISIBLE
                         recommend1.visibility = View.VISIBLE
                         recommend2.visibility = View.GONE
 
                         recommend1Name.text = response.body()?.get(0)?.name
                         recommend1Explanation.text = response.body()?.get(0)?.booth_description
+
                         Glide.with(this@FestivalActivity)
                             .load(response.body()?.get(0)?.image_url)
                             .into(recommend1Image)
 
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend1.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(0)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
+
+
                     } else if (recommendBoothList.size >= 2) {
+                        postApi!!.getBoothWaiting(token, response.body()?.get(0)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+                                    println(response.body()?.waiting)
+                                    recommend1Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
+                        postApi!!.getBoothWaiting(token, response.body()?.get(1)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+                                    println(response.body()?.waiting)
+                                    recommend2Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
                         recommendText.visibility = View.VISIBLE
                         recommend1.visibility = View.VISIBLE
                         recommend2.visibility = View.VISIBLE
@@ -209,7 +283,24 @@ class FestivalActivity : AppCompatActivity() {
                         Glide.with(this@FestivalActivity)
                             .load(response.body()?.get(1)?.image_url)
                             .into(recommend2Image)
+
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend1.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(0)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
+
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend2.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(1)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
                     }
+
                 }
             }
 

@@ -4,6 +4,7 @@ import RetrofitClient
 import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
+import android.icu.text.NumberFormat
 import android.media.Image
 import android.os.Bundle
 import android.util.Log
@@ -39,6 +40,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class MenuRankData(
     var image: Int? = null,
@@ -56,6 +58,7 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     private val colorList = ArrayList<Int>()
     private var menuRankList = emptyList<MenuAnalysis>()
     private var boothDailyList = emptyList<BoothDailySales>()
+    private var values = ArrayList<BarEntry>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +83,7 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
     }
 
     fun createBarChart() {
-        val values = ArrayList<BarEntry>()
+//        val values = ArrayList<BarEntry>()
         val type = ArrayList<String>()
         val set: BarDataSet
 
@@ -149,7 +152,7 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             legend.isEnabled = false
             setTouchEnabled(true)
             isDoubleTapToZoomEnabled = false
-//            animateY(3000) // 애니메이션 효과 적용 시간
+            animateY(3000) // 애니메이션 효과 적용 시간
         }
     }
 
@@ -171,7 +174,15 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             setDrawAxisLine(false)
             isEnabled = true
             setDrawLabels(true)
-            axisMaximum = 200000f
+//            axisMaximum = 200000f
+            var maxYValue = Float.MIN_VALUE
+            for (entry in values) {
+                if (entry.y > maxYValue) {
+                    maxYValue = entry.y
+                }
+            }
+            val newAxisMaximum = maxYValue + 10000f
+            axisMaximum = newAxisMaximum
         }
     }
 
@@ -234,7 +245,12 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                     println(response.body())
                     Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
                     menuRankList = response.body()?.menu ?: emptyList()
-                    boothDailyList = response.body()?.daily_sales ?: emptyList()
+
+                    if (response.body()?.daily_sales!!.size <= 5) {
+                        boothDailyList = response.body()?.daily_sales ?: emptyList()
+                    } else {
+                        boothDailyList = response.body()?.daily_sales?.subList(response.body()?.daily_sales!!.size - 5, response.body()?.daily_sales!!.size) ?: emptyList()
+                    }
 
                     val textView = view.findViewById<TextView>(R.id.nodata)
 
@@ -334,11 +350,13 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
 
             if (selectedIndex >= 0 && selectedIndex < boothDailyList.size) {
                 val selectedData = boothDailyList[selectedIndex]
+                val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
+                val formattedString = formatter.format(selectedData.amount)
 
                 // 다이얼로그에 선택된 데이터를 표시하는 로직을 작성하면 됩니다.
                 val dialog = AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
                     .setTitle("매출 상세정보")
-                    .setMessage("날짜: ${selectedData.date}\n누적 주문건수: ${selectedData.count}\n누적 매출: ${selectedData.amount}")
+                    .setMessage("\n날짜: ${selectedData.date}\n\n누적 주문건수: ${selectedData.count}건\n누적 매출: ${formattedString}원")
                     .setPositiveButton("OK", null)
                     .create()
                 dialog.show()

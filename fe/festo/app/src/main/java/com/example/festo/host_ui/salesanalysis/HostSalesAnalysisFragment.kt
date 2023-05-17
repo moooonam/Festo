@@ -118,7 +118,8 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             }
             chart.invalidate()
         }
-        chart.setOnChartValueSelectedListener(this)
+//        chart.setOnChartValueSelectedListener(this)
+        chart.setOnChartValueSelectedListener(this@HostSalesAnalysisFragment)
     }
 
     fun basicSetting() {

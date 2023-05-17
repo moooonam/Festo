@@ -103,33 +103,35 @@ class MypageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fun getUserData() {
-            val sharedPreferences =
-                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-            val myToken = sharedPreferences.getString("myToken", "")
-            val token = "$myToken"
-            val postApi = retrofit?.create(UserAPI::class.java)
-            postApi!!.getUserInfo(token).enqueue(object : Callback<UserInfoRes> {
-                override fun onResponse(
-                    call: Call<UserInfoRes>, response: Response<UserInfoRes>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(" 유저정보부르기", "${response},  ${response.body()?.nickname}")
-                        if (!response.body()?.nickname.isNullOrEmpty())
-                        {
-                        mBinding?.tvGreating!!.text = "${response.body()?.nickname}님 안녕하세요"
-                        }
-                    }
-
-                }
-
-                override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
-                    Log.d(" 부스 주문내역 실패", "응")
-                    t.printStackTrace()
-                }
-            })
-        }
-        getUserData()
+//        fun getUserData() {
+//            val sharedPreferences =
+//                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+//            val myToken = sharedPreferences.getString("myToken", "")
+//            val token = "$myToken"
+//            val postApi = retrofit?.create(UserAPI::class.java)
+//            postApi!!.getUserInfo(token).enqueue(object : Callback<UserInfoRes> {
+//                override fun onResponse(
+//                    call: Call<UserInfoRes>, response: Response<UserInfoRes>
+//                ) {
+//                    if (response.isSuccessful) {
+//                        Log.d(" 유저정보부르기", "${response},  ${response.body()?.nickname}")
+//                        if (!response.body()?.nickname.isNullOrEmpty())
+//                        {
+//                        mBinding?.tvGreating!!.text = "${response.body()?.nickname}님 안녕하세요"
+//                        } else {
+//                            println("333333333333333333333333333333")
+//                        }
+//                    }
+//
+//                }
+//
+//                override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
+//                    Log.d(" 부스 주문내역 실패", "응")
+//                    t.printStackTrace()
+//                }
+//            })
+//        }
+//        getUserData()
 
     }
 
