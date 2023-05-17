@@ -23,7 +23,7 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
 
     var mDataListAll = ArrayList<FestivalListRes>(list)
     // var mAccount: MutableList<FestivalListRes> = list as MutableList<FestivalListRes>
-    var mAccount: MutableList<FestivalListRes> = mutableListOf()
+    var mAccount: MutableList<FestivalListRes> = ArrayList(list)
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
@@ -95,6 +95,7 @@ class FestivalItemListAdapter(private var list: List<FestivalListRes>) :
     fun updateList(newList: List<FestivalListRes>) {
         list = newList
         mDataListAll = ArrayList(newList)
+        mAccount = ArrayList(newList)
         notifyDataSetChanged()
     }
 }

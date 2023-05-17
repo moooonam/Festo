@@ -57,7 +57,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textColor="@color/festO"
                     android:text="설명문구 쓰는 자리입니다." />
 
                 <LinearLayout
@@ -71,13 +70,14 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="3dp"
                         android:layout_marginTop="6dp"
-                        android:background="@drawable/ic_location" />
+                        android:background="@drawable/ic_location_color" />
 
                     <TextView
                         android:id="@+id/boothLocation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/festO"
                         android:text="주소가 들어갈 자리"
                         />
 
@@ -92,7 +92,7 @@
                 <ListView
                     android:id="@+id/menu_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="470dp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -127,14 +127,6 @@
                 android:textStyle="bold" />
             />
 
-            <TextView
-                android:layout_width="141dp"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="원"
-                android:textColor="@color/white"
-                android:textSize="19dp"
-                android:textStyle="bold" />
             />
 
             <TextView

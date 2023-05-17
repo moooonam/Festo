@@ -19,15 +19,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class OrderListData(
-    var boothImg: Int? = null,
-    var festival: String? = null,
-    var booth: String? = null,
-    var menu: String? = null,
-    var ordernum: Int? = null,
-    var date: String? = null,
-    var state: String? = null,
-)
 class OrderlistFragment : Fragment() {
     private var retrofit = RetrofitClient.client
     private var orderlist = emptyList<UserOrderListRes>()
@@ -54,32 +45,24 @@ class OrderlistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        var OrderListDataList : ArrayList <OrderListData> = arrayListOf(
-//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 2개",87,"23.04.27 16:10","준비완료"),
-//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 3개",87,"23.04.27 16:10","준비완료"),
-//           OrderListData(R.drawable.logo1,"광양 숯불구이 축제","까사꼬치","닭꼬치 외 4개",87,"23.04.27 16:10","준비완료"),
-//        )
-//        listAdapter = OrderlistAdapter(OrderListDataList)
-//        mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mBinding?.orderlistFragmentListView?.adapter = listAdapter
-
 
         // 유저의 주문내역 조회
         val postApi = retrofit?.create(UserAPI::class.java)
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
-        println(token)
+//        println(token)
         postApi!!.getOrderList(token).enqueue(object : Callback<List<UserOrderListRes>> {
             override fun onResponse(
                 call: Call<List<UserOrderListRes>>,
                 response: Response<List<UserOrderListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.size)
-                    Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body()?.size)
+                    // Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
                     orderlist = response.body() ?: emptyList()
+                    orderlist = orderlist.reversed()
                     listAdapter = OrderlistAdapter(orderlist)
                     mBinding?.orderlistFragmentListView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                     mBinding?.orderlistFragmentListView?.adapter = listAdapter
@@ -87,7 +70,7 @@ class OrderlistFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<UserOrderListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

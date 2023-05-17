@@ -1,17 +1,19 @@
 package com.example.festo.data.API
 
 import com.example.festo.data.req.LoginReq
+import com.example.festo.data.req.MenuRecommendReq
 import com.example.festo.data.req.OrderReq
 import com.example.festo.data.res.BoothDetailRes
 import com.example.festo.data.res.BoothListRes
 import com.example.festo.data.res.BoothMenuListRes
+import com.example.festo.data.res.BoothRecommendRes
 import com.example.festo.data.res.BoothWaitingRes
 import com.example.festo.data.res.FestivalInfoRes
 import com.example.festo.data.res.FestivalListRes
 import com.example.festo.data.res.IsHaveFestivalRes
 import com.example.festo.data.res.LoginRes
+import com.example.festo.data.res.MenuRecommendRes
 import com.example.festo.data.res.MyBoothListRes
-import com.example.festo.data.res.TestGetUserDataRes
 import com.example.festo.data.res.UserInfoRes
 import com.example.festo.data.res.UserNotificationListRes
 import com.example.festo.data.res.UserOrderListRes
@@ -31,7 +33,7 @@ interface UserAPI {
     @POST("api/v1/login")
     fun login(@Body request: LoginReq): Call<LoginRes>
     companion object { // static 처럼 공유객체로 사용가능함. 모든 인스턴스가 공유하는 객체로서 동작함.
-        private const val BASE_URL = "http://k8c106.p.ssafy.io:8080/" // 주소
+        private const val BASE_URL = "https://k8c106.p.ssafy.io/api/" // 주소
         fun create(): UserAPI {
             val gson : Gson =   GsonBuilder().setLenient().create();
             return Retrofit.Builder()
@@ -49,14 +51,10 @@ interface UserAPI {
     /*@GET("festivals/search")
     fun searchFestival(@Header("Authorization") token: String): Call<List<SearchFestivalRes>>*/
 
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
-    @GET("api/v1/members/me")
-    fun getUserData(): Call<TestGetUserDataRes>
 
     //유저 알림목록 불러오기
-    @Headers("Authorization: Bearer eyJ0eXAiOiJKV1QiLCJyZWdEYXRlIjoxNjgzNjc2ODM1LCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg4NjA4MzUsInN1YiI6IjEiLCJpc3MiOiJPdG16IiwiaWF0IjoxNjgzNjc2ODM1fQ.n6qr--t-M8jAwr7xkM5ndhd54Sd9TsLnt-lQ3Dj7J2Y")
     @GET("notifications")
-    fun getUserNotificationData(): Call<UserNotificationListRes>
+    fun getUserNotificationData(@Header("Authorization") token: String): Call<List<UserNotificationListRes>>
 
 
     // 부스 메뉴 조회. 일단 id 2번 부스로 고정
@@ -100,7 +98,17 @@ interface UserAPI {
 
 
     // 내가 등록한 부스 리스트 조회
-    @GET("/booths/{owner_id}/owner")
+    @GET("booths/{owner_id}/owner")
     fun getMyBoothList(@Header("Authorization") token: String,  @Path("owner_id") owner_id: String): Call<List<MyBoothListRes>>
+
+
+    // 사용자 주문 기록 기반으로 부스 추천
+    @GET("recommend_booth/{festival_id}/{user_id}")
+    fun getBoothRecommend(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?, @Path("user_id") user_id: String): Call<List<BoothRecommendRes>>
+
+
+    // 주문할 메뉴 기반으로 메뉴 추천
+    @POST("recommend_order/{festival_id}")
+    fun getMenuRecommend(@Header("Authorization") token: String,  @Path("festival_id") festival_id: String, @Body data: MenuRecommendReq): Call<List<MenuRecommendRes>>
 
 }

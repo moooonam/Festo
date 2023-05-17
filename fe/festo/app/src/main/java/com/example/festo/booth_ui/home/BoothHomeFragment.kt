@@ -26,7 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.booth_ui.orderlist.BoothOrderListFragment
 import com.example.festo.data.API.BoothAPI
+import com.example.festo.data.API.RegisterMenuListener
 import com.example.festo.data.API.UserAPI
 import com.example.festo.data.req.BoothStatusReq
 import com.example.festo.data.req.RegiMenuReq
@@ -52,9 +54,12 @@ import java.io.File
 class BoothHomeFragment : Fragment() {
     private var retrofit = RetrofitClient.client
     private var menuList = emptyList<BoothMenuListRes>()
-    private lateinit var imagePart: MultipartBody.Part
+    private var imagePart: MultipartBody.Part? = null
     private lateinit var listAdapter: MenuListAdapter
     private var mBinding: FragmentBoothHomeBinding? = null
+
+
+
     private var alertDialog: AlertDialog? = null
     private val galleryLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -119,23 +124,26 @@ class BoothHomeFragment : Fragment() {
 
                     // 이제 데이터 넘겨주고 리사이클뷰에 추가할 부분
                     val request = RegiMenuReq(meueName, Price)
-                    val data = RegisterMenuReq(request, imagePart)
-                    Log.d("잘들어감?", "${data}")
                     val sharedPreferences =
                         requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                     val myValue = sharedPreferences.getString("myToken", "")
                     val token = "$myValue"
                     fun postRegisterMenu() {
+                        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                        val boothId = sharedPreferences.getString("boothId", "")
                         Log.d("이미지파트", "${imagePart}")
                         val postApi = retrofit?.create(BoothAPI::class.java)
                         postApi!!.registerMenu(
-                            token,"4", request, imagePart
+                            token, boothId!!.toLong(), request, imagePart!!
                         )
                             .enqueue(object : Callback<Long> {
                                 override fun onResponse(
                                     call: Call<Long>,
                                     response: Response<Long>
                                 ) {
+                                    val transaction = fragmentManager?.beginTransaction()
+                                    transaction?.replace(R.id.booth_layout_nav_bottom, BoothHomeFragment())
+                                    transaction?.commit()
                                     Log.d(
                                         "부스메뉴테스트트",
                                         "${response.isSuccessful()}, ${response.code()}, ${response}"
@@ -148,8 +156,49 @@ class BoothHomeFragment : Fragment() {
                                 }
                             })
                     }
+                    fun postRegisterNoImageMenu() {
+                        val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                        val boothId = sharedPreferences.getString("boothId", "")
+                        val emptyByteArray: ByteArray = byteArrayOf()  // 빈 바이트 배열 생성
+
+                        val requestBody: RequestBody = RequestBody.create(
+                            "multipart/form-data".toMediaTypeOrNull(),
+                            emptyByteArray
+                        )
+                        val part: MultipartBody.Part =
+                            MultipartBody.Part.createFormData("productImage", "", requestBody)
+                        val postApi = retrofit?.create(BoothAPI::class.java)
+                        postApi!!.registerNoImageMenu(
+                            token, boothId!!.toLong(), request, part
+                        )
+                            .enqueue(object : Callback<Long> {
+                                override fun onResponse(
+                                    call: Call<Long>,
+                                    response: Response<Long>
+                                ) {
+                                    val transaction = fragmentManager?.beginTransaction()
+                                    transaction?.replace(R.id.booth_layout_nav_bottom, BoothHomeFragment())
+                                    transaction?.commit()
+                                    Log.d(
+                                        "부스메뉴테스트트",
+                                        "${response.isSuccessful()}, ${response.code()}, ${response}"
+                                    )
+                                }
+
+                                override fun onFailure(call: Call<Long>, t: Throwable) {
+                                    t.printStackTrace()
+                                    Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+                                }
+                            })
+                    }
+                    if (imagePart !== null )
+                    {
                     postRegisterMenu()
                     dialogInterface.dismiss()
+                    } else {
+                        postRegisterNoImageMenu()
+                        dialogInterface.dismiss()
+                    }
                 }
             }
             .setNegativeButton("닫기") { dialogInterface, _ ->
@@ -176,7 +225,7 @@ class BoothHomeFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val boothId = sharedPreferences.getString("boothId", "")
 
-        // 부스 상세정보 retrofit. 일단 1로 고정해놨음
+        // 부스 상세정보 retrofit.
         val postApi = retrofit?.create(UserAPI::class.java)
         var boothStatus: String // 부스 현재 상태
         var change = "CLOSE"// 부스 상태 바꿀때 보낼 req
@@ -189,9 +238,9 @@ class BoothHomeFragment : Fragment() {
                 response: Response<BoothDetailRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     val boothImage = view.findViewById<ImageView>(R.id.boothImage)
                     val boothNameTop = view.findViewById<TextView>(R.id.boothNameTop)
                     val boothName = view.findViewById<TextView>(R.id.boothName)
@@ -220,7 +269,7 @@ class BoothHomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -233,9 +282,9 @@ class BoothHomeFragment : Fragment() {
                 response: Response<List<BoothMenuListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
                     listAdapter = MenuListAdapter(menuList)
@@ -247,7 +296,7 @@ class BoothHomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<BoothMenuListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -260,7 +309,7 @@ class BoothHomeFragment : Fragment() {
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
-                            println("상태변경성공!!!!!!!!!!!!!!!!!!!")
+//                            println("상태변경성공!!!!!!!!!!!!!!!!!!!")
                             postApi!!.getBoothDetail(token,boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
                                 override fun onResponse(
                                     call: Call<BoothDetailRes>,
@@ -281,7 +330,7 @@ class BoothHomeFragment : Fragment() {
                                 }
 
                                 override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                                    println("실패!!!!!!!!!!!!!!!!!!!")
+//                                    println("실패!!!!!!!!!!!!!!!!!!!")
                                     t.printStackTrace()
                                 }
                             })
@@ -291,8 +340,8 @@ class BoothHomeFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        println("상태변경실패!!!!!!!!!!!!!!!!!!!")
-                        println(boothId)
+//                        println("상태변경실패!!!!!!!!!!!!!!!!!!!")
+//                        println(boothId)
                         t.printStackTrace()
                     }
                 })

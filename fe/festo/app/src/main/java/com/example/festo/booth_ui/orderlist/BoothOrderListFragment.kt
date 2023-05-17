@@ -62,7 +62,7 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
 
 
         fun getBoothOrderList() {
-            Log.d(" 실행타이밍", "지금")
+//            Log.d(" 실행타이밍", "지금")
 //            val sharedPreferences =
 //                requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
             val myValue = sharedPreferences.getString("myToken", "")
@@ -72,18 +72,21 @@ class BoothOrderListFragment : Fragment(), OnBoothOrderListCompleteListener {
                 override fun onResponse(call: Call<List<BoothOrderListRes>>, response: Response<List<BoothOrderListRes>>) {
                     if (response.isSuccessful) {
                         orderListData = response.body()!!
-                        listAdapter = BoothOrderListAdapter( orderListData as MutableList<BoothOrderListRes>, token, this@BoothOrderListFragment)
-                        mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                        mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
+                        orderListData = orderListData.reversed()
+                        if (orderListData.size != 0) {
+                            listAdapter = BoothOrderListAdapter( orderListData as MutableList<BoothOrderListRes>, token, this@BoothOrderListFragment)
+                            mBinding?.boothOrderlistFragmentListview?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                            mBinding?.boothOrderlistFragmentListview?.adapter = listAdapter
+                        }
 //                    Log.d("테스트중", "onResponse: ${response.body()}")
-                        Log.d(" 부스 주문내역 과연", "${response},  ${response.body()}")
+//                        Log.d(" 부스 주문내역 과연", "${response},  ${response.body()}")
                     }
                     else {
-                        Log.d(" 부스 주문내역 successful 아닐때", "${response},  ${response.code()}")
+//                        Log.d(" 부스 주문내역 successful 아닐때", "${response},  ${response.code()}")
                     }
                 }
                 override fun onFailure(call: Call<List<BoothOrderListRes>>, t: Throwable) {
-                    Log.d(" 부스 주문내역 실패", "응")
+//                    Log.d(" 부스 주문내역 실패", "응")
                     t.printStackTrace()
                 }
             })

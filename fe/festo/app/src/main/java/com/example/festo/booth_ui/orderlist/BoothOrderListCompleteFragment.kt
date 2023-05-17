@@ -60,10 +60,13 @@ class BoothOrderListCompleteFragment : Fragment() {
                 override fun onResponse(call: Call<List<BoothOrderListCompleteRes>>, response: Response<List<BoothOrderListCompleteRes>>) {
                     if (response.isSuccessful) {
                         completeOrderListData = response.body()!!
-                        listAdapter = BoothOrderListCompleteAdapter(completeOrderListData as MutableList<BoothOrderListCompleteRes>)
-                        mBinding?.boothOrderlistCompleteFragmentListview?.layoutManager =
-                            LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                        mBinding?.boothOrderlistCompleteFragmentListview?.adapter = listAdapter
+                        completeOrderListData = completeOrderListData.reversed()
+                        if (completeOrderListData.size != 0) {
+                            listAdapter = BoothOrderListCompleteAdapter(completeOrderListData as MutableList<BoothOrderListCompleteRes>)
+                            mBinding?.boothOrderlistCompleteFragmentListview?.layoutManager =
+                                LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                            mBinding?.boothOrderlistCompleteFragmentListview?.adapter = listAdapter
+                        }
 //                    Log.d("테스트중", "onResponse: ${response.body()}")
                         Log.d(" 부스 완료된 주문내역 과연", "${response},  ${response.code()}, ${completeOrderListData}")
                     }

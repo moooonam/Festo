@@ -8,10 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.splash)
         Handler().postDelayed({
         var intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
-        },1000)
+        },1500)
     }
 }

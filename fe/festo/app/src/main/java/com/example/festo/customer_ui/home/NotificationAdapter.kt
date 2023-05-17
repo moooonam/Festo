@@ -7,21 +7,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.festo.R
+import com.example.festo.data.res.UserNotificationListRes
 
-class NotificationAdapter (private var list: MutableList<NotificationData>): RecyclerView.Adapter<NotificationAdapter.ListItemViewHolder> () {
+class NotificationAdapter (private var list: MutableList<UserNotificationListRes>): RecyclerView.Adapter<NotificationAdapter.ListItemViewHolder> () {
 
     // inner class로 ViewHolder 정의
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
 
-        var state: TextView = itemView!!.findViewById(R.id.tv_state)
+        var coment: TextView = itemView!!.findViewById(R.id.tv_coment)
+        var festivalName: TextView = itemView!!.findViewById(R.id.tv_festivalname)
         var booth: TextView = itemView!!.findViewById(R.id.tv_booth)
         var date: TextView = itemView!!.findViewById(R.id.tv_date)
+        var time: TextView = itemView!!.findViewById(R.id.tv_time)
 
         // onBindViewHolder의 역할을 대신한다.
-        fun bind(data: NotificationData, position: Int) {
-            state.text = data.state
-            booth.text = data.booth
-            date.text = data.date
+        fun bind(data: UserNotificationListRes, position: Int) {
+            coment.text = data.content
+            festivalName.text = "축제: ${data.festivalName}"
+            booth.text = "부스: ${data.boothName}"
+            date.text = data.time.substring(0,10)
+            time.text = data.time.substring(11)
         }
     }
 

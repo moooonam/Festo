@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_splash"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="fest'O"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:paddingBottom="100dp"
+        android:textSize="90sp"
+        android:gravity="center" />
+
+</RelativeLayout>

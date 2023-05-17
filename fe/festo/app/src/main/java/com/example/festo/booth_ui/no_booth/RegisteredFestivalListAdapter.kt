@@ -35,9 +35,9 @@ class RegisteredFestivalListAdapter(private var list: List<MyBoothListRes>) :
 
         fun bind(data: MyBoothListRes, position: Int) {
             Glide.with(itemView.context)
-                .load(data.imageUrl)
+                .load(data.festivalImageUrl)
                 .into(imageUrl)
-            name.text = data.name
+            name.text = data.festivalName
         }
 
         @SuppressLint("CommitPrefEdits")

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
     <application
@@ -61,9 +62,7 @@
         <activity
             android:name=".customer_ui.mypage.MypageActivity"
             android:exported="false" />
-        <activity
-            android:name=".customer_ui.recent.RecentActivity"
-            android:exported="false" />
+
         <activity
             android:name=".customer_ui.orderlist.OrderlistActivity"
             android:exported="false" />
@@ -97,10 +96,9 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            >
              <intent-filter>
                  <action android:name="android.intent.action.MAIN" />
-
                  <category android:name="android.intent.category.LAUNCHER" />
              </intent-filter>
         </activity>

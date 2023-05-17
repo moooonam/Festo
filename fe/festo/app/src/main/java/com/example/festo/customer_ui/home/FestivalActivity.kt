@@ -5,15 +5,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.festo.R
+import com.example.festo.booth_ui.salesanalysis.MenuRankListAdapter
 import com.example.festo.customer_ui.search.SearchActivity
 import com.example.festo.data.API.UserAPI
+import com.example.festo.data.DataRetrofitClient
 import com.example.festo.data.res.BoothListRes
+import com.example.festo.data.res.BoothRecommendRes
+import com.example.festo.data.res.BoothWaitingRes
+import com.example.festo.data.res.FestivalDailySales
 import com.example.festo.data.res.FestivalInfoRes
+import com.example.festo.data.res.UserInfoRes
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,17 +37,15 @@ import java.util.Locale
 class FestivalActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var boothList = emptyList<BoothListRes>()
+    private var dataRetrofit = DataRetrofitClient.client
+    private var recommendBoothList = emptyList<BoothRecommendRes>()
+
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_festival)
         val festival_id = intent.getStringExtra("festivalId")
-
-        // 하나의 축제에 대한 부스 리스트 어댑터 연결
-//        val Adapter = BoothAdapter(this, BoothList)
-//        val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
-//        list_view.adapter = Adapter
 
         val notificationBtn = findViewById<ImageView>(R.id.notification_btn)
         notificationBtn.setOnClickListener {
@@ -55,9 +65,9 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<FestivalInfoRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.startDate)
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body()?.startDate)
+//                    Log.d(" 테스트", "${response.body()}")
                     val festivalName = findViewById<TextView>(R.id.festivalName)
                     val festivalAddress = findViewById<TextView>(R.id.festivalAddress)
                     val festivalPeriod = findViewById<TextView>(R.id.festivalPeriod)
@@ -82,7 +92,7 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -95,12 +105,14 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<List<BoothListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
-                    val Adapter = BoothAdapter(this@FestivalActivity, boothList, token)
+                    val Adapter = BoothAdapter(this@FestivalActivity, boothList, token,
+                        festival_id.toString()
+                    )
                     val list_view = findViewById<ListView>(com.example.festo.R.id.list_view)
                     list_view.adapter = Adapter
 
@@ -108,7 +120,192 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+        // 나의 정보 불러오기
+        postApi!!.getUserInfo(token).enqueue(object :
+            Callback<UserInfoRes> {
+            override fun onResponse(
+                call: Call<UserInfoRes>,
+                response: Response<UserInfoRes>
+            ) {
+                if (response.isSuccessful) {
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("유저정보", "${response.body()}")
+                    val userNickname = findViewById<TextView>(R.id.userNickname)
+
+                    // 데이터 xml에 입력
+                    userNickname.text = "${response.body()?.nickname}"
+                }
+            }
+
+            override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
+//                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
+                t.printStackTrace()
+            }
+        })
+
+        // 추천 부스 가져오기
+        val dataPostApi = dataRetrofit?.create(UserAPI::class.java)
+        val memberId = sharedPreferences.getString("memberId", "")
+        val myId = "$memberId"
+        dataPostApi!!.getBoothRecommend(token, festival_id, myId).enqueue(object :
+            Callback<List<BoothRecommendRes>> {
+            override fun onResponse(
+                call: Call<List<BoothRecommendRes>>,
+                response: Response<List<BoothRecommendRes>>
+            ) {
+                if (response.isSuccessful) {
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    println(festival_id)
+//                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
+                    recommendBoothList = response.body() ?: emptyList()
+
+                    // 추천 부스 연결
+                    var recommend1Name = findViewById<TextView>(R.id.recommend1Name)
+                    var recommend1Explanation = findViewById<TextView>(R.id.recommend1Explanation)
+                    var recommend1Wait = findViewById<TextView>(R.id.recommend1Wait)
+                    var recommend1Image = findViewById<ImageView>(R.id.recommend1Image)
+
+                    var recommend2Name = findViewById<TextView>(R.id.recommend2Name)
+                    var recommend2Explanation = findViewById<TextView>(R.id.recommend2Explanation)
+                    var recommend2Wait = findViewById<TextView>(R.id.recommend2Wait)
+                    var recommend2Image = findViewById<ImageView>(R.id.recommend2Image)
+
+                    var recommendText = findViewById<LinearLayout>(R.id.recommendText)
+                    var recommend1 = findViewById<CardView>(R.id.recommend1)
+                    var recommend2 = findViewById<CardView>(R.id.recommend2)
+
+
+                    if (recommendBoothList.size  == 0) {
+                        recommendText.visibility = View.GONE
+                        recommend1.visibility = View.GONE
+                        recommend2.visibility = View.GONE
+                    } else if (recommendBoothList.size == 1) {
+                        postApi!!.getBoothWaiting(token, response.body()?.get(0)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
+                                    recommend1Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
+                        recommendText.visibility = View.VISIBLE
+                        recommend1.visibility = View.VISIBLE
+                        recommend2.visibility = View.GONE
+
+                        recommend1Name.text = response.body()?.get(0)?.name
+                        recommend1Explanation.text = response.body()?.get(0)?.booth_description
+
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(0)?.image_url)
+                            .into(recommend1Image)
+
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend1.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(0)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
+
+
+                    } else if (recommendBoothList.size >= 2) {
+                        postApi!!.getBoothWaiting(token, response.body()?.get(0)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
+                                    recommend1Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
+                        postApi!!.getBoothWaiting(token, response.body()?.get(1)?.booth_id?.toLong()).enqueue(object : Callback<BoothWaitingRes> {
+                            override fun onResponse(
+                                call: Call<BoothWaitingRes>,
+                                response: Response<BoothWaitingRes>
+                            ) {
+                                if (response.isSuccessful) {
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
+                                    recommend2Wait.text = response.body()?.waiting.toString()
+//                                    Log.d(" 부스대기인원", "${response.body()}")
+                                } else {
+//                                    Log.d(" 부스대기인원", "실패111111111111")
+                                }
+                            }
+
+                            override fun onFailure(call: Call<BoothWaitingRes>, t: Throwable) {
+//                                Log.d(" 부스대기인원", "실패222222222222222")
+                                t.printStackTrace()
+                            }
+                        })
+                        recommendText.visibility = View.VISIBLE
+                        recommend1.visibility = View.VISIBLE
+                        recommend2.visibility = View.VISIBLE
+
+                        recommend1Name.text = response.body()?.get(0)?.name
+                        recommend1Explanation.text = response.body()?.get(0)?.booth_description
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(0)?.image_url)
+                            .into(recommend1Image)
+
+                        recommend2Name.text = response.body()?.get(1)?.name
+                        recommend2Explanation.text = response.body()?.get(1)?.booth_description
+                        Glide.with(this@FestivalActivity)
+                            .load(response.body()?.get(1)?.image_url)
+                            .into(recommend2Image)
+
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend1.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(0)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
+
+                        // 카드뷰 클릭시 detail 페이지로 이동
+                        recommend2.setOnClickListener {
+                            val intent = Intent(this@FestivalActivity, BoothDetailActivity::class.java)
+                            intent.putExtra("festivalId", festival_id)
+                            intent.putExtra("boothId", response.body()?.get(1)?.booth_id.toString())
+                            this@FestivalActivity.startActivity(intent)
+                        }
+                    }
+
+                }
+            }
+
+            override fun onFailure(call: Call<List<BoothRecommendRes>>, t: Throwable) {
+//                println("추천 부스 받아오기 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

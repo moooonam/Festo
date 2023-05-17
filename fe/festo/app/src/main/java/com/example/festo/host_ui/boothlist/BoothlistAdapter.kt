@@ -16,9 +16,7 @@ class BoothlistAdapter(private var list: List<BoothListRes>): RecyclerView.Adapt
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var image: ImageView = itemView!!.findViewById(R.id.boothImage)
         var name: TextView = itemView!!.findViewById(R.id.boothName)
-        var category: TextView = itemView!!.findViewById(R.id.boothCategory)
         var explanation: TextView = itemView!!.findViewById(R.id.boothExplanation)
-        var totalOrder: TextView = itemView!!.findViewById(R.id.totalOrder)
 
 
         // onBindViewHolder의 역할을 대신한다.
@@ -27,9 +25,7 @@ class BoothlistAdapter(private var list: List<BoothListRes>): RecyclerView.Adapt
                 .load(data.imageUrl)
                 .into(image)
             name.text = data.name
-            category.text = data.category
             explanation.text = data.description
-//            totalOrder.text = data.totalOrder.toString()
         }
     }
 

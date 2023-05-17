@@ -61,7 +61,7 @@
                     android:id="@+id/festivalImage"
                     android:layout_width="match_parent"
                     android:layout_height="246dp"
-                    android:src="@drawable/festival2" />
+                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"

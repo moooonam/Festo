@@ -27,9 +27,9 @@ class BoothDetailActivity : AppCompatActivity() {
     private var retrofit = RetrofitClient.client
     private var putBoothName : String = "dd"
     private var menuList = emptyList<BoothMenuListRes>()
-
     // 주문할 메뉴를 담을 리스트
     var myOrderList = arrayListOf<MyOrderList>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.festo.R.layout.activity_booth_detail)
@@ -45,6 +45,7 @@ class BoothDetailActivity : AppCompatActivity() {
         // 전달받은 부스 정보
         val intent = intent //전달할 데이터를 받을 Intent
         val boothId = intent.getStringExtra("boothId")
+        val festivalId = intent.getStringExtra("festivalId")
 
         // 부스 상세정보 retrofit
         val postApi = retrofit?.create(UserAPI::class.java)
@@ -57,9 +58,9 @@ class BoothDetailActivity : AppCompatActivity() {
                 response: Response<BoothDetailRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     val boothName = findViewById<TextView>(R.id.boothName)
                     val boothLocation = findViewById<TextView>(R.id.boothLocation)
                     val boothExplanation = findViewById<TextView>(R.id.boothExplanation)
@@ -73,7 +74,7 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -85,9 +86,9 @@ class BoothDetailActivity : AppCompatActivity() {
                 response: Response<List<BoothMenuListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
                     val adapter = MenuAdapter(this@BoothDetailActivity, menuList)
@@ -100,19 +101,10 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<BoothMenuListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
-
-        // 메뉴 리스트 연결
-//        val adapter = MenuAdapter(this, arrayListOf())
-//        adapter.totalTextView = findViewById(R.id.totalTextView)
-//        val list_view = findViewById<ListView>(com.example.festo.R.id.menu_list_view)
-//        list_view.adapter = adapter
-
-        // 합계 출력 id 연결
-//        adapter.totalTextView = findViewById(R.id.totalTextView)
 
         // 결제 페이지로 이동
         val payBtn = findViewById<TextView>(R.id.payBtn)
@@ -125,9 +117,11 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             if (myOrderList.size != 0) {
+
                 val intent = Intent(this, PaymentActivity::class.java)
                 intent.putExtra("myOrderList", myOrderList)
                 intent.putExtra("boothId", boothId)
+                intent.putExtra("festivalId", festivalId)
                 intent.putExtra("boothName", putBoothName)
                 startActivity(intent)
             } else {
@@ -165,6 +159,12 @@ class BoothDetailActivity : AppCompatActivity() {
             }
             true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // 이전 페이지로 돌아왔을 때 myOrderList를 비워줌
+        myOrderList.clear()
     }
 
 }

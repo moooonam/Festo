@@ -21,21 +21,22 @@ import com.example.festo.booth_ui.BoothMainActivity
 import com.example.festo.customer_ui.home.HomeActivity
 import com.example.festo.data.API.BoothAPI
 import com.example.festo.data.req.RegiBoothRequest
-import com.example.festo.data.req.RegisterBoothReq
 import com.example.festo.data.res.RegisterBoothRes
 import com.example.festo.databinding.FragmentRegisterboothBinding
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Multipart
 import java.io.File
 
 class RegisterBoothFragment : Fragment() {
     private var mBinding: FragmentRegisterboothBinding? = null
     private var retrofit = RetrofitClient.client
-    private lateinit var imagePart: MultipartBody.Part
+    private  var imagePart: MultipartBody.Part? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -113,40 +114,91 @@ class RegisterBoothFragment : Fragment() {
                     binding.tvEndTime.text.toString()
 
                 )
+                val festivalId = arguments?.getString("festivalId")
                 val sharedPreferences =
                     requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                 val myValue = sharedPreferences.getString("myToken", "")
                 val token = "$myValue"
-                val data = RegisterBoothReq(request, imagePart)
-                Log.d("제발", "${data}")
+//                val data = RegisterBoothReq(request, imagePart)
+//                Log.d("제발", "${data}")
                 fun postRegisterBooth() {
-                    Log.d("이미지파트", "${imagePart.body}")
+//                    Log.d("이미지파트", "${imagePart?.body}")
                     val postApi = retrofit?.create(BoothAPI::class.java)
                     postApi!!.registerBooth( token,
-                        "1", request, imagePart
+                        festivalId!!.toLong(), request, imagePart!!
                     )
                         .enqueue(object : Callback<RegisterBoothRes> {
                             override fun onResponse(
                                 call: Call<RegisterBoothRes>,
                                 response: Response<RegisterBoothRes>
                             ) {
-                                Log.d(
-                                    "부스테스트트",
-                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
-                                )
+//                                Log.d(
+//                                    "부스테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
                                 //메인페이지 이동
                                 val intent = Intent(requireContext(), BoothMainActivity::class.java)
-                                intent.putExtra("boothId", response.body()?.BoothId)
+                                // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
+                                val editor = sharedPreferences.edit()
+//                                Log.d(
+//                                    "부스아이디저장",
+//                                    "${response.body()?.boothId}"
+//                                )
+                                editor.putString("boothId", response.body()?.boothId.toString())
+                                editor.apply() // 또는 editor.commit() 사용 가능
                                 startActivity(intent)
                             }
 
                             override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
                                 t.printStackTrace()
-                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }
                         })
                 }
+                fun postRegisterNoImageBooth() {
+//                    Log.d("이미지파트", "${imagePart}")
+//                    val imageData: ByteArray = byteArrayOf()
+                    val emptyByteArray: ByteArray = byteArrayOf()  // 빈 바이트 배열 생성
+
+                    val requestBody: RequestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), emptyByteArray)
+                    val part: MultipartBody.Part = MultipartBody.Part.createFormData("boothImg", "", requestBody)
+                    val postApi = retrofit?.create(BoothAPI::class.java)
+                    postApi!!.registerNoImageBooth( token,
+                        festivalId!!.toLong(), request, part
+                    )
+                        .enqueue(object : Callback<RegisterBoothRes> {
+                            override fun onResponse(
+                                call: Call<RegisterBoothRes>,
+                                response: Response<RegisterBoothRes>
+                            ) {
+//                                Log.d(
+//                                    "부스테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
+                                //메인페이지 이동
+                                val intent = Intent(requireContext(), BoothMainActivity::class.java)
+                                // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
+                                val editor = sharedPreferences.edit()
+//                                Log.d(
+//                                    "부스아이디저장",
+//                                    "${response.body()?.boothId}"
+//                                )
+                                editor.putString("boothId", response.body()?.boothId.toString())
+                                editor.apply() // 또는 editor.commit() 사용 가능
+                                startActivity(intent)
+                            }
+
+                            override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
+                                t.printStackTrace()
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+                            }
+                        })
+                }
+                if (imagePart !== null) {
                 postRegisterBooth()
+                } else {
+                    postRegisterNoImageBooth()
+                }
             }
         }
 

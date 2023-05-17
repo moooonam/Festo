@@ -49,11 +49,16 @@ class NoBoothMainFragment : Fragment() {
                     response: Response<FestivalIdRes>
                 ) {
                     if (response.isSuccessful) {
-                        println("성공!!!!!!!!!!!!!!!!!!!")
-                        Log.d(" 테스트", "${response.body()?.festivalId}")
-                        Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
+//                        println("성공!!!!!!!!!!!!!!!!!!!")
+//                        Log.d(" 테스트", "${response.body()?.festivalId}")
+//                        Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
                         val transaction = fragmentManager?.beginTransaction()
-                        transaction?.replace(R.id.no_booth_layout_nav_bottom, RegisterBoothFragment())
+                        val bundle = Bundle().apply { putString("festivalId", response.body()?.festivalId.toString()) }
+                        val fragment = RegisterBoothFragment().apply { arguments = bundle }
+                        transaction?.replace(
+                            R.id.no_booth_layout_nav_bottom,
+                            fragment
+                        )
 //                        transaction?.replace(R.id.no_booth_layout_nav_bottom, BoothHomeFragment())
                         transaction?.commit()
                     } else {
@@ -61,7 +66,7 @@ class NoBoothMainFragment : Fragment() {
                     }
                 }
                 override fun onFailure(call: Call<FestivalIdRes>, t: Throwable) {
-                    println("실패!!!!!!!!!!!!!!!!!!!")
+//                    println("실패!!!!!!!!!!!!!!!!!!!")
                     t.printStackTrace()
                 }
             })
@@ -80,21 +85,6 @@ class NoBoothMainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // 나의 부스 리스트 연결
-//        var RegisteredFestivalList: ArrayList<RegisteredFestivalList> = arrayListOf(
-//            RegisteredFestivalList(R.drawable.festival1, "a유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "b광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "c유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "d광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "e유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "f광양 전통숯불구이 축제"),
-//            RegisteredFestivalList(R.drawable.festival1, "g유등축제"),
-//            RegisteredFestivalList(R.drawable.festival2, "h광양 전통숯불구이 축제"),
-//        )
-//        listAdapter = RegisteredFestivalListAdapter(RegisteredFestivalList)
-//        mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mBinding?.festivalRecyclerView?.adapter = listAdapter
-
-        // 나의 부스 리스트 연결
         val userpostApi = retrofit?.create(UserAPI::class.java)
         val sharedPreferences =
             requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
@@ -108,9 +98,9 @@ class NoBoothMainFragment : Fragment() {
                 response: Response<List<MyBoothListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
                     myBoothList = response.body() ?: emptyList()
                     listAdapter = RegisteredFestivalListAdapter(myBoothList)
                     mBinding?.festivalRecyclerView?.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -121,7 +111,7 @@ class NoBoothMainFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<MyBoothListRes>>, t: Throwable) {
-                println("나의 부스 리스트 조회 실패!!!!!!!!!!!!!!!!!!!")
+//                println("나의 부스 리스트 조회 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

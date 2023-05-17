@@ -6,17 +6,20 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.festo.customer_ui.home.HomeActivity
-import com.example.festo.customer_ui.orderlist.OrderlistActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.FutureTarget
+import com.example.festo.customer_ui.orderlist.OrderlistFragment
 import com.example.festo.customer_ui.search.SearchActivity
 import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import okhttp3.internal.notify
 
 class MessagingService : FirebaseMessagingService() {
     private var default_notification_channel_id: String? = null
@@ -24,6 +27,7 @@ class MessagingService : FirebaseMessagingService() {
     // 수신 메세지 처리
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
+        Log.i("dddddddd", message.notification?.title.toString())
         if (message.notification != null)
             showNotification(message.notification?.title, message.notification!!.body)
     }
@@ -64,22 +68,34 @@ class MessagingService : FirebaseMessagingService() {
 
     @SuppressLint("MissingPermission")
     private fun showNotification(title: String?, body: String?) {
-        /*val intent = Intent(this, MainActivity::class.java)
+        /*val intent = Intent(this, SearchActivity::class.java)
         intent.putExtra("FRAGMENT_NAME", "OrderlistFragment")
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)*/
+        // fest'O 기본 로고 보여주기
+        val futureTarget: FutureTarget<Bitmap> = Glide.with(this)
+            .asBitmap()
+            .load(R.drawable.festologo)
+            .submit()
+        val bitmap: Bitmap = futureTarget.get()
+
+        Log.i("비트맵 정보", "너비: ${bitmap.width}, 높이: ${bitmap.height}")
 
         val notificationBuilder = NotificationCompat.Builder(this, default_notification_channel_id!!)
             .setSmallIcon(R.drawable.ic_launcher_background)
+            /*.setStyle(NotificationCompat.BigPictureStyle()
+                .bigPicture(bitmap))*/
+            .setLargeIcon(bitmap)
             .setContentTitle(title)
             .setContentText(body)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            //.setFullScreenIntent(pendingIntent, true)
-            //.setContentIntent(pendingIntent)
-            /*.apply {
-                if (body != null) {
-                    setContentText(body)
-                }
-            }*/
+        //.setFullScreenIntent(pendingIntent, true)
+        // .setContentIntent(pendingIntent)
+        /*.apply {
+            if (body != null) {
+                setContentText(body)
+            }
+        }*/
 
 
         with(NotificationManagerCompat.from(this)) {

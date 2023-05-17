@@ -45,7 +45,7 @@ import java.io.File
 class RegisterFestivalFragment : Fragment() {
     private var mBinding: FragmentRegisterFestivalBinding? = null
     private var retrofit = RetrofitClient.client
-    private lateinit var imagePart: MultipartBody.Part
+    private var imagePart: MultipartBody.Part? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,11 +76,11 @@ class RegisterFestivalFragment : Fragment() {
                     val calendar = Calendar.getInstance()
                     calendar.timeInMillis = selection?.first ?: 0
                     startDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("start", startDate!!)
+//                    Log.d("start", startDate!!)
 
                     calendar.timeInMillis = selection?.second ?: 0
                     endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("end", endDate!!)
+//                    Log.d("end", endDate!!)
 
                     binding.tvFestivalperiod.setText(dateRangePicker.headerText)
 
@@ -98,10 +98,10 @@ class RegisterFestivalFragment : Fragment() {
                     val calendar = Calendar.getInstance()
                     calendar.timeInMillis = selection?.first ?: 0
                     startDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("start", startDate!!)
+//                    Log.d("start", startDate!!)
                     calendar.timeInMillis = selection?.second ?: 0
                     endDate = SimpleDateFormat("yyyyMMdd").format(calendar.time).toString()
-                    Log.d("end", endDate!!)
+//                    Log.d("end", endDate!!)
 
                     binding.tvFestivalperiod.setText(dateRangePicker.headerText)
 
@@ -113,9 +113,9 @@ class RegisterFestivalFragment : Fragment() {
         binding.registerFestival.setOnClickListener {
 //
             //데이터 넣기
-            Log.d("버튼은", "반응함")
+//            Log.d("버튼은", "반응함")
             if (binding.etFestivalName.text.toString().isEmpty()) {
-                Log.d("if", "들어옴")
+//                Log.d("if", "들어옴")
                 Toast.makeText(requireActivity(), "축제 이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
             } else if (binding.etFestivalDescription.text.toString().isEmpty()) {
                 Toast.makeText(requireActivity(), "축제 설명을 입력해 주세요", Toast.LENGTH_SHORT).show()
@@ -136,32 +136,69 @@ class RegisterFestivalFragment : Fragment() {
                     requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
                 val myValue = sharedPreferences.getString("myToken", "")
                 val token = "$myValue"
-                val data = RegisterFestivalReq(request, imagePart)
-                Log.d("과연", "${data}")
+
+                //                val data = RegisterFestivalReq(request, imagePart)
+//                Log.d("과연", "${data}")
                 fun postRegisterFestival() {
                     val postApi = retrofit?.create(HostAPI::class.java)
                     postApi!!.registerFestival(
                         token,
-                        request, imagePart
+                        request, imagePart!!
                     )
                         .enqueue(object : Callback<RegisterFestivalRes> {
                             override fun onResponse(
                                 call: Call<RegisterFestivalRes>,
                                 response: Response<RegisterFestivalRes>
                             ) {
-                                Log.d(
-                                    "테스트트",
-                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
-                                )
+//                                Log.d(
+//                                    "테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
                             }
 
                             override fun onFailure(call: Call<RegisterFestivalRes>, t: Throwable) {
                                 t.printStackTrace()
-                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }
                         })
                 }
-                postRegisterFestival()
+
+                fun postRegisterNoImageFestival() {
+                    val postApi = retrofit?.create(HostAPI::class.java)
+                    val emptyByteArray: ByteArray = byteArrayOf()  // 빈 바이트 배열 생성
+
+                    val requestBody: RequestBody = RequestBody.create(
+                        "multipart/form-data".toMediaTypeOrNull(),
+                        emptyByteArray
+                    )
+                    val part: MultipartBody.Part =
+                        MultipartBody.Part.createFormData("festivalImg", "", requestBody)
+                    postApi!!.registerNoImageFestival(
+                        token,
+                        request, part
+                    )
+                        .enqueue(object : Callback<RegisterFestivalRes> {
+                            override fun onResponse(
+                                call: Call<RegisterFestivalRes>,
+                                response: Response<RegisterFestivalRes>
+                            ) {
+//                                Log.d(
+//                                    "테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
+                            }
+
+                            override fun onFailure(call: Call<RegisterFestivalRes>, t: Throwable) {
+                                t.printStackTrace()
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+                            }
+                        })
+                }
+                if (imagePart !== null) {
+                    postRegisterFestival()
+                } else {
+                    postRegisterNoImageFestival()
+                }
 
 
                 // 메인페이지 이동
