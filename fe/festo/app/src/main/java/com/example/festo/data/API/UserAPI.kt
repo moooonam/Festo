@@ -65,7 +65,7 @@ interface UserAPI {
 
     // 축제 상세정보 조회
     @GET("festivals/{festival_id}")
-    fun getFestivalDetail(@Header("Authorization") token: String, @Path("festival_id") festival_id: String?): Call<FestivalInfoRes>
+    fun getFestivalDetail(@Header("Authorization") token: String, @Path("festival_id") festivalId: String?): Call<FestivalInfoRes>
 
     // 주문하기
      @POST("orders")

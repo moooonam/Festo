@@ -1,0 +1,47 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    url: jdbc:mysql://k8c106.p.ssafy.io:3306/festo?serverTimezone=Asia/Seoul
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Asia/Seoul
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  jackson:
+    time-zone: Asia/Seoul
+
+jwt:
+  secret: 6riw64uk66a87JeG64qU7LaV7KCc66W87JyE7ZWc7Iqk66eI7Yq47Jik642U
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAXI6LVK5FS6IMGTUR
+      secretKey: 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
+    s3:
+      bucket: festo-s3
+      dir: festo
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: 'false'
+
+server:
+  error:
+    include-exception: false      # Response 에 Exception 을 표시할지
+    include-message: always       # Response 에 Exception Message 를 표시할지 (never | always | on_param)
+    include-stacktrace: on_param  # Response 에 Stack Trace 를 표시할지 (never | always | on_param) on_trace_params 은 deprecated
+    whitelabel.enabled: true      # 에러 발생 시 Spring 기본 에러 페이지 노출 여부
