@@ -1,7 +1,6 @@
 package com.example.festo.booth_ui.mypage
 
 
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +24,7 @@ import retrofit2.Response
 
 class BoothMypageFragment : Fragment() {
     private var retrofit = RetrofitClient.client
-    private var mBinding : FragmentBoothMypageBinding? = null
+    private var mBinding: FragmentBoothMypageBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +45,10 @@ class BoothMypageFragment : Fragment() {
                 ) {
                     if (response.isSuccessful) {
                         Log.d(" 유저정보부르기", "${response},  ${response.body()?.nickname}")
-                        mBinding?.tvGreating2!!.text = "${response.body()?.nickname}님 안녕하세요"
+                        if (!response.body()?.nickname.isNullOrEmpty()) {
+                            mBinding?.tvGreating2!!.text = "${response.body()?.nickname}님 안녕하세요"
+
+                        }
                     }
 
                 }
@@ -58,11 +60,11 @@ class BoothMypageFragment : Fragment() {
             })
         }
         getUserData()
-        mBinding!!.ivProfile1.setOnClickListener{
+        mBinding!!.ivProfile1.setOnClickListener {
             val intent = Intent(getActivity(), HomeActivity::class.java)
             startActivity(intent)
         }
-        mBinding!!.ivProfile3.setOnClickListener{
+        mBinding!!.ivProfile3.setOnClickListener {
             fun getIsHave() {
 
                 val sharedPreferences =
@@ -101,7 +103,7 @@ class BoothMypageFragment : Fragment() {
             }
             getIsHave()
         }
-        return  mBinding?.root
+        return mBinding?.root
     }
 
 
