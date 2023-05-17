@@ -19,6 +19,7 @@ class MenuRankListAdapter(private var list: List<MenuAnalysis>): RecyclerView.Ad
         var image: ImageView = itemView!!.findViewById(R.id.menuImage)
         var name: TextView = itemView!!.findViewById(R.id.menuName)
         val total: TextView = itemView!!.findViewById(R.id.totalSales)
+        var count: TextView = itemView!!.findViewById(R.id.totalOrder)
 
         // onBindViewHolder의 역할을 대신한다.
         fun bind(data: MenuAnalysis, position: Int) {
@@ -26,6 +27,7 @@ class MenuRankListAdapter(private var list: List<MenuAnalysis>): RecyclerView.Ad
                 .load(data.image_url)
                 .into(image)
             name.text = data.name
+            count.text = "누적 주문량 : ${data.count.toString()} 건"
             val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale.KOREA)
             val formattedString = formatter.format(data.amount)
             total.text = "총 ${formattedString}원"
