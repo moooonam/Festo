@@ -88,7 +88,7 @@ class BoothDetailActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     println("성공!!!!!!!!!!!!!!!!!!!")
                     println(response.body())
-                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
+//                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
                     val adapter = MenuAdapter(this@BoothDetailActivity, menuList)
