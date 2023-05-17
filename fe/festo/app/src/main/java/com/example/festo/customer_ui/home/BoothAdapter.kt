@@ -50,12 +50,12 @@ class BoothAdapter(val context: FestivalActivity, val BoothList: List<BoothListR
                 response: Response<BoothWaitingRes>
             ) {
                 if (response.isSuccessful) {
-                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.waiting)
+//                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body()?.waiting)
                     waitCount.text = response.body()?.waiting.toString()
-                    Log.d(" 부스대기인원", "${response.body()}")
+//                    Log.d(" 부스대기인원", "${response.body()}")
                 } else {
-                    Log.d(" 부스대기인원", "실패111111111111")
+//                    Log.d(" 부스대기인원", "실패111111111111")
                 }
             }
 

@@ -49,9 +49,9 @@ class NoBoothMainFragment : Fragment() {
                     response: Response<FestivalIdRes>
                 ) {
                     if (response.isSuccessful) {
-                        println("성공!!!!!!!!!!!!!!!!!!!")
-                        Log.d(" 테스트", "${response.body()?.festivalId}")
-                        Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
+//                        println("성공!!!!!!!!!!!!!!!!!!!")
+//                        Log.d(" 테스트", "${response.body()?.festivalId}")
+//                        Toast.makeText(activity, "축제 코드 확인 성공", Toast.LENGTH_SHORT).show()
                         val transaction = fragmentManager?.beginTransaction()
                         val bundle = Bundle().apply { putString("festivalId", response.body()?.festivalId.toString()) }
                         val fragment = RegisterBoothFragment().apply { arguments = bundle }
@@ -66,7 +66,7 @@ class NoBoothMainFragment : Fragment() {
                     }
                 }
                 override fun onFailure(call: Call<FestivalIdRes>, t: Throwable) {
-                    println("실패!!!!!!!!!!!!!!!!!!!")
+//                    println("실패!!!!!!!!!!!!!!!!!!!")
                     t.printStackTrace()
                 }
             })
@@ -98,8 +98,8 @@ class NoBoothMainFragment : Fragment() {
                 response: Response<List<MyBoothListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
 //                    Log.d("나의 부스 리스트 조회", "${response.body()?.get(0)?.boothId}")
                     myBoothList = response.body() ?: emptyList()
                     listAdapter = RegisteredFestivalListAdapter(myBoothList)
@@ -111,7 +111,7 @@ class NoBoothMainFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<MyBoothListRes>>, t: Throwable) {
-                println("나의 부스 리스트 조회 실패!!!!!!!!!!!!!!!!!!!")
+//                println("나의 부스 리스트 조회 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

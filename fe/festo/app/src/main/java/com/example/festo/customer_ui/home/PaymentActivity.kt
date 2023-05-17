@@ -56,17 +56,17 @@ class PaymentActivity : AppCompatActivity() {
         val myOrderList = intent.getSerializableExtra("myOrderList") as ArrayList<*>
         val gson = Gson()
         val json = gson.toJson(myOrderList)
-        Log.d("내주문", json)
+//        Log.d("내주문", json)
         var myOrderListForRecommend = ArrayList<OrderList>()
         for (order in myOrderList) {
             val orderJson = gson.toJson(order)
             val orderList = gson.fromJson(orderJson, OrderList::class.java)
-            Log.d("내 오더리스트", orderJson)
-            Log.d("내 오더리스트", orderJson)
+//            Log.d("내 오더리스트", orderJson)
+//            Log.d("내 오더리스트", orderJson)
             myOrderListForRecommend.add(OrderList(orderList.product_id, orderList.cnt))
         }
-        Log.d("잘담김?", myOrderListForRecommend.toString())
-        Log.d("부스아이디", boothId.toString())
+//        Log.d("잘담김?", myOrderListForRecommend.toString())
+//        Log.d("부스아이디", boothId.toString())
         val MenuReq = MenuRecommendReq(boothId!!.toInt(), myOrderListForRecommend)
         // 나의 정보 불러오기
         val dataPostApi = dataRetrofit?.create(UserAPI::class.java)
@@ -88,22 +88,22 @@ class PaymentActivity : AppCompatActivity() {
         )
         val list_view2 = findViewById<ListView>(R.id.recommend_list_view)
         list_view2.adapter = Adapter2
-        Log.d("보내기","${selectedFestivalId}, ${menureq}")
+//        Log.d("보내기","${selectedFestivalId}, ${menureq}")
         dataPostApi!!.getMenuRecommend(token, selectedFestivalId.toString(), MenuReq)
             .enqueue(object : Callback<List<MenuRecommendRes>> {
                 override fun onResponse(
                     call: Call<List<MenuRecommendRes>>,
                     response: Response<List<MenuRecommendRes>>
                 ) {
-                    Log.d("추천된메뉴!!!!!", "${response},${response.body()}, ${response.code()}")
+//                    Log.d("추천된메뉴!!!!!", "${response},${response.body()}, ${response.code()}")
                     if (response.isSuccessful) {
-                        Log.d("추천된메뉴", "${response.body().toString()}, ${response.code()}")
+//                        Log.d("추천된메뉴", "${response.body().toString()}, ${response.code()}")
                         RecommendMenuDataList = response.body()!!
                         Adapter2.updateList(RecommendMenuDataList)
                     }
                 }
                 override fun onFailure(call: Call<List<MenuRecommendRes>>, t: Throwable) {
-                    println("ㅇ악")
+//                    println("ㅇ악")
                     t.printStackTrace()
                 }
             })
@@ -114,9 +114,9 @@ class PaymentActivity : AppCompatActivity() {
                 response: Response<UserInfoRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("유저정보", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("유저정보", "${response.body()}")
                     val userNickname = findViewById<TextView>(R.id.userNickname)
 
                     // 데이터 xml에 입력
@@ -125,7 +125,7 @@ class PaymentActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
-                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
+//                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

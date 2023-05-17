@@ -58,9 +58,9 @@ class BoothListFragment : Fragment() {
                                 response: Response<List<BoothListRes>>
                             ) {
                                 if (response.isSuccessful) {
-                                    println("성공!!!!!!!!!!!!!!!!!!!")
-                                    println(response.body()?.size)
-                                    Log.d(" 테스트", "${response.body()}")
+//                                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.size)
+//                                    Log.d(" 테스트", "${response.body()}")
                                     boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
                                     listAdapter = BoothlistAdapter(boothList)
@@ -72,7 +72,7 @@ class BoothListFragment : Fragment() {
                             }
 
                             override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
-                                println("실패!!!!!!!!!!!!!!!!!!!")
+//                                println("실패!!!!!!!!!!!!!!!!!!!")
                                 t.printStackTrace()
                             }
                         })
@@ -81,7 +81,7 @@ class BoothListFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

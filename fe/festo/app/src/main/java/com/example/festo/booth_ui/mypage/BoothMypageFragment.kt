@@ -70,7 +70,7 @@ class BoothMypageFragment : Fragment() {
                 val memberId = sharedPreferences.getString("memberId", "")
                 val token = "$myToken"
                 val myId = "$memberId"
-                Log.d("아이디", "${myId}")
+//                Log.d("아이디", "${myId}")
                 val postApi = retrofit?.create(UserAPI::class.java)
                 postApi!!.getIsHaveFestival(token, myId).enqueue(object :
                     Callback<IsHaveFestivalRes> {
@@ -80,7 +80,7 @@ class BoothMypageFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             val isFestival = response.body()?.open
-                            Log.d(" 있나없나", "${response},  ${response.body()?.open}")
+//                            Log.d(" 있나없나", "${response},  ${response.body()?.open}")
                             if (isFestival!!) {
                                 val intent =
                                     Intent(getActivity(), NoFeativalMainActivity::class.java)
@@ -93,7 +93,7 @@ class BoothMypageFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<IsHaveFestivalRes>, t: Throwable) {
-                        Log.d(" 부스 주문내역 실패", "응")
+//                        Log.d(" 부스 주문내역 실패", "응")
                         t.printStackTrace()
                     }
                 })

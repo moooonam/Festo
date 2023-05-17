@@ -65,9 +65,9 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<FestivalInfoRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.startDate)
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body()?.startDate)
+//                    Log.d(" 테스트", "${response.body()}")
                     val festivalName = findViewById<TextView>(R.id.festivalName)
                     val festivalAddress = findViewById<TextView>(R.id.festivalAddress)
                     val festivalPeriod = findViewById<TextView>(R.id.festivalPeriod)
@@ -92,7 +92,7 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -105,9 +105,9 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<List<BoothListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     boothList = response.body() ?: emptyList()
 //                    부스 리스트 연결
                     val Adapter = BoothAdapter(this@FestivalActivity, boothList, token,
@@ -120,7 +120,7 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<BoothListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -133,9 +133,9 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<UserInfoRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("유저정보", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("유저정보", "${response.body()}")
                     val userNickname = findViewById<TextView>(R.id.userNickname)
 
                     // 데이터 xml에 입력
@@ -144,7 +144,7 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserInfoRes>, t: Throwable) {
-                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
+//                println("유저 정보 조회 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -160,10 +160,10 @@ class FestivalActivity : AppCompatActivity() {
                 response: Response<List<BoothRecommendRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    println(festival_id)
-                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    println(festival_id)
+//                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
                     recommendBoothList = response.body() ?: emptyList()
 
                     // 추천 부스 연결
@@ -193,8 +193,8 @@ class FestivalActivity : AppCompatActivity() {
                                 response: Response<BoothWaitingRes>
                             ) {
                                 if (response.isSuccessful) {
-                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
-                                    println(response.body()?.waiting)
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
                                     recommend1Wait.text = response.body()?.waiting.toString()
 //                                    Log.d(" 부스대기인원", "${response.body()}")
                                 } else {
@@ -234,8 +234,8 @@ class FestivalActivity : AppCompatActivity() {
                                 response: Response<BoothWaitingRes>
                             ) {
                                 if (response.isSuccessful) {
-                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
-                                    println(response.body()?.waiting)
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
                                     recommend1Wait.text = response.body()?.waiting.toString()
 //                                    Log.d(" 부스대기인원", "${response.body()}")
                                 } else {
@@ -254,8 +254,8 @@ class FestivalActivity : AppCompatActivity() {
                                 response: Response<BoothWaitingRes>
                             ) {
                                 if (response.isSuccessful) {
-                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
-                                    println(response.body()?.waiting)
+//                                    println("대기인원성공!!!!!!!!!!!!!!!!!!!")
+//                                    println(response.body()?.waiting)
                                     recommend2Wait.text = response.body()?.waiting.toString()
 //                                    Log.d(" 부스대기인원", "${response.body()}")
                                 } else {
@@ -305,7 +305,7 @@ class FestivalActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<BoothRecommendRes>>, t: Throwable) {
-                println("추천 부스 받아오기 실패!!!!!!!!!!!!!!!!!!!")
+//                println("추천 부스 받아오기 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

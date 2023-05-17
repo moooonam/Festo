@@ -215,9 +215,9 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                 response: Response<BoothDetailRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("부스이름만 가져오기", "${response.body()?.name}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("부스이름만 가져오기", "${response.body()?.name}")
                     val boothName = view.findViewById<TextView>(R.id.boothName)
 
                     // 데이터 xml에 입력
@@ -227,7 +227,7 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             }
 
             override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -241,9 +241,9 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                 response: Response<BoothAnalysisRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d("부스매출분석 데이터 불러오기 성공", "${response.body()}")
                     menuRankList = response.body()?.menu ?: emptyList()
 
                     if (response.body()?.daily_sales!!.size <= 5) {
@@ -325,14 +325,14 @@ class SalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
 
 
                 } else {
-                    Log.d("부스매출분석 실패다!!!", "${response.body()}")
-                    println(boothId)
+//                    Log.d("부스매출분석 실패다!!!", "${response.body()}")
+//                    println(boothId)
 
                 }
             }
 
             override fun onFailure(call: Call<BoothAnalysisRes>, t: Throwable) {
-                println("부스매출분석 실패!!!!!!!!!!!!!!!!!!!")
+//                println("부스매출분석 실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

@@ -58,9 +58,9 @@ class BoothDetailActivity : AppCompatActivity() {
                 response: Response<BoothDetailRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     val boothName = findViewById<TextView>(R.id.boothName)
                     val boothLocation = findViewById<TextView>(R.id.boothLocation)
                     val boothExplanation = findViewById<TextView>(R.id.boothExplanation)
@@ -74,7 +74,7 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -86,8 +86,8 @@ class BoothDetailActivity : AppCompatActivity() {
                 response: Response<List<BoothMenuListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
 //                    Log.d(" 테스트", "${response.body()?.get(0)?.cnt}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
@@ -101,7 +101,7 @@ class BoothDetailActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<BoothMenuListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

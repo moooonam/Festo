@@ -122,7 +122,7 @@ class RegisterBoothFragment : Fragment() {
 //                val data = RegisterBoothReq(request, imagePart)
 //                Log.d("제발", "${data}")
                 fun postRegisterBooth() {
-                    Log.d("이미지파트", "${imagePart?.body}")
+//                    Log.d("이미지파트", "${imagePart?.body}")
                     val postApi = retrofit?.create(BoothAPI::class.java)
                     postApi!!.registerBooth( token,
                         festivalId!!.toLong(), request, imagePart!!
@@ -132,18 +132,18 @@ class RegisterBoothFragment : Fragment() {
                                 call: Call<RegisterBoothRes>,
                                 response: Response<RegisterBoothRes>
                             ) {
-                                Log.d(
-                                    "부스테스트트",
-                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
-                                )
+//                                Log.d(
+//                                    "부스테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
                                 //메인페이지 이동
                                 val intent = Intent(requireContext(), BoothMainActivity::class.java)
                                 // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
                                 val editor = sharedPreferences.edit()
-                                Log.d(
-                                    "부스아이디저장",
-                                    "${response.body()?.boothId}"
-                                )
+//                                Log.d(
+//                                    "부스아이디저장",
+//                                    "${response.body()?.boothId}"
+//                                )
                                 editor.putString("boothId", response.body()?.boothId.toString())
                                 editor.apply() // 또는 editor.commit() 사용 가능
                                 startActivity(intent)
@@ -151,12 +151,12 @@ class RegisterBoothFragment : Fragment() {
 
                             override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
                                 t.printStackTrace()
-                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }
                         })
                 }
                 fun postRegisterNoImageBooth() {
-                    Log.d("이미지파트", "${imagePart}")
+//                    Log.d("이미지파트", "${imagePart}")
 //                    val imageData: ByteArray = byteArrayOf()
                     val emptyByteArray: ByteArray = byteArrayOf()  // 빈 바이트 배열 생성
 
@@ -171,18 +171,18 @@ class RegisterBoothFragment : Fragment() {
                                 call: Call<RegisterBoothRes>,
                                 response: Response<RegisterBoothRes>
                             ) {
-                                Log.d(
-                                    "부스테스트트",
-                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
-                                )
+//                                Log.d(
+//                                    "부스테스트트",
+//                                    "${response.isSuccessful()}, ${response.code()}, ${response}"
+//                                )
                                 //메인페이지 이동
                                 val intent = Intent(requireContext(), BoothMainActivity::class.java)
                                 // 입력될 값의 타입에 맞는 Editor 써서 저장해야함
                                 val editor = sharedPreferences.edit()
-                                Log.d(
-                                    "부스아이디저장",
-                                    "${response.body()?.boothId}"
-                                )
+//                                Log.d(
+//                                    "부스아이디저장",
+//                                    "${response.body()?.boothId}"
+//                                )
                                 editor.putString("boothId", response.body()?.boothId.toString())
                                 editor.apply() // 또는 editor.commit() 사용 가능
                                 startActivity(intent)
@@ -190,7 +190,7 @@ class RegisterBoothFragment : Fragment() {
 
                             override fun onFailure(call: Call<RegisterBoothRes>, t: Throwable) {
                                 t.printStackTrace()
-                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
+//                                Log.d("테스트트트트트", "시래패패패패패패패패패패패퍂패패패")
                             }
                         })
                 }

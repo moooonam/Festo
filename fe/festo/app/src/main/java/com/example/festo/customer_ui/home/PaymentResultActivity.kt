@@ -63,7 +63,7 @@ class PaymentResultActivity : AppCompatActivity() {
         )
 
         // 주문 retrofit 전송
-        println(orderReq)
+//        println(orderReq)
         val postApi = retrofit?.create(UserAPI::class.java)
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
@@ -71,14 +71,14 @@ class PaymentResultActivity : AppCompatActivity() {
         postApi!!.orderMenu(token, orderReq).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
-                    println("주문성공!!!!!!!!!!!!!!!!!!!")
+//                    println("주문성공!!!!!!!!!!!!!!!!!!!")
                 }
 //                println("오잉!!!!!!!!!!!!!!!!!!!")
 //                println(response)
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                println("주문실패!!!!!!!!!!!!!!!!!!!")
+//                println("주문실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

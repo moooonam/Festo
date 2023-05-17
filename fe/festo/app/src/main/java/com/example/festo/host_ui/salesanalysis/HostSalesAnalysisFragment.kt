@@ -314,8 +314,8 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
                 response: Response<List<MyFestivalRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    Log.d("축제이름만 가져오기", "${response.body()?.get(0)?.name}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    Log.d("축제이름만 가져오기", "${response.body()?.get(0)?.name}")
                     val festivalName = view.findViewById<TextView>(R.id.festivalName)
 
                     // 데이터 xml에 입력
@@ -324,7 +324,7 @@ class HostSalesAnalysisFragment : Fragment(), OnChartValueSelectedListener {
             }
 
             override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

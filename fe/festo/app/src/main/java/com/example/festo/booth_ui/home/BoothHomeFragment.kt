@@ -238,9 +238,9 @@ class BoothHomeFragment : Fragment() {
                 response: Response<BoothDetailRes>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     val boothImage = view.findViewById<ImageView>(R.id.boothImage)
                     val boothNameTop = view.findViewById<TextView>(R.id.boothNameTop)
                     val boothName = view.findViewById<TextView>(R.id.boothName)
@@ -269,7 +269,7 @@ class BoothHomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -282,9 +282,9 @@ class BoothHomeFragment : Fragment() {
                 response: Response<List<BoothMenuListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body())
-                    Log.d(" 테스트", "${response.body()}")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body())
+//                    Log.d(" 테스트", "${response.body()}")
                     menuList = response.body() ?: emptyList()
                     // 메뉴 리스트 연결
                     listAdapter = MenuListAdapter(menuList)
@@ -296,7 +296,7 @@ class BoothHomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<BoothMenuListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
@@ -309,7 +309,7 @@ class BoothHomeFragment : Fragment() {
                 .enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>, response: Response<Void>) {
                         if (response.isSuccessful) {
-                            println("상태변경성공!!!!!!!!!!!!!!!!!!!")
+//                            println("상태변경성공!!!!!!!!!!!!!!!!!!!")
                             postApi!!.getBoothDetail(token,boothId.toString()).enqueue(object : Callback<BoothDetailRes> {
                                 override fun onResponse(
                                     call: Call<BoothDetailRes>,
@@ -330,7 +330,7 @@ class BoothHomeFragment : Fragment() {
                                 }
 
                                 override fun onFailure(call: Call<BoothDetailRes>, t: Throwable) {
-                                    println("실패!!!!!!!!!!!!!!!!!!!")
+//                                    println("실패!!!!!!!!!!!!!!!!!!!")
                                     t.printStackTrace()
                                 }
                             })
@@ -340,8 +340,8 @@ class BoothHomeFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<Void>, t: Throwable) {
-                        println("상태변경실패!!!!!!!!!!!!!!!!!!!")
-                        println(boothId)
+//                        println("상태변경실패!!!!!!!!!!!!!!!!!!!")
+//                        println(boothId)
                         t.printStackTrace()
                     }
                 })

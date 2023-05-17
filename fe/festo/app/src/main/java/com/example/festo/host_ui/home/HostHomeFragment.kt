@@ -53,7 +53,7 @@ class HostHomeFragment : Fragment() {
                 response: Response<List<MyFestivalRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
 //                    Log.d("내가 등록한 축제 아이디 가져오기", "${response.body()?.get(0)?.festivalId}")
                     val postApi = retrofit?.create(UserAPI::class.java)
 
@@ -64,9 +64,9 @@ class HostHomeFragment : Fragment() {
                             response: Response<FestivalInfoRes>
                         ) {
                             if (response.isSuccessful) {
-                                println("성공!!!!!!!!!!!!!!!!!!!")
-                                println(response.body()?.startDate)
-                                Log.d(" 테스트", "${response.body()}")
+//                                println("성공!!!!!!!!!!!!!!!!!!!")
+//                                println(response.body()?.startDate)
+//                                Log.d(" 테스트", "${response.body()}")
                                 val festivalName = view.findViewById<TextView>(R.id.festivalName)
                                 val festivalAddress = view.findViewById<TextView>(R.id.festivalAddress)
                                 val festivalPeriod = view.findViewById<TextView>(R.id.festivalPeriod)
@@ -97,7 +97,7 @@ class HostHomeFragment : Fragment() {
                         }
 
                         override fun onFailure(call: Call<FestivalInfoRes>, t: Throwable) {
-                            println("실패!!!!!!!!!!!!!!!!!!!")
+//                            println("실패!!!!!!!!!!!!!!!!!!!")
                             t.printStackTrace()
                         }
                     })
@@ -110,16 +110,16 @@ class HostHomeFragment : Fragment() {
                             response: Response<FestivalCodeRes>
                         ) {
                             if (response.isSuccessful) {
-                                println("성공!!!!!!!!!!!!!!!!!!!")
-                                println(response.body())
-                                Log.d("축제코드", "${response.body()?.inviteCode}")
+//                                println("성공!!!!!!!!!!!!!!!!!!!")
+//                                println(response.body())
+//                                Log.d("축제코드", "${response.body()?.inviteCode}")
                                 val code = view.findViewById<TextView>(R.id.festivalCode)
                                 code.text = "축제코드 ${response.body()?.inviteCode}"
                             }
                         }
 
                         override fun onFailure(call: Call<FestivalCodeRes>, t: Throwable) {
-                            Log.d("축제코드", "실패!!!!!!!!!!!!!!!!!")
+//                            Log.d("축제코드", "실패!!!!!!!!!!!!!!!!!")
                             t.printStackTrace()
                         }
                     })
@@ -128,7 +128,7 @@ class HostHomeFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<MyFestivalRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })

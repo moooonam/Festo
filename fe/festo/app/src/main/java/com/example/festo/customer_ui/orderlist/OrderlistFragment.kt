@@ -51,15 +51,15 @@ class OrderlistFragment : Fragment() {
         val sharedPreferences = requireContext().getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
         val myValue = sharedPreferences.getString("myToken", "")
         val token = "$myValue"
-        println(token)
+//        println(token)
         postApi!!.getOrderList(token).enqueue(object : Callback<List<UserOrderListRes>> {
             override fun onResponse(
                 call: Call<List<UserOrderListRes>>,
                 response: Response<List<UserOrderListRes>>
             ) {
                 if (response.isSuccessful) {
-                    println("성공!!!!!!!!!!!!!!!!!!!")
-                    println(response.body()?.size)
+//                    println("성공!!!!!!!!!!!!!!!!!!!")
+//                    println(response.body()?.size)
                     // Log.d(" 주문내역", "${response.body()?.get(0)?.orderNo?.number}")
                     orderlist = response.body() ?: emptyList()
                     orderlist = orderlist.reversed()
@@ -70,7 +70,7 @@ class OrderlistFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<UserOrderListRes>>, t: Throwable) {
-                println("실패!!!!!!!!!!!!!!!!!!!")
+//                println("실패!!!!!!!!!!!!!!!!!!!")
                 t.printStackTrace()
             }
         })
