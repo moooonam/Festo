@@ -7,11 +7,11 @@ plugins {
 
 
 android {
-    namespace 'com.example.festo'
+    namespace 'com.nowusee.festo'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.festo"
+        applicationId "com.nowusee.festo"
         minSdk 24
         targetSdk 33
         versionCode 1
