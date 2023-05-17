@@ -150,19 +150,24 @@ def recommend_booth(festival_id: int, user_number:int, db: SessionLocal = Depend
 
     # 추천해줄 부스가 없는 경우
     if len(booths) == 0:
-        Orders_boothIdxs = list(map(lambda x: x.booth_id,db.query(OrdersTable).all()))
+        Booths_idxs = list(map(lambda x: x.booth_id,db.query(BoothTable).filter(BoothTable.festival_id == festival_id).all()))
 
+        Orders_boothIdxs = list(map(lambda x: x.booth_id,db.query(OrdersTable).all()))
         set_idxs = list(set(Orders_boothIdxs))
-        set_idxs = sorted(set_idxs, key=lambda x: Orders_boothIdxs.count(x), reverse=True)[:2]
+        set_idxs = sorted(set_idxs, key=lambda x: Orders_boothIdxs.count(x), reverse=True)
+        
         for idx in set_idxs:
-            Booth = db.query(BoothTable).filter(BoothTable.booth_id == idx).all()[0]
-            booths.append({
-                "booth_id" : Booth.booth_id,
-                "booth_description":Booth.booth_description,
-                "image_url":Booth.image_url,
-                "location_description":Booth.location_description,
-                'name':Booth.name,
-            })
+            if idx in Booths_idxs:
+                Booth = db.query(BoothTable).filter(BoothTable.booth_id == idx).all()[0]
+                booths.append({
+                    "booth_id" : Booth.booth_id,
+                    "booth_description":Booth.booth_description,
+                    "image_url":Booth.image_url,
+                    "location_description":Booth.location_description,
+                    'name':Booth.name,
+                }) 
+                if len(booths) == 2:
+                    break
 
     return booths
 
