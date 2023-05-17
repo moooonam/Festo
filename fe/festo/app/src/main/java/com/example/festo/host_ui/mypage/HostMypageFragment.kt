@@ -1,7 +1,6 @@
 package com.example.festo.booth_ui.mypage
 
 
-
 import RetrofitClient
 import android.content.Context
 import android.content.Intent
@@ -23,7 +22,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class HostMypageFragment : Fragment() {
-    private var mBinding : FragmentHostMypageBinding? = null
+    private var mBinding: FragmentHostMypageBinding? = null
     private var retrofit = RetrofitClient.client
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,14 +60,14 @@ class HostMypageFragment : Fragment() {
             val intent = Intent(getActivity(), HomeActivity::class.java)
             startActivity(intent)
         }
-        mBinding!!.ivProfile2.setOnClickListener{
+        mBinding!!.ivProfile2.setOnClickListener {
 //            val intent = Intent(getActivity(), BoothMainActivity::class.java)
 //            startActivity(intent)
 
             val intent = Intent(getActivity(), NoBoothMainActivity::class.java)
             startActivity(intent)
         }
-        return  mBinding?.root
+        return mBinding?.root
     }
 
     override fun onDestroyView() {

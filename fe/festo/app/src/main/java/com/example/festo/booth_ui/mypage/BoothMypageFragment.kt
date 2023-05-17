@@ -1,7 +1,6 @@
 package com.example.festo.booth_ui.mypage
 
 
-
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +24,7 @@ import retrofit2.Response
 
 class BoothMypageFragment : Fragment() {
     private var retrofit = RetrofitClient.client
-    private var mBinding : FragmentBoothMypageBinding? = null
+    private var mBinding: FragmentBoothMypageBinding? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +61,7 @@ class BoothMypageFragment : Fragment() {
             val intent = Intent(getActivity(), HomeActivity::class.java)
             startActivity(intent)
         }
-        mBinding!!.ivProfile3.setOnClickListener{
+        mBinding!!.ivProfile3.setOnClickListener {
             fun getIsHave() {
 
                 val sharedPreferences =
@@ -101,7 +100,7 @@ class BoothMypageFragment : Fragment() {
             }
             getIsHave()
         }
-        return  mBinding?.root
+        return mBinding?.root
     }
 
 
