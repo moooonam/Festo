@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -51,6 +52,10 @@ class MessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel("CHANNEL_ID", name, importance).apply {
                 description = descriptionText
             }
+
+            val notiSound = Uri.parse("android.resource://com.nowusee.festo/raw/festosound")
+            channel.setSound(notiSound, null)
+
             val notificationManager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -72,7 +77,7 @@ class MessagingService : FirebaseMessagingService() {
             .submit()
         val bitmap: Bitmap = futureTarget.get()
 
-        Log.i("비트맵 정보", "너비: ${bitmap.width}, 높이: ${bitmap.height}")
+        // Log.i("비트맵 정보", "너비: ${bitmap.width}, 높이: ${bitmap.height}")
 
         val notificationBuilder = NotificationCompat.Builder(this, default_notification_channel_id!!)
             .setSmallIcon(R.mipmap.ic_launcher_round)
