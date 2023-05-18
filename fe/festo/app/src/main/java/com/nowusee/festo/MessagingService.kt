@@ -75,7 +75,7 @@ class MessagingService : FirebaseMessagingService() {
         Log.i("비트맵 정보", "너비: ${bitmap.width}, 높이: ${bitmap.height}")
 
         val notificationBuilder = NotificationCompat.Builder(this, default_notification_channel_id!!)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.mipmap.ic_launcher_round)
             /*.setStyle(NotificationCompat.BigPictureStyle()
                 .bigPicture(bitmap))*/
             .setLargeIcon(bitmap)
