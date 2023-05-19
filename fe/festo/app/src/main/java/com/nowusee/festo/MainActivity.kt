@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             else if (tokenInfo != null) {
 //                Log.i("엑세스 유지: ", tokenInfo.toString())
 //                Toast.makeText(this, "토큰 정보 보기 성공", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, SecondActivity::class.java)
+                val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }
@@ -123,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                         })
                     }
                 }
-                val intent = Intent(this, SecondActivity::class.java)
+                val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
                 finish()
             }
